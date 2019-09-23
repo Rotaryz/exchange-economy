@@ -22,6 +22,9 @@ var utils = require('./utils')
 var spinner = ora(`building for ${process.env.BUILD_ENV}...`)
 spinner.start()
 
+// build构建时检查分支
+checkBuildBranch()
+
 rm(path.join(config.build.assetsRoot, '*'), err => {
   if (err) throw err
   webpack(webpackConfig, function (err, stats) {
@@ -50,3 +53,16 @@ rm(path.join(config.build.assetsRoot, '*'), err => {
     ))
   })
 })
+
+function checkBuildBranch() {
+  const isBuild = process.env.BUILD_ENV === '\'production\''
+  if (!isBuild) return
+  const fs = require('fs')
+  const currentBranch = fs.readFileSync(path.join(__dirname, '../.git/HEAD'), 'utf-8').trim().replace('ref: refs/heads/', '')
+  const allowBuildBranch = /(release)/g.test(currentBranch)
+  if (!allowBuildBranch) {
+    console.log(chalk.cyan('\n请在release开头的分支上传正式站代码，记得push origin；\n由管理员进行整合master和release分支！！！'))
+    spinner.stop()
+    process.exit(1)
+  }
+}
