@@ -12,6 +12,9 @@ export default {
   onLoad() {
   },
   onUnload() {
+    this.timer && clearInterval(this.timer)
+    this.timer && clearTimeout(this.timer)
+    typeof this.$beforeUnload === 'function' && this.$beforeUnload()
     this._resetData()
     this._clearWatcher()
   },

@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/mine",
+    "pages/demo",
     "pages/home"
   ],
   "subPackages": [

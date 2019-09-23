@@ -3,6 +3,7 @@
     <navigation-bar title="首页"></navigation-bar>
     home
     <div @click="chooseFilesHandle">cos</div>
+    <navigator url="/pages/demo">demo</navigator>
   </div>
 </template>
 

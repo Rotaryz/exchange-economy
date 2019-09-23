@@ -6,6 +6,7 @@ export default {
     PACKAGE: MAIN,
     HOME:`${MAIN}/home`,
     MINE:`${MAIN}/mine`,
+    DEMO:`${MAIN}/demo`,
     // main
   }
 }

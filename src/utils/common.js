@@ -1,3 +1,8 @@
+import appJson from '../app'
+
+export function $checkIsTabPage(path) {
+  return appJson.tabBar.list.some(val => path === ('/' + val.pagePath))
+}
 // import API from '@api'
 // import * as wechat from './wechat'
 // import {ERR_OK} from '@utils/config'
