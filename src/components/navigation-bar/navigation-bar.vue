@@ -1,11 +1,15 @@
 <template>
   <div id="navigationBar">
     <div class="head-item" :style="headStyleData" :class="showTitle ? '' : 'showNavigation'">
+      <!--<div v-if="isShowSearch" class="search-box" @click="search">-->
+        <!--<img src="./icon-search@2x.png" class="search">-->
+      <!--</div>-->
       <div class="status-bar" :style="{height: statusBarHeight + 'px'}"></div>
       <div class="head-content" :style="{color: titleColor}">
-        
+        {{currentTitle}}
         <div class="head-arrow" v-if="showArrow" @click="goBackUrl">
-          <img src="./icon-title_back@2x.png" class="head-arrow-img">
+          <img v-if="arrowColor==='black'" src="./icon-title_back@2x.png" class="head-arrow-img">
+          <img v-if="arrowColor==='white'" src="./icon-title_back1@2x.png" class="head-arrow-img">
         </div>
       </div>
     </div>
@@ -15,10 +19,11 @@
 <script type="text/ecmascript-6">
   /* eslint-disable no-undef */
   import wx from 'wx'
-  import app from '@src/app.json'
+
+  // import app from '@src/app.json'
 
   function pageRouter() {
-    return '/' + app.pages[0]
+    return '/pages/home'
   }
 
   let DEFAULT_PAGE = pageRouter()
@@ -40,6 +45,10 @@
       showArrow: {
         type: Boolean,
         default: true
+      },
+      arrowColor: {
+        type: String,
+        default: 'black' // white
       },
       // 标题文字颜色
       titleColor: {
@@ -80,6 +89,14 @@
       titleMaxLen: {
         type: Number,
         default: 10
+      },
+      isShowSearch: {
+        type: Boolean, // 是否展示搜索框
+        default: false
+      },
+      isOpacity: {
+        type: Boolean,
+        default: false
       }
     },
     onPageScroll(e) {
@@ -98,9 +115,14 @@
     created() {
       let res = mpvue.getSystemInfoSync()
       this.statusBarHeight = res.statusBarHeight || 20
+    },
+    onLoad() {
       this._initHeadStyle()
     },
     methods: {
+      search() {
+        this.$emit('search')
+      },
       setNavigationBarTitle(title) {
         this.translucentTitle = title
       },
@@ -126,14 +148,17 @@
         } else {
           this.headStyleData = 'background: rgba(255, 255, 255, 0)'
           this.titleColorData = 'white'
-          this.translucentTitle = ''
+          this.translucentTitle = this.isOpacity ? this.title : ''
         }
       },
       _initHeadStyle() {
-        if (this.translucent) {
+        if (this.translucent & !this.isOpacity) {
           this.headStyleData = 'background: rgba(255, 255, 255, 0)'
           this.titleColorData = 'transparent'
           this.translucentTitle = ''
+        } else if (this.isOpacity) {
+          this.headStyleData = 'background: rgba(255, 255, 255, 0)'
+          this.translucentTitle = this.title
         }
       },
       goBackUrl() {
@@ -144,9 +169,9 @@
         }
         let pages = getCurrentPages()
         if (+pages.length === 1) {
-          wx.switchTab({url: DEFAULT_PAGE})
+          wx.switchTab({ url: DEFAULT_PAGE })
         } else {
-          wx.navigateBack({delta: 1})
+          wx.navigateBack({ delta: 1 })
         }
       },
       _exceedHeadShow(e) {
@@ -215,6 +240,24 @@
       font-size: 18px
       font-family: PingFangSC-Medium
       color: #000000
+
   .showNavigation
     opacity: 0
+
+  .search-box
+    height: 100%
+    position: absolute
+    top: 0
+    left: 0
+    width: 47px
+    z-index: 10
+
+    .search
+      width: 20px
+      height: 20px
+      position: absolute
+      left: 50%
+      transform: translateX(-50%)
+      bottom: 10px
+      z-index: 10
 </style>

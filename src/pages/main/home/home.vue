@@ -1,17 +1,14 @@
 <template>
   <div class="home">
-    <navigation-bar title="首页"></navigation-bar>
-    home
-    <div @click="chooseFilesHandle">cos</div>
-    <navigator url="/pages/demo">demo</navigator>
+    <navigation-bar title="兑换商城" :showArrow="false" titleColor="#000" :isOpacity="true"></navigation-bar>
+    <div class="location-city"></div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   // import * as Helpers from './modules/helpers'
-  import API from '@api'
+  // import API from '@api'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
-  import chooseFiles from '@utils/we-cos/upload'
 
   const PAGE_NAME = 'HOME'
 
@@ -25,39 +22,8 @@
         hh: 'heooloa a '
       }
     },
-    async onLoad() {
-      let data = {j: '123'}
-      try {
-        // let res = await API.Jwt.getToken({
-        //   data,
-        //   formatter(res) {
-        //     return res
-        //   },
-        //   doctor() {
-        //     // do some
-        //   }
-        // })
-        // let ctx = this
-        let res = await API.Jwt.getToken({
-          data,
-          formatter(err, res) {
-            console.log(err)
-            return res
-          },
-          doctor(res) {
-          }
-        })
-        console.log(res)
-      } catch (e) {
-        console.log(e)
-      }
-    },
+    async onLoad() {},
     methods: {
-      chooseFilesHandle() {
-        chooseFiles().then(res => {
-          console.log(res)
-        })
-      }
     }
   }
 </script>
@@ -65,6 +31,13 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~@design"
 
+  .home
+    width: 100%
+  .location-city
+    padding: 13.5px 15px
+    box-sizing: border-box
+    layout(row)
+    align-items: center
   .home
     width: 100%
 </style>
