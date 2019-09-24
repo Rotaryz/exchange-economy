@@ -7,6 +7,7 @@ export default {
     HOME:`${MAIN}/home`,
     MINE:`${MAIN}/mine`,
     DEMO:`${MAIN}/demo`,
+    GOODS_DETAIL:`${MAIN}/goods-detail`,
     // main
   }
 }
