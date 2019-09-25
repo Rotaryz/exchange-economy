@@ -217,6 +217,4 @@
           font-size: $font-size-14
         .goods-time-bottom
           margin-bottom: 4.5px
-  .home
-    width: 100%
 </style>
