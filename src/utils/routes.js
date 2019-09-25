@@ -7,6 +7,7 @@ export default {
     HOME:`${MAIN}/home`,
     MINE:`${MAIN}/mine`,
     DEMO:`${MAIN}/demo`,
+    JOIN_GUIDE:`${MAIN}/join-guide`,
     // main
   }
 }

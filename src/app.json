@@ -2,7 +2,8 @@
   "pages": [
     "pages/mine",
     "pages/demo",
-    "pages/home"
+    "pages/home",
+    "pages/join-guide"
   ],
   "subPackages": [
   ],
