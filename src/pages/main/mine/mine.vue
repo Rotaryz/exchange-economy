@@ -20,6 +20,7 @@
 
 <script type="text/ecmascript-6">
   // import * as Helpers from './modules/helpers'
+  import API from '@api'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
   import AppPromise from '@utils/app-promise'
   import {findLast} from 'lodash'
@@ -33,7 +34,7 @@
     },
     data() {
       return {
-        count: 0
+        userInfo: {}
       }
     },
     onLoad() {
@@ -50,8 +51,14 @@
     onShow() {
       AppPromise.getInstance().then(res => {
       })
+      this._getUserInfo()
     },
     methods: {
+      _getUserInfo() {
+        API.Customer.getUserInfo({}).then(res => {
+          this.userInfo = res.data
+        })
+      },
       goGuide() {
         wx.navigateTo({ url: `${this.$routes.main.JOIN_GUIDE}` })
       }
@@ -96,8 +103,8 @@
         box-sizing: border-box
         width: auto
         height: 18px
-        line-height: 18px
-        padding: 0 8.5px
+        line-height: 1
+        padding: 2px 8.5px
         font-family: $font-family-regular
         font-size: 14px
         color: #fc3e3e
