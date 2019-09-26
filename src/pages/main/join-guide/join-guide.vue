@@ -22,21 +22,24 @@
           <p class="text">生成海报</p>
         </nav>
       </section>
-      <div class="poster-wrapper" id="sharePoster">
-        <div class="poster-con">
-          <img :src="shareInfo.img" class="poster-banner" mode="aspectFill">
-          <div class="poster-title">
-            <span class="title-tag">报名中</span>
-            <span class="share-title">{{shareInfo.title}}</span>
-          </div>
-          <div class="code-box">
-            <img src="./poster-qrcode.png" class="code-img" mode="aspectFill">
-            <div class="code-text">扫一扫立即报名</div>
-          </div>
+      <we-paint ref="wePaint"></we-paint>
+    </div>
+    <div class="poster-wrapper" id="sharePoster">
+      <img src="./pic-poster_bg@2x.png" class="poster-bg" mode="aspectFill">
+      <div class="poster-con">
+        <img :src="shareInfo.img" class="poster-banner" mode="aspectFill">
+        <div class="poster-title">
+          <img src="./pic-enrolment@2x.png" class="tag-img" mode="aspectFill">
+          <span class="share-title">{{shareInfo.title}}</span>
+          <div class="title-residual">{{shareInfo.title2}}</div>
+        </div>
+        <div class="code-box">
+          <img src="./poster-qrcode.png" class="code-img" mode="aspectFill">
+          <div class="code-text">扫一扫立即报名</div>
         </div>
       </div>
     </div>
-    <we-paint :preview='false' :loading="false" ref="wePaint" @drawDone="_savePoster"></we-paint>
+    <we-paint ref="wePaint" @drawDone="_savePoster"></we-paint>
   </div>
 </template>
 
@@ -56,7 +59,8 @@
     data() {
       return {
         shareInfo: {
-          title: '第一期赞播《美业5G新营销》之异业联盟',
+          title: '第一期赞播《美业5G新营销》',
+          title2: '之异业联盟',
           img: 'https://exchange-platform-1254297111.picgz.myqcloud.com/dev/2019/09/25/1569397929504-168145.jpeg?imageMogr2/thumbnail/750x750'
         },
         showShare: false,
@@ -83,8 +87,8 @@
       },
       // 获取分享二维码
       _getQrCode() {
-        this.shareQRCode = 'https://exchange-platform-1254297111.picgz.myqcloud.com/dev/2019/09/25/1569397929504-168145.jpeg?imageMogr2/thumbnail/750x750'
-        this._handleSavePoster()
+        this.shareQRCode = 'https://social-shopping-api-1254297111.picgz.myqcloud.com/corp1%2F2019%2F07%2F01%2F1561952187961-%E5%BC%80%E5%BF%83%E6%9E%9C.jpg'
+        // this._handleSavePoster()
       },
       // 保存海报按钮
       _handleSavePoster() {
@@ -106,97 +110,94 @@
               drawType: 'rect',
               color: '#fff'
             },
+            // {
+            //   el: '.poster-bg',
+            //   drawType: 'img',
+            //   mode: 'aspectFill',
+            //   source: './pic-poster_bg@2x.png',
+            //   unLoad: false
+            // },
             {
               el: '.poster-banner',
               drawType: 'img',
               mode: 'aspectFill',
-              // source: this.shareInfo.img,
-              source: 'https://social-shopping-api-1254297111.picgz.myqcloud.com/corp1%2F2019%2F07%2F01%2F1561952187961-%E5%BC%80%E5%BF%83%E6%9E%9C.jpg',
+              source: this.shareInfo.img,
               unLoad: false
-            // },
-            // {
-            //   el: '.poster-wrapper .title-tag',
-            //   drawType: 'text',
-            //   source: '报名中',
-            //   fontSize: 14,
-            //   color: '#3F454B'
-            // },
-            // {
-            //   el: '.poster-wrapper .share-title',
-            //   drawType: 'text',
-            //   source: this.shareInfo.title,
-            //   fontSize: 14,
-            //   color: '#3F454B'
-            // },
-            // {
-            //   el: '.poster-wrapper .code-text',
-            //   drawType: 'text',
-            //   source: '扫一扫立即报名',
-            //   fontSize: 14,
-            //   color: '#3F454B'
-            // },
-            // {
-            //   el: '.poster-wrapper .code-img',
-            //   drawType: 'img',
-            //   mode: 'aspectFill',
-            //   source: this.shareQRCode
+            },
+            {
+              el: '.poster-wrapper .tag-img',
+              drawType: 'img',
+              mode: 'aspectFill',
+              source: this.shareInfo.img,
+              unLoad: false,
+              xAdjust: -20,
+              yAdjust: -2
+            },
+            {
+              el: '.poster-wrapper .share-title',
+              drawType: 'text',
+              source: this.shareInfo.title,
+              fontSize: 18,
+              color: '#1D2023',
+              xAdjust: -20
+            },
+            {
+              el: '.poster-wrapper .title-residual',
+              drawType: 'text',
+              source: this.shareInfo.title2,
+              fontSize: 18,
+              color: '#1D2023',
+              xAdjust: -16
+            },
+            {
+              el: '.poster-wrapper .code-text',
+              drawType: 'text',
+              source: '扫一扫立即报名',
+              fontSize: 14,
+              color: '#888888',
+              yAdjust: 20
+            },
+            {
+              el: '.poster-wrapper .code-img',
+              drawType: 'img',
+              mode: 'aspectFill',
+              source: this.shareQRCode,
+              yAdjust: 15
             }
           ]
         }
-        this.$refs.wePaint && this.$refs.wePaint.action(options)// 绘图
-        // let options = {
-        //   canvasId: 'we-paint',
-        //   multiple: 1,
-        //   panel: {
-        //     el: '.panel'
-        //   },
-        //   els: [
-        //     {
-        //       el: '.panel',
-        //       drawType: 'rect',
-        //       color: '#fff'
-        //     },
-        //     {
-        //       el: '.h-avatar',
-        //       drawType: 'img',
-        //       source: 'https://social-shopping-api-1254297111.picgz.myqcloud.com/corp1%2F2019%2F07%2F01%2F1561952187961-%E5%BC%80%E5%BF%83%E6%9E%9C.jpg',
-        //       mode: 'aspectFill',
-        //       unLoad: false
-        //     }
-        //   ]
-        // }
-        // this.$refs.wePaint.action(options)
+        this.$refs.wePaint.action(options)// 绘图
       },
       // 保存海报到本地
       _savePoster(pic) {
         this.shareImg = pic
-        // let self = this
-        // wx.saveImageToPhotosAlbum({
-        //   filePath: pic,
-        //   success: (res) => {
-        //     wx.showToast('海报保存成功')
-        //     this._hideShareModal()
-        //   },
-        //   fail: (e) => {
-        //     // 没有授权，重新调起授权
-        //     wx.showModal({
-        //       content: '保存海报需进行相册授权，请到小程序设置中打开授权',
-        //       confirmText: '去授权',
-        //       confirmColor: '#FC3E3E',
-        //       success(res) {
-        //         if (res.confirm) {
-        //           wx.openSetting({
-        //             success: (res) => {
-        //               if (res.authSetting && res.authSetting['scope.writePhotosAlbum']) {
-        //                 pic && self._savePoster(pic)
-        //               }
-        //             }
-        //           })
-        //         }
-        //       }
-        //     })
-        //   }
-        // })
+        let self = this
+        wx.saveImageToPhotosAlbum({
+          filePath: pic,
+          success: (res) => {
+            wx.showToast('海报保存成功')
+            self._hideShareModal()
+          },
+          fail: (e) => {
+            // 没有授权，重新调起授权
+            wx.showModal({
+              content: '保存海报需进行相册授权，请到小程序设置中打开授权',
+              confirmText: '去授权',
+              confirmColor: '#FC3E3E',
+              success(res) {
+                if (res.confirm) {
+                  wx.openSetting({
+                    success: (res) => {
+                      if (res.authSetting && res.authSetting['scope.writePhotosAlbum']) {
+                        pic && self._savePoster(pic)
+                      }
+                    }
+                  })
+                }
+              }
+            })
+          }
+        })
       }
     }
   }
@@ -289,22 +290,32 @@
         color: $color-text-sub
         text-align: center
   .poster-wrapper
-    position: absolute
-    top: 45%
-    transform :translateY(-50%)
-    left: 0
-    right: 0
+    box-sizing: border-box
+    position: fixed
+    bottom: -200vh
+    left: -200vw
     margin: auto
     background: #fff
-    width: px-change-vw(270)
+    width: 100vw
+    height: auto
     padding: px-change-vw(15)
-    z-index: 9
+    z-index: -9
+    .poster-bg
+      position: absolute
+      top: 0
+      left: 0
+      right: 0
+      bottom: 0
+      width: 100%
+      height: 100%
+      z-index: -1
     .poster-con
-      border-1px(#cccccc)
       .poster-banner
-        width: 100%
-        height: px-change-vw(124.16)
+        width: px-change-vw(345)
+        height: px-change-vw(194)
       .poster-title
+        box-sizing: border-box
+        height: 50px
         padding: 15px
         font-family: $font-family-medium
         font-size: 18px
@@ -323,6 +334,10 @@
           font-size: 11px
           font-family: $font-family-regular
           color: $color-white
+        .tag-img
+          width: 48px
+          height: 17px
+          margin-right: 5px
       .code-box
         layout()
         justify-content: center
@@ -331,7 +346,8 @@
           width: px-change-vw(156.5)
           height: px-change-vw(161.5)
         .code-text
-          margin-bottom: 20px
+          width: 98px
+          margin: 0 auto 20px
           line-height: 1
           text-align: center
           color: #888888
