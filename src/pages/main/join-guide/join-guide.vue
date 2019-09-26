@@ -98,7 +98,7 @@
           canvasId: 'we-paint',
           multiple: 1,
           panel: {
-            el: '#sharePoster'
+            el: '.poster-wrapper'
           },
           els: [
             {
@@ -107,42 +107,65 @@
               color: '#fff'
             },
             {
-              el: '#sharePoster .poster-banner',
+              el: '.poster-banner',
               drawType: 'img',
               mode: 'aspectFill',
-              source: this.shareInfo.img
-            },
-            {
-              el: '#sharePoster .title-tag',
-              drawType: 'text',
-              source: '报名中',
-              fontSize: 14,
-              color: '#3F454B'
-            },
-            {
-              el: '#sharePoster .share-title',
-              drawType: 'text',
-              source: this.shareInfo.title,
-              fontSize: 14,
-              color: '#3F454B'
-            },
-            {
-              el: '#sharePoster .code-text',
-              drawType: 'text',
-              source: '扫一扫立即报名',
-              fontSize: 14,
-              color: '#3F454B'
-            },
-            {
-              el: '#sharePoster .code-img',
-              drawType: 'img',
-              mode: 'aspectFill',
-              source: this.shareQRCode
+              // source: this.shareInfo.img,
+              source: 'https://social-shopping-api-1254297111.picgz.myqcloud.com/corp1%2F2019%2F07%2F01%2F1561952187961-%E5%BC%80%E5%BF%83%E6%9E%9C.jpg',
+              unLoad: false
+            // },
+            // {
+            //   el: '.poster-wrapper .title-tag',
+            //   drawType: 'text',
+            //   source: '报名中',
+            //   fontSize: 14,
+            //   color: '#3F454B'
+            // },
+            // {
+            //   el: '.poster-wrapper .share-title',
+            //   drawType: 'text',
+            //   source: this.shareInfo.title,
+            //   fontSize: 14,
+            //   color: '#3F454B'
+            // },
+            // {
+            //   el: '.poster-wrapper .code-text',
+            //   drawType: 'text',
+            //   source: '扫一扫立即报名',
+            //   fontSize: 14,
+            //   color: '#3F454B'
+            // },
+            // {
+            //   el: '.poster-wrapper .code-img',
+            //   drawType: 'img',
+            //   mode: 'aspectFill',
+            //   source: this.shareQRCode
             }
           ]
         }
-        console.log(this.shareInfo)
-        this.$refs.wePaint && this.$refs.wePaint.action(options, false)// 绘图
+        this.$refs.wePaint && this.$refs.wePaint.action(options)// 绘图
+        // let options = {
+        //   canvasId: 'we-paint',
+        //   multiple: 1,
+        //   panel: {
+        //     el: '.panel'
+        //   },
+        //   els: [
+        //     {
+        //       el: '.panel',
+        //       drawType: 'rect',
+        //       color: '#fff'
+        //     },
+        //     {
+        //       el: '.h-avatar',
+        //       drawType: 'img',
+        //       source: 'https://social-shopping-api-1254297111.picgz.myqcloud.com/corp1%2F2019%2F07%2F01%2F1561952187961-%E5%BC%80%E5%BF%83%E6%9E%9C.jpg',
+        //       mode: 'aspectFill',
+        //       unLoad: false
+        //     }
+        //   ]
+        // }
+        // this.$refs.wePaint.action(options)
       },
       // 保存海报到本地
       _savePoster(pic) {
