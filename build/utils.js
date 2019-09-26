@@ -120,7 +120,7 @@ exports.writeFrameworkinfo = function () {
 exports.pathHandle = function (targetPath, absolutePath) {
   let arr = absolutePath.toString().split('pages' + path.sep)
   let fullPath = arr[1]
-  if (fullPath) return targetPath
+  if (!fullPath) return targetPath
   let packageName = fullPath.split(path.sep)[0]
   let fileName = fullPath.split(path.sep)[2]
   if (packageName === 'main') {
