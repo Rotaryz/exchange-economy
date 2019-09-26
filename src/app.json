@@ -1,8 +1,9 @@
 {
   "pages": [
+    "pages/home",
+    "pages/goods-detail",
     "pages/mine",
     "pages/demo",
-    "pages/home",
     "pages/join-guide"
   ],
   "subPackages": [
