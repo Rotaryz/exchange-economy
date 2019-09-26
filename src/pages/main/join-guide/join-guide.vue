@@ -19,15 +19,15 @@
         </button>
         <nav class="share-btn" @click="_handleSavePoster">
           <img v-if="imageUrl" :src="imageUrl + '/yx-image/goods/icon-poster@2x.png'" class="item-icon" mode="aspectFill">
-          <p class="text">保存海报</p>
+          <p class="text">生成海报</p>
         </nav>
       </section>
       <div class="poster-wrapper" id="sharePoster">
         <div class="poster-con">
-          <img src="./poster-banner.png" class="poster-banner" mode="aspectFill">
+          <img :src="shareInfo.img" class="poster-banner" mode="aspectFill">
           <div class="poster-title">
             <span class="title-tag">报名中</span>
-            第一期赞播《美业5G新营销》之异业联盟
+            <span class="share-title">{{shareInfo.title}}</span>
           </div>
           <div class="code-box">
             <img src="./poster-qrcode.png" class="code-img" mode="aspectFill">
@@ -36,23 +36,32 @@
         </div>
       </div>
     </div>
+    <we-paint :preview='false' :loading="false" ref="wePaint" @drawDone="_savePoster"></we-paint>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   // import * as Helpers from './modules/helpers'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
+  import WePaint from '@components/we-paint/we-paint'
 
   const PAGE_NAME = 'MINE'
 
   export default {
     name: PAGE_NAME,
     components: {
-      NavigationBar
+      NavigationBar,
+      WePaint
     },
     data() {
       return {
-        showShare: false
+        shareInfo: {
+          title: '第一期赞播《美业5G新营销》之异业联盟',
+          img: 'https://exchange-platform-1254297111.picgz.myqcloud.com/dev/2019/09/25/1569397929504-168145.jpeg?imageMogr2/thumbnail/750x750'
+        },
+        showShare: false,
+        shareQRCode: '',
+        shareImg: ''
       }
     },
     onLoad() {
@@ -61,13 +70,110 @@
     },
     methods: {
       copyNumber() {
-        this.showShare = true
+        this._showShareModal()
       },
+      // 显示分享modal
+      _showShareModal() {
+        this.showShare = true
+        this._getQrCode()
+      },
+      // 隐藏分享modal
       _hideShareModal() {
         this.showShare = false
       },
+      // 获取分享二维码
+      _getQrCode() {
+        this.shareQRCode = 'https://exchange-platform-1254297111.picgz.myqcloud.com/dev/2019/09/25/1569397929504-168145.jpeg?imageMogr2/thumbnail/750x750'
+        this._handleSavePoster()
+      },
+      // 保存海报按钮
       _handleSavePoster() {
-        this.showShare = false
+        console.log('_handleSavePoster')
+        if (!this.shareQRCode) {
+          // 没有二维码，重新获取二维码并画海报
+          this._getQrCode()
+          return
+        }
+        let options = {
+          canvasId: 'we-paint',
+          multiple: 1,
+          panel: {
+            el: '#sharePoster'
+          },
+          els: [
+            {
+              el: '.poster-con',
+              drawType: 'rect',
+              color: '#fff'
+            },
+            {
+              el: '#sharePoster .poster-banner',
+              drawType: 'img',
+              mode: 'aspectFill',
+              source: this.shareInfo.img
+            },
+            {
+              el: '#sharePoster .title-tag',
+              drawType: 'text',
+              source: '报名中',
+              fontSize: 14,
+              color: '#3F454B'
+            },
+            {
+              el: '#sharePoster .share-title',
+              drawType: 'text',
+              source: this.shareInfo.title,
+              fontSize: 14,
+              color: '#3F454B'
+            },
+            {
+              el: '#sharePoster .code-text',
+              drawType: 'text',
+              source: '扫一扫立即报名',
+              fontSize: 14,
+              color: '#3F454B'
+            },
+            {
+              el: '#sharePoster .code-img',
+              drawType: 'img',
+              mode: 'aspectFill',
+              source: this.shareQRCode
+            }
+          ]
+        }
+        console.log(this.shareInfo)
+        this.$refs.wePaint && this.$refs.wePaint.action(options, false)// 绘图
+      },
+      // 保存海报到本地
+      _savePoster(pic) {
+        this.shareImg = pic
+        // let self = this
+        // wx.saveImageToPhotosAlbum({
+        //   filePath: pic,
+        //   success: (res) => {
+        //     wx.showToast('海报保存成功')
+        //     this._hideShareModal()
+        //   },
+        //   fail: (e) => {
+        //     // 没有授权，重新调起授权
+        //     wx.showModal({
+        //       content: '保存海报需进行相册授权，请到小程序设置中打开授权',
+        //       confirmText: '去授权',
+        //       confirmColor: '#FC3E3E',
+        //       success(res) {
+        //         if (res.confirm) {
+        //           wx.openSetting({
+        //             success: (res) => {
+        //               if (res.authSetting && res.authSetting['scope.writePhotosAlbum']) {
+        //                 pic && self._savePoster(pic)
+        //               }
+        //             }
+        //           })
+        //         }
+        //       }
+        //     })
+        //   }
+        // })
       }
     }
   }
