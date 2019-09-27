@@ -3,6 +3,7 @@ import AppPromise from '@utils/app-promise'
 import HTTP from '@utils/http'
 import API from '@api'
 import { globalMethods } from '@state/helpers'
+// import $$routes from '@utils/routes'
 export default {
   created () {
     // 调用API从本地缓存中获取数据
@@ -34,6 +35,7 @@ export default {
           loading: false,
           toast: false,
           doctor() {
+            // wx.reLaunch({url: $$routes.main.LOGIN})
           }
         })
         if (res.error_code !== this.$ERR_OK) return

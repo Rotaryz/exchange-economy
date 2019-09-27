@@ -7,7 +7,6 @@ import storage from '@utils/storage'
 const COMMON_HEADER = {
   'Authorization': storage('token')
 }
-const ERR_KEY = 'error_code'
 let ErrorNum = 0
 
 HTTP.init(http => {
@@ -32,38 +31,31 @@ HTTP.setCallback({
     return response
   },
   // 请求完成后的逻辑处理
-  responseFulfilled(res, {url, loading = true, toast = true, formatter, doctor}) {
-    let err = false // 是否有错
+  responseFulfilled(res, { url, loading = true, toast = true, doctor }) {
     // 可自定义处理loading
     if (typeof loading === 'function') {
       loading(res)
     } else if (loading) {
       hideLoading()
     }
-    if (res[ERR_KEY] !== ERR_OK) {
-      errorCodeHandle(res[ERR_KEY])
-    }
-    // 可自定义处理toast错误
+    // 错误处理
     if (res.error_code !== ERR_OK) {
+      // 1 code码处理
+      errorCodeHandle(res.error_code, url)
+      // 2 可自定义处理toast错误
       if (typeof toast === 'function') {
+        console.log(3333)
         toast(res)
       } else if (toast) {
         showToast(res.message)
       }
-    }
-    // 处理错误函数
-    if (res[ERR_KEY] !== ERR_OK) {
+      // 3 错误处理
       console.error(url + ' <<<<<<接口异常>>>>> ' + JSON.stringify(res))
-      err = true
       if (typeof doctor === 'function') {
         doctor(res, url)
       } else {
         throw res
       }
-    }
-    // 对返回的数据劫持
-    if (typeof formatter === 'function') {
-      return formatter(err, res)
     }
     return res
   }
