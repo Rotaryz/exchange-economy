@@ -33,8 +33,12 @@
     data() {
       return {
         userInfo: {},
-        phoneNum: '13316241009'
+        phoneNum: ''
       }
+    },
+    onLoad() {
+      this.phoneNum = wx.getStorageSync('phone') || ''
+      this._getUserInfo()
     },
     onShow() {
       this._getUserInfo()

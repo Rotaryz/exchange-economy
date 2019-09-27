@@ -379,8 +379,9 @@
         })
       },
       phoneCall() {
+        let num = wx.getStorageSync('phone')
         wx.makePhoneCall({
-          phoneNumber: '13316241009'
+          phoneNumber: num
         })
       }
     }
