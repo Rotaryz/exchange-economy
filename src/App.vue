@@ -1,5 +1,8 @@
 <script>
 import AppPromise from '@utils/app-promise'
+import HTTP from '@utils/http'
+import API from '@api'
+import { globalMethods } from '@state/helpers'
 export default {
   created () {
     // 调用API从本地缓存中获取数据
@@ -11,13 +14,34 @@ export default {
      * 支付宝(蚂蚁)：mpvue === my, mpvuePlatform === 'my'
      */
   },
+  async onLaunch() {
+  },
   onShow() {
-    AppPromise.getInstance(resolve => {     // eslint-disable-line
-      console.log('app on show 延迟5s!!!')
-      setTimeout(() => {
-        resolve(true)
-      }, 5000)
+    AppPromise.getInstance(async resolve => {
+      await this.silenceLogin()
+      resolve(true)
     })
+  },
+  methods: {
+    ...globalMethods,
+    // 静默
+    async silenceLogin() {
+      // 初始化获取静默授权
+      this.codeMsg = await this.$wechat.login()
+      if (!this.$storage('token')) {
+        let res = await API.Login.getToken({
+          data: { code: this.codeMsg.code },
+          loading: false,
+          toast: false,
+          doctor() {
+          }
+        })
+        if (res.error_code !== this.$ERR_OK) return
+        this.$storage('token', res.data.access_token)
+        this.$storage('userInfo', res.data.customer_info)
+        HTTP.setHeaders({ Authorization: res.data.access_token })
+      }
+    }
   }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <navigation-bar title="兑换商城" :showArrow="false" titleColor="#000"></navigation-bar>
+    <navigation-bar title="5G新营销" :showArrow="false" titleColor="#000"></navigation-bar>
     <div class="location-city">
       <img src="./icon-current_city@2x.png" alt="" class="location-img">
       <div class="location-text">当前城市: 广州市</div>
@@ -69,7 +69,8 @@
 
 <script type="text/ecmascript-6">
   // import * as Helpers from './modules/helpers'
-  // import API from '@api'
+  import API from '@api'
+  // import storage from '@utils/storage'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
 
   const PAGE_NAME = 'HOME'
@@ -91,9 +92,32 @@
       }
     },
     async onLoad() {},
+    onShow() {
+      this.pageDetail()
+    },
     methods: {
       handleSetBannerIndex(e) {
         this.bannerIndex = e.target.current
+      },
+      pageDetail() {
+        const code = 'gift_index'
+        const data = { code }
+        API.Goods.pageDetail({ data, loading: this.isFirstLoad })
+          .then((res) => {
+            if (res.data.code === code) {
+              this.CMS = res.data.children
+              if (this.page !== 1) return
+              this.CMS.forEach((item) => {
+                if (item.code === 'hot_goods' && item.detail.image_url) {
+                  this.bannerHT = item.detail.image_url
+                }
+                if (item.code === 'recommend' && item.detail.image_url) {
+                  this.bannerRE = item.detail.image_url
+                }
+              })
+            }
+          })
+        this.isFirstLoad = false
       }
     }
   }

@@ -1,34 +1,60 @@
 const env = process.env
 const version = process.versions
 
+const LOCAL = {
+  api: 'http://exchange-platform-api.com/exchange-platform' + version,
+  image: 'http://img.com/defaults',
+  upload: 'http://exchange-platform-api.com/exchange-platform' + version,
+  outLink: 'wss://fresh-h5.jkweixin.net', // 外部h5链接
+  websocket: 'wss://wss.com/',
+  webview: 'https://fresh-h5.jkweixin.net'
+}
+
 const DEV = {
-  api: 'http://social-shopping-api.jerryf.cn/social-shopping' + version,
-  image: 'https://img.jerryf.cn/defaults',
-  upload: 'http://social-shopping-api.jerryf.cn/social-shopping' + version,
+  api: 'https://exchange-platform-api.jerryf.cn/exchange-platform' + version,
+  image: 'https://img.jkweixin.net/defaults',
+  upload: 'https://exchange-platform-api.jerryf.cn/exchange-platform' + version,
   outLink: 'wss://fresh-h5.jkweixin.net', // 外部h5链接
   websocket: 'wss://wss.jerryf.cn/',
   webview: 'https://fresh-h5.jkweixin.net'
 }
 
 const TEST = {
-  api: 'https://social-shopping-api.jkweixin.net/social-shopping' + version,
+  api: 'https://exchange-platform-api.jkweixin.net/exchange-platform' + version,
   image: 'https://img.jkweixin.net/defaults',
-  upload: 'https://social-shopping-api.jkweixin.net/social-shopping' + version,
+  upload: 'https://exchange-platform-api.jkweixin.net/exchange-platform' + version,
   outLink: 'https://fresh-h5.jkweixin.net',
   websocket: 'wss://wss.jkweixin.net',
   webview: 'https://fresh-h5.jkweixin.net'
 }
 
 const PROD = {
-  api: 'https://social-shopping-api.jkweixin.com/social-shopping' + version,
+  api: 'https://exchange-platform-api.jkweixin.com/exchange-platform' + version,
   image: 'https://img.jkweixin.com/defaults',
-  upload: 'https://social-shopping-api.jkweixin.com/social-shopping' + version,
+  upload: 'https://exchange-platform-api.jkweixin.com/exchange-platform' + version,
   outLink: 'https://fresh-h5.jkweixin.com',
   websocket: 'wss://wss.jkweixin.com',
   webview: 'https://fresh-h5.jkweixin.com'
 }
 
-export const baseURL = env === 'production' ? PROD : env === 'test' ? TEST : DEV
+// 环境配置请求的api
+let baseUrl = ''
+switch (env) {
+  case 'local':
+    baseUrl = LOCAL
+    break
+  case 'dev':
+    baseUrl = DEV
+    break
+  case 'test':
+    baseUrl = TEST
+    break
+  case 'production':
+  default:
+    baseUrl = PROD
+    break
+}
+export const baseURL = baseUrl
 
 export const ERR_OK = 0
 export const TIME_OUT = 10000

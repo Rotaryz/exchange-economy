@@ -4,6 +4,7 @@ import {ERR_OK, baseURL} from './config'
 import baseCommon from '@mixins/base-common'
 import base from '@mixins/base'
 import routes from '@utils/routes'
+import * as wechat from './wechat'
 
 // 定义插件
 const AppPlugin = {
@@ -14,6 +15,7 @@ const AppPlugin = {
     Vue.prototype.$imageUrl = baseURL.image
     Vue.prototype.$store = store
     Vue.prototype.$routes = routes
+    Vue.prototype.$wechat = wechat
   }
 }
 // 使用插件

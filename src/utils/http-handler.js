@@ -1,9 +1,14 @@
 import HTTP from '@utils/http'
 import { showLoading, hideLoading, showToast } from '@utils/wechat'
 import { baseURL, ERR_OK, TIME_OUT } from '@utils/config'
+import { silentAuthorization } from './common'
+import storage from '@utils/storage'
 
-const COMMON_HEADER = {}
+const COMMON_HEADER = {
+  'Authorization': storage('token')
+}
 const ERR_KEY = 'error_code'
+let ErrorNum = 0
 
 HTTP.init(http => {
   http.config.timeout = TIME_OUT
@@ -39,7 +44,7 @@ HTTP.setCallback({
       errorCodeHandle(res[ERR_KEY])
     }
     // 可自定义处理toast错误
-    if (res.error !== ERR_OK) {
+    if (res.error_code !== ERR_OK) {
       if (typeof toast === 'function') {
         toast(res)
       } else if (toast) {
@@ -69,11 +74,12 @@ function errorCodeHandle(code) {
   switch (code) {
     // 登录凭证失效的时候
     case 10000:
-      // if (ErrorNum <= 0) {
-      //   silentAuthorization()
-      //   ErrorNum = -1
-      // }
-      // ErrorNum++
+      console.log(code)
+      if (ErrorNum <= 0) {
+        silentAuthorization()
+        ErrorNum = -1
+      }
+      ErrorNum++
       break
     case 2010101: // 商品不存在
     case 2020101: // 服务不存在
