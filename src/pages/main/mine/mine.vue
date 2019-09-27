@@ -22,8 +22,6 @@
   // import * as Helpers from './modules/helpers'
   import API from '@api'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
-  import AppPromise from '@utils/app-promise'
-  import {findLast} from 'lodash'
 
   const PAGE_NAME = 'MINE'
 
@@ -37,20 +35,7 @@
         userInfo: {}
       }
     },
-    onLoad() {
-      // wx.showShareMenu({
-      //   withShareTicket: true
-      // })
-      console.log(findLast)
-      console.log(this.route)
-      wx.env.imageUrl = 'https://123'
-      console.log(wx.env, process.env)
-      AppPromise.getInstance().then(res => {
-      })
-    },
     onShow() {
-      AppPromise.getInstance().then(res => {
-      })
       this._getUserInfo()
     },
     methods: {

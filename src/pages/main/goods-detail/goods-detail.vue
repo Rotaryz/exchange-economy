@@ -5,9 +5,9 @@
     <section class="banner-box">
       <div class="header-swiper">
         <swiper v-if="goodsBanner && goodsBanner.length" :current="swiperIdx" class="banner" @change="bannerChange" interval="5000">
-          <block v-if="hasVideo&&goodsMsg.goods_videos">
+          <block v-if="hasVideo">
             <swiper-item class="banner-item">
-              <video v-if="goodsMsg.goods_videos && goodsMsg.goods_videos[0] && goodsMsg.goods_videos[0].full_url" class="item-img" id="goodsVideo" :src="goodsMsg.goods_videos[0].full_url" :poster="videoPoster" :muted="true" :show-mute-btn="true" :show-center-play-btn="false" :enable-progress-gesture="false" @ended='videoEnd' @waiting="videoWaiting" @progress="videoLoaded"></video>
+              <video class="item-img" id="goodsVideo" :src="goodsMsg.banner_videos[0].video_url" :poster="videoPoster" :muted="true" :show-mute-btn="true" :show-center-play-btn="false" :enable-progress-gesture="false" @ended='videoEnd' @waiting="videoWaiting" @progress="videoLoaded"></video>
               <img v-if="goodsBanner[0].image_url" :class="!playBefore?'hide':''" :src="goodsBanner[0].image_url" mode="aspectFill" class="item-img video-img">
               <div class="play-btn" @click="playVideo && playVideo(false)">
                 <img v-if="imageUrl&&!videoPlaying" :src="imageUrl + '/yx-image/2.6.5/icon-play_big@2x.png'" mode="aspectFill" class="play-btn-icon" @click.stop="playVideo && playVideo(true)">
@@ -37,15 +37,15 @@
     </section>
     <!--商品信息-->
     <section class="goods-info">
-      <div class="title has-title"><span class="title-label">报名中</span>集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采集采</div>
+      <div class="title has-title"><span class="title-label">报名中</span>{{goodsMsg.name}}</div>
       <div class="goods-text-box">
-        <text class="goods-text">{{text}}</text>
+        <text class="goods-text">{{goodsMsg.description}}</text>
       </div>
       <div class="goods-share">
         <div class="goods-share-title">他们已经报名</div>
         <div class="goods-share-box">
           <div class="share-box-left">
-            <img v-for="(item, index) in 6" :key="index" :src="image" alt="" class="share-box-img">
+            <img v-for="(item, index) in goodsMsg.appointment_numbers" :key="index" :src="item" alt="" class="share-box-img">
           </div>
           <div class="share-box-right">邀请好友报名</div>
         </div>
@@ -57,7 +57,7 @@
         <div class="goods-detail-icon"></div>
         <div class="goods-detail-text">课程介绍</div>
       </div>
-      <img v-for="(item, index) in 6" v-if="image" :src="image" lazy-load="true" class="detail-img" mode="widthFix" :key="index">
+      <img v-for="(item, index) in goodsMsg.detail_images" v-if="item.image_url" :src="item.image_url" lazy-load="true" class="detail-img" mode="widthFix" :key="index">
     </section>
     <div class="fixed-btn">
       <div class="fixed-btn-phone">
@@ -71,7 +71,7 @@
 
 <script type="text/ecmascript-6">
   // import * as Helpers from './modules/helpers'
-  // import API from '@api'
+  import API from '@api'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
 
   const PAGE_NAME = 'GOODS_DETAIL'
@@ -86,24 +86,87 @@
         goodsMsg: {},
         swiperIdx: 0,
         videoPlaying: false,
-        currentNum: 1,
-        hasVideo: false,
-        text: '开课时间：2019.09.22 9:00\n开课地点：微信群\n报名人数：390',
-        image: 'https://exchange-platform-1254297111.picgz.myqcloud.com/dev/2019/08/29/1567070867535-109527.png?imageMogr2/thumbnail/750x750'
+        currentNum: 1
       }
     },
     computed: {
       goodsBanner() {
-        return this.goodsMsg.goods_banner_images || []
+        return this.goodsMsg.banner_images || []
       },
       goodsBannerLength() {
         return this.goodsBanner.length || 0
+      },
+      hasVideo() {
+        return (this.goodsMsg.banner_videos && this.goodsMsg.banner_videos[0] && this.goodsMsg.banner_videos[0].video_url) || false
       }
       // ...Helpers.computed,
     },
+    onShow() {
+      this.goodsMsg = {
+        'id': 4,
+        'name': '如何布局短视频矩阵30天吸粉',
+        'description': '开课时间：2019.09.22 9:00\n开课地点：微信群\n报名人数：390',
+        'wechat': 'jason',
+        'banner_images': [
+          {
+            'id': 5,
+            'image_id': 1,
+            'image_url': 'https://exchange-platform-1254297111.picgz.myqcloud.com/dev/2019/08/29/1567070867535-109527.png?imageMogr2/thumbnail/750x750'
+          },
+          {
+            'id': 5,
+            'image_id': 1,
+            'image_url': 'https://exchange-platform-1254297111.picgz.myqcloud.com/dev/2019/08/29/1567070867535-109527.png?imageMogr2/thumbnail/750x750'
+          }
+        ],
+        'detail_images': [
+          {
+            'id': 6,
+            'image_id': 1,
+            'image_url': 'https://exchange-platform-1254297111.picgz.myqcloud.com/dev/2019/08/29/1567070867535-109527.png?imageMogr2/thumbnail/750x750'
+          },
+          {
+            'id': 6,
+            'image_id': 1,
+            'image_url': 'https://exchange-platform-1254297111.picgz.myqcloud.com/dev/2019/08/29/1567070867535-109527.png?imageMogr2/thumbnail/750x750'
+          }
+        ],
+        'cover_image': '',
+        'cover_image_id': 5,
+        'banner_videos': [
+          {
+            'id': 3,
+            'video_id': 1,
+            'video_cover_image': '',
+            'video_url': ''
+          }
+        ],
+        'mobile': '13800138000',
+        'appointment_numbers': [
+          'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3uPoSTpdozKgSGLicLQQnrTHvgQjrefo5ZDvKicVSf3IkMnibnDWTpVT5SpSk0ZN43oSLEgsM54szg/132',
+          'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3uPoSTpdozKgSGLicLQQnrTHvgQjrefo5ZDvKicVSf3IkMnibnDWTpVT5SpSk0ZN43oSLEgsM54szg/132',
+          'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3uPoSTpdozKgSGLicLQQnrTHvgQjrefo5ZDvKicVSf3IkMnibnDWTpVT5SpSk0ZN43oSLEgsM54szg/132',
+          'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3uPoSTpdozKgSGLicLQQnrTHvgQjrefo5ZDvKicVSf3IkMnibnDWTpVT5SpSk0ZN43oSLEgsM54szg/132',
+          'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3uPoSTpdozKgSGLicLQQnrTHvgQjrefo5ZDvKicVSf3IkMnibnDWTpVT5SpSk0ZN43oSLEgsM54szg/132',
+          'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3uPoSTpdozKgSGLicLQQnrTHvgQjrefo5ZDvKicVSf3IkMnibnDWTpVT5SpSk0ZN43oSLEgsM54szg/132',
+          'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3uPoSTpdozKgSGLicLQQnrTHvgQjrefo5ZDvKicVSf3IkMnibnDWTpVT5SpSk0ZN43oSLEgsM54szg/132',
+          'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3uPoSTpdozKgSGLicLQQnrTHvgQjrefo5ZDvKicVSf3IkMnibnDWTpVT5SpSk0ZN43oSLEgsM54szg/132',
+          'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3uPoSTpdozKgSGLicLQQnrTHvgQjrefo5ZDvKicVSf3IkMnibnDWTpVT5SpSk0ZN43oSLEgsM54szg/132',
+          'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3uPoSTpdozKgSGLicLQQnrTHvgQjrefo5ZDvKicVSf3IkMnibnDWTpVT5SpSk0ZN43oSLEgsM54szg/132',
+          'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3uPoSTpdozKgSGLicLQQnrTHvgQjrefo5ZDvKicVSf3IkMnibnDWTpVT5SpSk0ZN43oSLEgsM54szg/132',
+          'https://wx.qlogo.cn/mmopen/vi_32/g8icwibEDlTklBbfwbH1Qa7Zrj0kbKWibahico3gQr1lia4Yia8MZFAUhUiaUviblTNqsa6sUdiaFxzNWfhhcLMCTuTMicPw/132'
+        ]
+      }
+      // this._getCourseInfo()
+    },
     methods: {
       // ...Helpers.methods,
-      changeCurrentNum() {}
+      changeCurrentNum() {},
+      _getCourseInfo() {
+        API.Course.getCourseInfo({data: {id: 13}}).then(res => {
+          this.goodsMsg = res.data
+        })
+      }
     }
   }
 </script>
