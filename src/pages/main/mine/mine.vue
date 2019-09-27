@@ -8,7 +8,7 @@
         <div class="user-tag">学员</div>
       </div>
     </div>
-    <div class="item" @click="goGuide">
+    <div class="item" @click="phoneCall">
       <div class="item-label">联系我们</div>
       <div class="text-con">
         <div class="item-text">{{phoneNum}}</div>
@@ -33,7 +33,7 @@
     data() {
       return {
         userInfo: {},
-        phoneNum: 12345678987
+        phoneNum: '13316241009'
       }
     },
     onShow() {
@@ -45,7 +45,7 @@
           this.userInfo = res.data
         })
       },
-      goGuide() {
+      phoneCall() {
         wx.makePhoneCall({
           phoneNumber: this.phoneNum
         })
