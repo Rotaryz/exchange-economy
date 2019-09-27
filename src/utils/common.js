@@ -9,6 +9,7 @@ import HTTP from '@utils/http'
 export function $checkIsTabPage(path) {
   return appJson.tabBar.list.some(val => path === ('/' + val.pagePath))
 }
+
 // import {SCENE_QR_CODE, SCENE_DEFAULT, SCENE_SHARE} from './contants'
 //
 // const shareArr = [1007, 1008, 1036, 1044, 1073, 1074]
@@ -167,29 +168,41 @@ function getUrl(path = '', query = {}) {
 
 // // 白名单
 const WHITE_LIST = []
+
 // // // 凭证失效时重新调起接口请求获取登录
 export async function silentAuthorization() {
   /* eslint-disable no-undef */
-  let el = await getCurrentPages()[getCurrentPages().length - 1]
-  let url = el && getUrl(el.route, el.options)
-  wx.setStorageSync('targetPage', url)
-  // 推广页面另外处理（白名单处理）
-  let flag = el && WHITE_LIST.some(val => val === el.route)
-  if (flag) {
-    return
+  try {
+    let el = await getCurrentPages()[getCurrentPages().length - 1]
+    let url = el && getUrl(el.route, el.options)
+    wx.setStorageSync('targetPage', url)
+    // 推广页面另外处理（白名单处理）
+    let flag = el && WHITE_LIST.some(val => val === el.route)
+    if (flag) {
+      return
+    }
+    let codeJson = await wechat.login()
+    let tokenJson = await API.Login.getToken({
+      data: {code: codeJson.code},
+      toast: false,
+      loading: false,
+      doctor(res) {
+      }
+    })
+    if (tokenJson.error_code === ERR_OK) {
+      wx.setStorageSync('token', tokenJson.data.access_token)
+      wx.setStorageSync('userInfo', tokenJson.data.customer_info)
+      HTTP.setHeaders({Authorization: tokenJson.data.access_token})
+      await getCurrentPages()[getCurrentPages().length - 1].onLoad()
+      await getCurrentPages()[getCurrentPages().length - 1].onShow()
+      return
+    }
+    wx.reLaunch({url: $$routes.main.LOGIN})
+  } catch (e) {
+    console.error(e)
   }
-  let codeJson = await wechat.login()
-  let tokenJson = await API.Login.getToken({data: {code: codeJson.code}}, false)
-  if (tokenJson.error_code === ERR_OK) {
-    wx.setStorageSync('token', tokenJson.data.access_token)
-    wx.setStorageSync('userInfo', tokenJson.data.customer_info)
-    HTTP.setHeaders({ Authorization: tokenJson.data.access_token })
-    await getCurrentPages()[getCurrentPages().length - 1].onLoad()
-    await getCurrentPages()[getCurrentPages().length - 1].onShow()
-    return
-  }
-  wx.reLaunch({url: $$routes.main.LOGIN})
 }
+
 //
 // // 两个浮点数求和
 // export function floatAccAdd(num1, num2) {
@@ -263,6 +276,7 @@ export function resolveQueryScene(scene = '') {
     employeeId
   }
 }
+
 //
 // // 优惠券金额处理
 // export function formatCouponMoney (money = '') {
