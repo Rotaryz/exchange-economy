@@ -5,7 +5,8 @@
     "pages/login",
     "pages/goods-detail",
     "pages/mine",
-    "pages/demo"
+    "pages/demo",
+    "pages/join-guide"
   ],
   "subPackages": [
   ],
