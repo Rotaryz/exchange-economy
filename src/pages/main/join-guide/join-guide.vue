@@ -10,66 +10,27 @@
       <div class="title">操作指引：</div>
       <img src="/static/images/user.png" alt="" class="guide-img" mode="aspectFill">
     </div>
-    <div class="share-modal" :class="{show: showShare}">
-      <div class="share-mask" @click="_hideShareModal"></div>
-      <section class="share-bottom">
-        <button  open-type="share" class="share-btn" @click="_hideShareModal">
-          <img v-if="imageUrl" :src="imageUrl + '/yx-image/goods/pic-wechat@2x.png'" class="item-icon" mode="aspectFill">
-          <p class="text button">分享好友</p>
-        </button>
-        <nav class="share-btn" @click="_handleSavePoster">
-          <img v-if="imageUrl" :src="imageUrl + '/exchange/icon-conserve_img@2x.png'" class="item-icon" mode="aspectFill">
-          <p class="text">生成海报</p>
-        </nav>
-      </section>
-      <we-paint ref="wePaint"></we-paint>
-    </div>
-    <div class="poster-wrapper" id="sharePoster">
-      <img v-if="imageUrl" :src="imageUrl+'/exchange/pic-poster_bg@2x.png'" class="poster-bg" mode="aspectFill">
-      <div class="poster-con">
-        <img :src="shareInfo.img" class="poster-banner" mode="aspectFill">
-        <div class="poster-title">
-          <img v-if="imageUrl" :src="imageUrl+'/exchange/pic-enrolment@2x.png'" class="tag-img" mode="aspectFill">
-          <span class="share-title">{{shareInfo.title}}</span>
-          <div class="title-residual">{{shareInfo.title2}}</div>
-        </div>
-        <div class="code-box">
-          <img src="" class="code-img" mode="aspectFill">
-          <div class="code-text">扫一扫立即报名</div>
-        </div>
-      </div>
-    </div>
-    <we-paint ref="wePaint" @drawDone="_savePoster"></we-paint>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   // import * as Helpers from './modules/helpers'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
-  import WePaint from '@components/we-paint/we-paint'
 
   const PAGE_NAME = 'MINE'
 
   export default {
     name: PAGE_NAME,
     components: {
-      NavigationBar,
-      WePaint
+      NavigationBar
     },
     data() {
       return {
-        wxNum: '34grdy65y5656',
-        shareInfo: {
-          title: '第一期赞播《美业5G新营销》',
-          title2: '之异业联盟',
-          img: 'https://exchange-platform-1254297111.picgz.myqcloud.com/dev/2019/09/25/1569397929504-168145.jpeg?imageMogr2/thumbnail/750x750'
-        },
-        showShare: false,
-        shareQRCode: '',
-        shareImg: ''
+        wxNum: ''
       }
     },
-    onLoad() {
+    onLoad(option) {
+      this.wxNum = option.wechat
     },
     onShow() {
     },
@@ -78,127 +39,6 @@
         wx.setClipboardData({
           data: this.wxNum,
           success: () => {}
-        })
-        this._showShareModal()
-      },
-      // 显示分享modal
-      _showShareModal() {
-        this.showShare = true
-        this._getQrCode()
-      },
-      // 隐藏分享modal
-      _hideShareModal() {
-        this.showShare = false
-      },
-      // 获取分享二维码
-      _getQrCode() {
-        this.shareQRCode = 'https://social-shopping-api-1254297111.picgz.myqcloud.com/corp1%2F2019%2F07%2F01%2F1561952187961-%E5%BC%80%E5%BF%83%E6%9E%9C.jpg'
-        // this._handleSavePoster()
-      },
-      // 保存海报按钮
-      _handleSavePoster() {
-        console.log('_handleSavePoster')
-        if (!this.shareQRCode) {
-          // 没有二维码，重新获取二维码并画海报
-          this._getQrCode()
-          return
-        }
-        let options = {
-          canvasId: 'we-paint',
-          multiple: 1,
-          panel: {
-            el: '.poster-wrapper'
-          },
-          els: [
-            {
-              el: '.poster-con',
-              drawType: 'rect',
-              color: '#fff'
-            },
-            {
-              el: '.poster-bg',
-              drawType: 'img',
-              mode: 'aspectFill',
-              source: this.$imageUrl + '/exchange/pic-poster_bg@2x.png',
-              unLoad: false
-            },
-            {
-              el: '.poster-banner',
-              drawType: 'img',
-              mode: 'aspectFill',
-              source: this.shareInfo.img,
-              unLoad: false
-            },
-            {
-              el: '.poster-wrapper .tag-img',
-              drawType: 'img',
-              mode: 'aspectFill',
-              source: this.$imageUrl + '/exchange/pic-enrolment@2x.png',
-              unLoad: false,
-              yAdjust: -2
-            },
-            {
-              el: '.poster-wrapper .share-title',
-              drawType: 'text',
-              source: this.shareInfo.title,
-              fontSize: 18,
-              color: '#1D2023'
-            },
-            {
-              el: '.poster-wrapper .title-residual',
-              drawType: 'text',
-              source: this.shareInfo.title2,
-              fontSize: 18,
-              color: '#1D2023'
-            },
-            {
-              el: '.poster-wrapper .code-text',
-              drawType: 'text',
-              source: '扫一扫立即报名',
-              fontSize: 14,
-              color: '#888888',
-              yAdjust: 20
-            },
-            {
-              el: '.poster-wrapper .code-img',
-              drawType: 'img',
-              mode: 'aspectFill',
-              source: this.shareQRCode,
-              yAdjust: 15
-            }
-          ]
-        }
-        this.$refs.wePaint.action(options)// 绘图
-      },
-      // 保存海报到本地
-      _savePoster(pic) {
-        this.shareImg = pic
-        let self = this
-        wx.saveImageToPhotosAlbum({
-          filePath: pic,
-          success: (res) => {
-            wx.showToast('海报保存成功')
-            self._hideShareModal()
-          },
-          fail: (e) => {
-            // 没有授权，重新调起授权
-            wx.showModal({
-              content: '保存海报需进行相册授权，请到小程序设置中打开授权',
-              confirmText: '去授权',
-              confirmColor: '#FC3E3E',
-              success(res) {
-                if (res.confirm) {
-                  wx.openSetting({
-                    success: (res) => {
-                      if (res.authSetting && res.authSetting['scope.writePhotosAlbum']) {
-                        pic && self._savePoster(pic)
-                      }
-                    }
-                  })
-                }
-              }
-            })
-          }
         })
       }
     }
@@ -246,113 +86,4 @@
     padding-top: 25px
     .guide-img
       margin-top: 15px
-
-  .share-modal
-    width: 100vw
-    height: 100vh
-    position: fixed
-    left: 0
-    bottom: -100vh
-    right: 0
-    z-index: 999
-    transition: all .25s
-    &.show
-      bottom :0
-  .share-mask
-    width: 100vw
-    height: 100vh
-    position: absolute
-    left: 0
-    top: 0
-    background: rgba(17, 17, 17, 0.7)
-  .share-bottom
-    display: flex
-    box-sizing: border-box
-    position: absolute
-    bottom: 0
-    left: 0
-    z-index:9
-    background: $color-white
-    width: 100%
-    padding: 28px 0 22px
-    .share-btn
-      background: $color-white
-      flex: 1
-      position: relative
-      border-none()
-      .item-icon
-        width:  45px
-        height: @width
-        display: block
-        margin: 0 auto 7.5px
-      .text
-        line-height: 1
-        font-family: $font-family-regular
-        font-size: 14px
-        color: $color-text-sub
-        text-align: center
-  .poster-wrapper
-    box-sizing: border-box
-    position: fixed
-    bottom: -200vh
-    left: -200vw
-    margin: auto
-    background: #fff
-    width: px-change-vw(375)
-    height: px-change-vw(500)
-    padding: px-change-vw(15)
-    z-index: -9
-    .poster-bg
-      position: absolute
-      top: 0
-      left: 0
-      right: 0
-      bottom: 0
-      width: 100%
-      height: 100%
-      z-index: -1
-    .poster-con
-      .poster-banner
-        width: px-change-vw(345)
-        height: px-change-vw(194)
-      .poster-title
-        box-sizing: border-box
-        height: 50px
-        padding: 15px
-        font-family: $font-family-medium
-        font-size: 18px
-        color: $color-text-main
-        .title-tag
-          display: inline-block
-          transform :translateY(-3px)
-          box-sizing: border-box
-          width: auto
-          height: 18px
-          line-height: 18px
-          padding: 0 6px
-          margin-right: 5px
-          background: #fc3e3e
-          border-radius: 9px
-          font-size: 11px
-          font-family: $font-family-regular
-          color: $color-white
-        .tag-img
-          width: 48px
-          height: 17px
-          margin-right: 5px
-      .code-box
-        layout()
-        justify-content: center
-        .code-img
-          margin: 0 auto 5.5px
-          width: px-change-vw(156.5)
-          height: px-change-vw(161.5)
-        .code-text
-          width: 98px
-          margin: 0 auto 20px
-          line-height: 1
-          text-align: center
-          color: #888888
-          font-size: 14px
-          font-family: $font-family-regular
 </style>

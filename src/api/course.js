@@ -10,5 +10,10 @@ export default {
   getCourseList(args) {
     const url = `/exchange-platform/business/course/course/index`
     return request.get({url, ...args})
+  },
+  // 课程预约
+  bookCourse(args) {
+    const url = `/exchange-platform/business/course-appointment/appointment/create`
+    return request.post({url, ...args})
   }
 }

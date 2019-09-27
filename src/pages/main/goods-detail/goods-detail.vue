@@ -47,7 +47,7 @@
           <div class="share-box-left">
             <img v-for="(item, index) in goodsMsg.appointment_numbers" :key="index" :src="item" alt="" class="share-box-img">
           </div>
-          <div class="share-box-right">邀请好友报名</div>
+          <div class="share-box-right" @click="_showShareModal">邀请好友报名</div>
         </div>
       </div>
     </section>
@@ -64,8 +64,37 @@
         <img src="./icon-tel@2x.png" alt="" class="btn-phone-img">
         <div class="btn-phone-text">打电话</div>
       </div>
-      <div class="fixed-btn-btn">马上进群</div>
+      <div class="fixed-btn-btn" @click="_bookCourse">马上进群</div>
     </div>
+    <div class="share-modal" :class="{show: showShare}">
+      <div class="share-mask" @click="_hideShareModal"></div>
+      <section class="share-bottom">
+        <button  open-type="share" class="share-btn" @click="_hideShareModal">
+          <img v-if="imageUrl" :src="imageUrl + '/yx-image/goods/pic-wechat@2x.png'" class="item-icon" mode="aspectFill">
+          <p class="text button">分享好友</p>
+        </button>
+        <nav class="share-btn" @click="_handleSavePoster">
+          <img v-if="imageUrl" :src="imageUrl + '/exchange/icon-conserve_img@2x.png'" class="item-icon" mode="aspectFill">
+          <p class="text">生成海报</p>
+        </nav>
+      </section>
+    </div>
+    <div class="poster-wrapper" id="sharePoster">
+      <img v-if="imageUrl" :src="imageUrl+'/exchange/pic-poster_bg@2x.png'" class="poster-bg" mode="aspectFill">
+      <div class="poster-con">
+        <img :src="shareInfo.img" class="poster-banner" mode="aspectFill">
+        <div class="poster-title">
+          <img v-if="imageUrl" :src="imageUrl+'/exchange/pic-enrolment@2x.png'" class="tag-img" mode="aspectFill">
+          <span class="share-title">{{shareInfo.title}}</span>
+          <div class="title-residual">{{shareInfo.title2}}</div>
+        </div>
+        <div class="code-box">
+          <img src="" class="code-img" mode="aspectFill">
+          <div class="code-text">扫一扫立即报名</div>
+        </div>
+      </div>
+    </div>
+    <we-paint ref="wePaint" @drawDone="_savePoster"></we-paint>
   </div>
 </template>
 
@@ -73,20 +102,36 @@
   // import * as Helpers from './modules/helpers'
   import API from '@api'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
+  import WePaint from '@components/we-paint/we-paint'
 
   const PAGE_NAME = 'GOODS_DETAIL'
 
   export default {
     name: PAGE_NAME,
     components: {
-      NavigationBar
+      NavigationBar,
+      WePaint
     },
     data() {
       return {
+        courseId: '',
         goodsMsg: {},
         swiperIdx: 0,
+        currentNum: 1,
+        isIos: false,
+        videoPoster: '',
         videoPlaying: false,
-        currentNum: 1
+        playBefore: true,
+        videoLoading: false,
+        videoContext: '',
+        shareInfo: {
+          title: '第一期赞播《美业5G新营销》',
+          title2: '之异业联盟',
+          img: 'https://exchange-platform-1254297111.picgz.myqcloud.com/dev/2019/09/25/1569397929504-168145.jpeg?imageMogr2/thumbnail/750x750'
+        },
+        showShare: false,
+        shareQRCode: '',
+        shareImg: ''
       }
     },
     computed: {
@@ -101,70 +146,221 @@
       }
       // ...Helpers.computed,
     },
+    onLoad(option) {
+      this.courseId = option.id
+      this.getSystemInfo()
+    },
     onShow() {
-      this.goodsMsg = {
-        'id': 4,
-        'name': '如何布局短视频矩阵30天吸粉',
-        'description': '开课时间：2019.09.22 9:00\n开课地点：微信群\n报名人数：390',
-        'wechat': 'jason',
-        'banner_images': [
-          {
-            'id': 5,
-            'image_id': 1,
-            'image_url': 'https://exchange-platform-1254297111.picgz.myqcloud.com/dev/2019/08/29/1567070867535-109527.png?imageMogr2/thumbnail/750x750'
-          },
-          {
-            'id': 5,
-            'image_id': 1,
-            'image_url': 'https://exchange-platform-1254297111.picgz.myqcloud.com/dev/2019/08/29/1567070867535-109527.png?imageMogr2/thumbnail/750x750'
-          }
-        ],
-        'detail_images': [
-          {
-            'id': 6,
-            'image_id': 1,
-            'image_url': 'https://exchange-platform-1254297111.picgz.myqcloud.com/dev/2019/08/29/1567070867535-109527.png?imageMogr2/thumbnail/750x750'
-          },
-          {
-            'id': 6,
-            'image_id': 1,
-            'image_url': 'https://exchange-platform-1254297111.picgz.myqcloud.com/dev/2019/08/29/1567070867535-109527.png?imageMogr2/thumbnail/750x750'
-          }
-        ],
-        'cover_image': '',
-        'cover_image_id': 5,
-        'banner_videos': [
-          {
-            'id': 3,
-            'video_id': 1,
-            'video_cover_image': '',
-            'video_url': ''
-          }
-        ],
-        'mobile': '13800138000',
-        'appointment_numbers': [
-          'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3uPoSTpdozKgSGLicLQQnrTHvgQjrefo5ZDvKicVSf3IkMnibnDWTpVT5SpSk0ZN43oSLEgsM54szg/132',
-          'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3uPoSTpdozKgSGLicLQQnrTHvgQjrefo5ZDvKicVSf3IkMnibnDWTpVT5SpSk0ZN43oSLEgsM54szg/132',
-          'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3uPoSTpdozKgSGLicLQQnrTHvgQjrefo5ZDvKicVSf3IkMnibnDWTpVT5SpSk0ZN43oSLEgsM54szg/132',
-          'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3uPoSTpdozKgSGLicLQQnrTHvgQjrefo5ZDvKicVSf3IkMnibnDWTpVT5SpSk0ZN43oSLEgsM54szg/132',
-          'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3uPoSTpdozKgSGLicLQQnrTHvgQjrefo5ZDvKicVSf3IkMnibnDWTpVT5SpSk0ZN43oSLEgsM54szg/132',
-          'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3uPoSTpdozKgSGLicLQQnrTHvgQjrefo5ZDvKicVSf3IkMnibnDWTpVT5SpSk0ZN43oSLEgsM54szg/132',
-          'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3uPoSTpdozKgSGLicLQQnrTHvgQjrefo5ZDvKicVSf3IkMnibnDWTpVT5SpSk0ZN43oSLEgsM54szg/132',
-          'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3uPoSTpdozKgSGLicLQQnrTHvgQjrefo5ZDvKicVSf3IkMnibnDWTpVT5SpSk0ZN43oSLEgsM54szg/132',
-          'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3uPoSTpdozKgSGLicLQQnrTHvgQjrefo5ZDvKicVSf3IkMnibnDWTpVT5SpSk0ZN43oSLEgsM54szg/132',
-          'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3uPoSTpdozKgSGLicLQQnrTHvgQjrefo5ZDvKicVSf3IkMnibnDWTpVT5SpSk0ZN43oSLEgsM54szg/132',
-          'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3uPoSTpdozKgSGLicLQQnrTHvgQjrefo5ZDvKicVSf3IkMnibnDWTpVT5SpSk0ZN43oSLEgsM54szg/132',
-          'https://wx.qlogo.cn/mmopen/vi_32/g8icwibEDlTklBbfwbH1Qa7Zrj0kbKWibahico3gQr1lia4Yia8MZFAUhUiaUviblTNqsa6sUdiaFxzNWfhhcLMCTuTMicPw/132'
-        ]
-      }
-      // this._getCourseInfo()
+      this._getCourseInfo()
+    },
+    onHide() {
+      this.autoplayTimer && clearTimeout(this.autoplayTimer)
+    },
+    onUnload() {
+      this.autoplayTimer && clearTimeout(this.autoplayTimer)
     },
     methods: {
       // ...Helpers.methods,
-      changeCurrentNum() {},
+      // 获取系统信息
+      getSystemInfo() {
+        let res = wx.getSystemInfoSync()
+        let system = res.system
+        this.isIos = /Ios/i.test(system)
+      },
+      // 获取课程详情
       _getCourseInfo() {
-        API.Course.getCourseInfo({data: {id: 13}}).then(res => {
+        API.Course.getCourseInfo({data: {id: this.courseId}}).then(res => {
           this.goodsMsg = res.data
+          this.courseId = res.data.id
+          // 有视频的情况
+          if (this.goodsMsg.banner_videos && this.goodsMsg.banner_videos[0] && this.goodsMsg.banner_videos[0].video_url) {
+            this.currentNum = 0// 默认为1，如果有视频设为0
+            this.videoContext = wx.createVideoContext('goodsVideo')
+            let that = this
+            // 设置自动播放
+            this.autoplayTimer = setTimeout(() => {
+              // 如果还没自动播放就执行播放方法
+              if (!that.videoPlaying && that.playBefore && that.swiperIdx === 0) {
+                that.playVideo && that.playVideo(true)
+              }
+            }, 2000)
+            // 如果不是苹果，显示视频封面
+            if (!this.isIos) {
+              this.videoPoster = this.goodsMsg.banner_videos[0].video_cover_image
+            }
+          }
+        })
+      },
+      // 轮播图切换后的方法
+      bannerChange(e) {
+        if (e.mp.detail.source !== 'touch') return
+        let curNum = e.target.current * 1 + !this.hasVideo
+        this.changeCurrentNum(curNum)
+      },
+      // 切换当前轮播图
+      changeCurrentNum(curNum) {
+        if (curNum !== this.currentNum) {
+          this.currentNum = curNum
+          // 有视频的情况
+          if (this.hasVideo && this.videoContext) {
+            this.autoplayTimer && clearTimeout(this.autoplayTimer)
+            this.swiperIdx = curNum
+            // 不是视频页的时候暂停播放
+            if (curNum !== 0) {
+              this.videoContext.pause()
+              this.videoPlaying = false
+            }
+          }
+        }
+      },
+      // 视频播放
+      playVideo(play) {
+        this.videoPlaying = play
+        this.playBefore = false
+        !this.videoContext && (this.videoContext = wx.createVideoContext('goodsVideo'))
+        if (play) {
+          this.videoContext && this.videoContext.play()
+        } else {
+          this.videoContext && this.videoContext.pause()
+        }
+      },
+      // 视频等待
+      videoWaiting() {
+        this.videoLoading = true
+      },
+      // 视频加载中
+      videoLoaded() {
+        this.videoLoading = false
+      },
+      // 视频播放结束
+      videoEnd() {
+        this.videoPlaying = false
+        this.videoContext.exitFullScreen()
+      },
+      // 预约课程，马上进群
+      _bookCourse() {
+        API.Course.bookCourse({data: {course_id: this.goodsMsg.id}}).then(res => {
+          wx.navigateTo({ url: `${this.$routes.main.JOIN_GUIDE}?wechat=${this.goodsMsg.wechat}` })
+        })
+      },
+      // 显示分享modal
+      _showShareModal() {
+        this.showShare = true
+        this._getQrCode()
+      },
+      // 隐藏分享modal
+      _hideShareModal() {
+        this.showShare = false
+      },
+      // 获取分享二维码
+      _getQrCode() {
+        this.shareQRCode = 'https://social-shopping-api-1254297111.picgz.myqcloud.com/corp1%2F2019%2F07%2F01%2F1561952187961-%E5%BC%80%E5%BF%83%E6%9E%9C.jpg'
+        // this._handleSavePoster()
+      },
+      // 保存海报按钮
+      _handleSavePoster() {
+        console.log('_handleSavePoster')
+        if (!this.shareQRCode) {
+          // 没有二维码，重新获取二维码并画海报
+          this._getQrCode()
+          return
+        }
+        let options = {
+          canvasId: 'we-paint',
+          multiple: 1,
+          panel: {
+            el: '.poster-wrapper'
+          },
+          els: [
+            {
+              el: '.poster-con',
+              drawType: 'rect',
+              color: '#fff'
+            },
+            {
+              el: '.poster-bg',
+              drawType: 'img',
+              mode: 'aspectFill',
+              source: this.$imageUrl + '/exchange/pic-poster_bg@2x.png',
+              unLoad: false
+            },
+            {
+              el: '.poster-banner',
+              drawType: 'img',
+              mode: 'aspectFill',
+              source: this.goodsBanner[0].image_url,
+              unLoad: false
+            },
+            {
+              el: '.poster-wrapper .tag-img',
+              drawType: 'img',
+              mode: 'aspectFill',
+              source: this.$imageUrl + '/exchange/pic-enrolment@2x.png',
+              unLoad: false,
+              yAdjust: -2
+            },
+            {
+              el: '.poster-wrapper .share-title',
+              drawType: 'text',
+              source: this.goodsMsg.name,
+              fontSize: 18,
+              color: '#1D2023'
+            },
+            {
+              el: '.poster-wrapper .title-residual',
+              drawType: 'text',
+              source: this.shareInfo.title2,
+              fontSize: 18,
+              color: '#1D2023'
+            },
+            {
+              el: '.poster-wrapper .code-text',
+              drawType: 'text',
+              source: '扫一扫立即报名',
+              fontSize: 14,
+              color: '#888888',
+              yAdjust: 20
+            },
+            {
+              el: '.poster-wrapper .code-img',
+              drawType: 'img',
+              mode: 'aspectFill',
+              source: this.shareQRCode,
+              yAdjust: 15
+            }
+          ]
+        }
+        this.$refs.wePaint.action(options)// 绘图
+      },
+      // 保存海报到本地
+      _savePoster(pic) {
+        this.shareImg = pic
+        let self = this
+        wx.saveImageToPhotosAlbum({
+          filePath: pic,
+          success: (res) => {
+            wx.showToast('海报保存成功')
+            self._hideShareModal()
+          },
+          fail: (e) => {
+            // 没有授权，重新调起授权
+            wx.showModal({
+              content: '保存海报需进行相册授权，请到小程序设置中打开授权',
+              confirmText: '去授权',
+              confirmColor: '#FC3E3E',
+              success(res) {
+                if (res.confirm) {
+                  wx.openSetting({
+                    success: (res) => {
+                      if (res.authSetting && res.authSetting['scope.writePhotosAlbum']) {
+                        pic && self._savePoster(pic)
+                      }
+                    }
+                  })
+                }
+              }
+            })
+          }
         })
       }
     }
@@ -232,9 +428,13 @@
         align-items: center
         justify-content: space-between
         .share-box-left
-          layout(row)
+          flex: 1
+          max-width: px-change-vw(200)
+          overflow: hidden
+          layout(row,block,nowrap)
           align-items: center
           .share-box-img
+            min-width: 24px
             width: 24px
             height: 24px
             border-radius: 50%
@@ -316,11 +516,11 @@
       transition: opacity 0.3s
   .header-swiper
     width: 100vw
-    height: 100vw
+    height: px-change-vw(211)
     position: relative
     .banner
       width: 100vw
-      height: 100vw
+      height: px-change-vw(211)
       .banner-item
         width: 100%
         height: 100%
@@ -388,11 +588,121 @@
           text-align: center
           opacity: .75
           &.active
-            background: linear-gradient(90deg, #FD4C46 0%, #FB6C21 73%)
+            /*background: linear-gradient(90deg, #FD4C46 0%, #FB6C21 73%)*/
+            background: $color-main
             color: $color-white
             opacity: 1
           .banner-btn-icon
             width: 7px
             height: 7.5px
 
+  /*分享*/
+  .share-modal
+    width: 100vw
+    height: 100vh
+    position: fixed
+    left: 0
+    bottom: -100vh
+    right: 0
+    z-index: 999
+    transition: all .25s
+    &.show
+      bottom :0
+  .share-mask
+    width: 100vw
+    height: 100vh
+    position: absolute
+    left: 0
+    top: 0
+    background: rgba(17, 17, 17, 0.7)
+  .share-bottom
+    display: flex
+    box-sizing: border-box
+    position: absolute
+    bottom: 0
+    left: 0
+    z-index:9
+    background: $color-white
+    width: 100%
+    padding: 28px 0 22px
+    .share-btn
+      background: $color-white
+      flex: 1
+      position: relative
+      border-none()
+      .item-icon
+        width:  45px
+        height: @width
+        display: block
+        margin: 0 auto 7.5px
+      .text
+        line-height: 1
+        font-family: $font-family-regular
+        font-size: 14px
+        color: $color-text-sub
+        text-align: center
+  .poster-wrapper
+    box-sizing: border-box
+    position: fixed
+    bottom: -200vh
+    left: -200vw
+    margin: auto
+    background: #fff
+    width: px-change-vw(375)
+    height: px-change-vw(500)
+    padding: px-change-vw(15)
+    z-index: -9
+    .poster-bg
+      position: absolute
+      top: 0
+      left: 0
+      right: 0
+      bottom: 0
+      width: 100%
+      height: 100%
+      z-index: -1
+    .poster-con
+      .poster-banner
+        width: px-change-vw(345)
+        height: px-change-vw(194)
+      .poster-title
+        box-sizing: border-box
+        height: 50px
+        padding: 15px
+        font-family: $font-family-medium
+        font-size: 18px
+        color: $color-text-main
+        .title-tag
+          display: inline-block
+          transform :translateY(-3px)
+          box-sizing: border-box
+          width: auto
+          height: 18px
+          line-height: 18px
+          padding: 0 6px
+          margin-right: 5px
+          background: #fc3e3e
+          border-radius: 9px
+          font-size: 11px
+          font-family: $font-family-regular
+          color: $color-white
+        .tag-img
+          width: 48px
+          height: 17px
+          margin-right: 5px
+      .code-box
+        layout()
+        justify-content: center
+        .code-img
+          margin: 0 auto 5.5px
+          width: px-change-vw(156.5)
+          height: px-change-vw(161.5)
+        .code-text
+          width: 98px
+          margin: 0 auto 20px
+          line-height: 1
+          text-align: center
+          color: #888888
+          font-size: 14px
+          font-family: $font-family-regular
 </style>

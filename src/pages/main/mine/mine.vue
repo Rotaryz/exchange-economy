@@ -11,7 +11,7 @@
     <div class="item" @click="goGuide">
       <div class="item-label">联系我们</div>
       <div class="text-con">
-        <div class="item-text">12345678987</div>
+        <div class="item-text">{{phoneNum}}</div>
         <img mode="aspectFill" src="/static/images/icon-tel@2x.png" alt="" class="item-icon">
       </div>
     </div>
@@ -32,7 +32,8 @@
     },
     data() {
       return {
-        userInfo: {}
+        userInfo: {},
+        phoneNum: 12345678987
       }
     },
     onShow() {
@@ -45,7 +46,9 @@
         })
       },
       goGuide() {
-        wx.navigateTo({ url: `${this.$routes.main.JOIN_GUIDE}` })
+        wx.makePhoneCall({
+          phoneNumber: this.phoneNum
+        })
       }
     }
   }
