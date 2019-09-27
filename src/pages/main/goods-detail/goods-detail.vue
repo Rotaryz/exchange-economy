@@ -582,7 +582,7 @@
       width: 100%
       padding: 0 12px
       position: absolute
-      bottom: px-change-vw(60.5)
+      bottom: 36px
       left: 0
       layout(row)
       align-items: center
