@@ -2,13 +2,13 @@
   <div class="mine">
     <navigation-bar headStyle="background: #f7f7f7" :showArrow="false" titleColor="#333333" title="我的"></navigation-bar>
     <div class="user-box">
-      <img mode="aspectFill" src="/static/images/user.png" alt="" class="user-img">
+      <img v-if="userInfo.avatar" :src="userInfo.avatar" mode="aspectFill" alt="" class="user-img">
       <div class="user-info">
-        <div class="user-name">我的天</div>
+        <div class="user-name">{{userInfo.nickname}}</div>
         <div class="user-tag">学员</div>
       </div>
     </div>
-    <div class="item" @click="goGuide">
+    <div class="item" @click="phoneCall">
       <div class="item-label">联系我们</div>
       <div class="text-con">
         <div class="item-text">{{phoneNum}}</div>
@@ -33,8 +33,12 @@
     data() {
       return {
         userInfo: {},
-        phoneNum: 12345678987
+        phoneNum: ''
       }
+    },
+    onLoad() {
+      this.phoneNum = wx.getStorageSync('phone') || ''
+      this._getUserInfo()
     },
     onShow() {
       this._getUserInfo()
@@ -45,7 +49,7 @@
           this.userInfo = res.data
         })
       },
-      goGuide() {
+      phoneCall() {
         wx.makePhoneCall({
           phoneNumber: this.phoneNum
         })
@@ -78,6 +82,7 @@
       width: 70px
       height: @width
       margin-right: 12px
+      border-radius: 35px
     .user-info
       flex: 1
       layout()

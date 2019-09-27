@@ -42,9 +42,9 @@
         <text class="goods-text">{{goodsMsg.description}}</text>
       </div>
       <div class="goods-share">
-        <div class="goods-share-title">他们已经报名</div>
+        <div v-if="goodsMsg.appointment_numbers&&goodsMsg.appointment_numbers.length" class="goods-share-title">他们已经报名</div>
         <div class="goods-share-box">
-          <div class="share-box-left">
+          <div v-if="goodsMsg.appointment_numbers&&goodsMsg.appointment_numbers.length" class="share-box-left">
             <img v-for="(item, index) in goodsMsg.appointment_numbers" :key="index" :src="item" alt="" class="share-box-img">
           </div>
           <div class="share-box-right" @click="_showShareModal">邀请好友报名</div>
@@ -60,7 +60,7 @@
       <img v-for="(item, index) in goodsMsg.detail_images" v-if="item.image_url" :src="item.image_url" lazy-load="true" class="detail-img" mode="widthFix" :key="index">
     </section>
     <div class="fixed-btn">
-      <div class="fixed-btn-phone">
+      <div class="fixed-btn-phone" @click="phoneCall">
         <img src="./icon-tel@2x.png" alt="" class="btn-phone-img">
         <div class="btn-phone-text">打电话</div>
       </div>
@@ -125,8 +125,8 @@
         videoLoading: false,
         videoContext: '',
         shareInfo: {
-          title: '第一期赞播《美业5G新营销》',
-          title2: '之异业联盟',
+          title: '',
+          title2: '',
           img: 'https://exchange-platform-1254297111.picgz.myqcloud.com/dev/2019/09/25/1569397929504-168145.jpeg?imageMogr2/thumbnail/750x750'
         },
         showShare: false,
@@ -158,6 +158,21 @@
     },
     onUnload() {
       this.autoplayTimer && clearTimeout(this.autoplayTimer)
+    },
+    onShareAppMessage() {
+      // 分享锁
+      const flag = Date.now()
+      return {
+        title: this.goodsMsg.name,
+        path: `${this.$routes.main.GOODS_DETAIL}?id=${this.goodsId}&flag=${flag}`, // 商品详情
+        imageUrl: this.goodsBanner[0].image_url,
+        success: (res) => {
+          // 转发成功
+        },
+        fail: (res) => {
+          // 转发失败
+        }
+      }
     },
     methods: {
       // ...Helpers.methods,
@@ -362,6 +377,12 @@
             })
           }
         })
+      },
+      phoneCall() {
+        let num = wx.getStorageSync('phone')
+        wx.makePhoneCall({
+          phoneNumber: num
+        })
       }
     }
   }
@@ -562,7 +583,7 @@
       width: 100%
       padding: 0 12px
       position: absolute
-      bottom: px-change-vw(60.5)
+      bottom: 36px
       left: 0
       layout(row)
       align-items: center
