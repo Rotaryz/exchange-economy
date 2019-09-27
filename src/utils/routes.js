@@ -9,6 +9,7 @@ export default {
     DEMO:`${MAIN}/demo`,
     GOODS_DETAIL:`${MAIN}/goods-detail`,
     LOGIN:`${MAIN}/login`,
+    OUT_HTML:`${MAIN}/out-html`,
     // main
   }
 }

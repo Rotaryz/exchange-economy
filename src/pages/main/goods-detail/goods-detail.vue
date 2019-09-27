@@ -243,14 +243,14 @@
       font-size: $font-size-16
       border-radius: 22.5px
   // banner图
-  .banner-box
-    position :relative
-    .header-title-wrapper
-      position: absolute
-      left: 12px
-      right :@left
-      bottom: 0
-      transition: opacity 0.3s
+      .banner-box
+        position :relative
+        .header-title-wrapper
+          position: absolute
+          left: 12px
+          right :@left
+          bottom: 0
+          transition: opacity 0.3s
   .header-swiper
     width: 100vw
     height: 100vw

@@ -5,61 +5,61 @@
       <img src="./icon-current_city@2x.png" alt="" class="location-img">
       <div class="location-text">当前城市: 广州市</div>
     </div>
-    <!-- 轮播图 -->
-    <div class="banner-box">
-      <swiper
-        class="banner"
-        autoplay
-        interval="5000"
-        display-multiple-items="1"
-        previous-margin="0px"
-        next-margin="0px"
-        circular
-        :current="bannerIndex"
-        @change="handleSetBannerIndex">
-        <block
-          v-for="(item,index) in bannerArray"
-          :key="index"
-        >
-          <swiper-item
-            class="banner-item"
+    <div v-for="(cms, cmsIndex) in CMS" :key="cms.id" class="cms">
+      <!-- 轮播图 -->
+      <div v-if="cms.code === 'banner' && bannerArray.length" class="banner-box">
+        <swiper
+          class="banner"
+          autoplay
+          interval="5000"
+          display-multiple-items="1"
+          previous-margin="0px"
+          next-margin="0px"
+          circular
+          :current="bannerIndex"
+          @change="handleSetBannerIndex">
+          <block
+            v-for="(item,index) in bannerArray"
+            :key="index"
           >
-            <div class="b-item-wrapper"
-                 @click="handleBannerJump(item)"
+            <swiper-item
+              class="banner-item"
             >
-              <img
-                v-if="item.detail.image_url"
-                class="item-img"
-                lazy-load
-                mode="aspectFill"
-                :src="item.detail.image_url"
+              <div class="b-item-wrapper"
+                   @click="handleBannerJump(item)"
               >
-            </div>
-          </swiper-item>
-        </block>
-      </swiper>
-      <div class="dot-wrapper">
-        <p class="dot-item">{{bannerIndex+1}}</p>
-        <p class="dot-item">/</p>
-        <p class="dot-item">{{bannerArray.length}}</p>
+                <img
+                  v-if="item.detail.image_url"
+                  class="item-img"
+                  lazy-load
+                  mode="aspectFill"
+                  :src="item.detail.image_url"
+                >
+              </div>
+            </swiper-item>
+          </block>
+        </swiper>
+        <div class="dot-wrapper">
+          <p class="dot-item">{{bannerIndex+1}}</p>
+          <p class="dot-item">/</p>
+          <p class="dot-item">{{bannerArray.length}}</p>
+        </div>
       </div>
     </div>
     <!-- 最新课程 -->
-    <div class="goods-box">
+    <div class="goods-box" v-if="goodsList.length">
       <div class="new-goods-title">
         <img src="./icon-new_curriculum@2x.png" alt="" class="new-goods-img">
         <div class="new-goods-text">最新课程</div>
       </div>
       <section class="goods"></section>
       <ul class="goods-list">
-        <li class="goods-item-wrap">
-          <img src="https://exchange-platform-1254297111.picgz.myqcloud.com/dev/2019/08/29/1567070867535-109527.png?imageMogr2/thumbnail/750x750" alt="" class="goods-item-top">
+        <li class="goods-item-wrap" v-for="item in goodsList" :key="item.id" @click="goodsJump(item)">
+          <img :src="item.goods_cover_image" lazy-load alt="" class="goods-item-top">
           <div class="goods-item-content">
             <div class="goods-item-title">
-              <span class="goods-label">报名中</span><p class="goods-title-text">《狼性营销团队打造与统御狼性营销团队打造与统御》狼性…</p>
-            </div>
-            <p class="goods-time goods-time-bottom">开课时间：2019.09.22 9:00</p>
-            <p class="goods-time">开课地点：微信群</p>
+              <span class="goods-label">报名中</span><p class="goods-title-text">{{item.name}}</p>
+            </div><text class="goods-time">{{item.description}}</text>
           </div>
         </li>
       </ul>
@@ -75,30 +75,53 @@
 
   const PAGE_NAME = 'HOME'
 
+  function formatArray(arr = [], codeName) {
+    const list = arr.find(val => val.code === codeName) || {}
+    return list.children || []
+  }
+
   export default {
     name: PAGE_NAME,
     components: {
       NavigationBar
     },
     data() {
+      this.isFirstLoad = true
       return {
         bannerIndex: 0,
-        cms: '',
-        bannerArray: [
-          {detail: {image_url: 'https://exchange-platform-1254297111.picgz.myqcloud.com/dev/2019/08/29/1567070867535-109527.png?imageMogr2/thumbnail/750x750'}},
-          {detail: {image_url: 'https://exchange-platform-1254297111.picgz.myqcloud.com/dev/2019/08/29/1567070867535-109527.png?imageMogr2/thumbnail/750x750'}},
-          {detail: {image_url: 'https://exchange-platform-1254297111.picgz.myqcloud.com/dev/2019/08/29/1567070867535-109527.png?imageMogr2/thumbnail/750x750'}}
-        ]
+        CMS: [],
+        params: {
+          limit: 10,
+          page: 1
+        },
+        loading: false,
+        totalPage: 0,
+        goodsList: []
+      }
+    },
+    computed: {
+      // banner图
+      bannerArray() {
+        return formatArray(this.CMS, 'banner')
       }
     },
     async onLoad() {},
     onShow() {
       this.pageDetail()
+      this.params.page = 1
+      this.getCourseList()
+    },
+    // 下拉加载
+    onReachBottom() {
+      if (this.params.page + 1 > this.totalPage || this.loading) return
+      this.params.page++
+      this.getCourseList()
     },
     methods: {
       handleSetBannerIndex(e) {
         this.bannerIndex = e.target.current
       },
+      // CMS模块
       pageDetail() {
         const code = 'gift_index'
         const data = { code }
@@ -106,18 +129,43 @@
           .then((res) => {
             if (res.data.code === code) {
               this.CMS = res.data.children
-              if (this.page !== 1) return
-              this.CMS.forEach((item) => {
-                if (item.code === 'hot_goods' && item.detail.image_url) {
-                  this.bannerHT = item.detail.image_url
-                }
-                if (item.code === 'recommend' && item.detail.image_url) {
-                  this.bannerRE = item.detail.image_url
-                }
-              })
             }
           })
         this.isFirstLoad = false
+      },
+      // 课程列表
+      getCourseList() {
+        this.loading = true
+        API.Goods.courseList({ data: this.params, loading: false }).then(res => {
+          if (this.params.page === 1) this.goodsList = []
+          this.goodsList = [...this.goodsList, ...res.data]
+          this.totalPage = res.meta.last_page
+          this.loading = false
+        }).catch(() => {
+          this.loading = false
+        })
+      },
+      handleBannerJump(item) {
+        let url = ''
+        switch (item.style) {
+          case 3004:// out-html外链
+            const link = item.detail.url.split('?')
+            const type = /webview/i.test(link[1]) ? '&webview=true' : ''
+            url = `${this.$routes.main.OUT_HTML}?url=${link[0]}` + type
+            break
+          case 3013:// 品牌
+            url = `${this.$routes.main.GOODS_DETAIL}?id=${item.detail.object_id}`
+            break
+          default:
+            break
+        }
+        if (url) {
+          this.$checkIsTabPage(url) ? wx.switchTab({ url }) : wx.navigateTo({ url })
+        }
+      },
+      goodsJump(item) {
+        let url = `${this.$routes.main.GOODS_DETAIL}?id=${item.id}`
+        this.$checkIsTabPage(url) ? wx.switchTab({ url }) : wx.navigateTo({ url })
       }
     }
   }
@@ -131,7 +179,6 @@
     min-height: 100vh
     background: $color-background
     overflow-x: hidden
-    padding-bottom: 15px
     box-sizing: border-box
   .location-city
     padding: 13.5px 15px

@@ -1,4 +1,5 @@
 import Routes from '@utils/routes'
+import appJson from '../app.json'
 // 不需要自动重置data数据的页
 const unResetPage = []
 
@@ -24,6 +25,9 @@ export default {
       if (!this.$mp) return
       this._watchers = []
       this._watcher && this._watcher.teardown()
+    },
+    $checkIsTabPage(path) {
+      return appJson.tabBar.list.some(val => path.includes(val.pagePath))
     },
     _resetData() {
       // 重置页面组件的data数据
