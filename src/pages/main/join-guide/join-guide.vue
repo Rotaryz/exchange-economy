@@ -3,7 +3,7 @@
     <navigation-bar  title="5G新营销加群"></navigation-bar>
     <div class="top-box">
       <div class="title">报名请加微信号，还能获得更多课程 ↓↓↓</div>
-      <div class="copy-con">34grdy65y5656</div>
+      <div class="copy-con">{{wxNum}}</div>
       <div class="copy-btn" @click="copyNumber">点击复制微信号</div>
     </div>
     <div class="guide-con">
@@ -18,23 +18,23 @@
           <p class="text button">分享好友</p>
         </button>
         <nav class="share-btn" @click="_handleSavePoster">
-          <img v-if="imageUrl" :src="imageUrl + '/yx-image/goods/icon-poster@2x.png'" class="item-icon" mode="aspectFill">
+          <img v-if="imageUrl" :src="imageUrl + '/exchange/icon-conserve_img@2x.png'" class="item-icon" mode="aspectFill">
           <p class="text">生成海报</p>
         </nav>
       </section>
       <we-paint ref="wePaint"></we-paint>
     </div>
     <div class="poster-wrapper" id="sharePoster">
-      <img src="./pic-poster_bg@2x.png" class="poster-bg" mode="aspectFill">
+      <img v-if="imageUrl" :src="imageUrl+'/exchange/pic-poster_bg@2x.png'" class="poster-bg" mode="aspectFill">
       <div class="poster-con">
         <img :src="shareInfo.img" class="poster-banner" mode="aspectFill">
         <div class="poster-title">
-          <img src="./pic-enrolment@2x.png" class="tag-img" mode="aspectFill">
+          <img v-if="imageUrl" :src="imageUrl+'/exchange/pic-enrolment@2x.png'" class="tag-img" mode="aspectFill">
           <span class="share-title">{{shareInfo.title}}</span>
           <div class="title-residual">{{shareInfo.title2}}</div>
         </div>
         <div class="code-box">
-          <img src="./poster-qrcode.png" class="code-img" mode="aspectFill">
+          <img src="" class="code-img" mode="aspectFill">
           <div class="code-text">扫一扫立即报名</div>
         </div>
       </div>
@@ -58,6 +58,7 @@
     },
     data() {
       return {
+        wxNum: '34grdy65y5656',
         shareInfo: {
           title: '第一期赞播《美业5G新营销》',
           title2: '之异业联盟',
@@ -74,6 +75,10 @@
     },
     methods: {
       copyNumber() {
+        wx.setClipboardData({
+          data: this.wxNum,
+          success: () => {}
+        })
         this._showShareModal()
       },
       // 显示分享modal
@@ -110,13 +115,13 @@
               drawType: 'rect',
               color: '#fff'
             },
-            // {
-            //   el: '.poster-bg',
-            //   drawType: 'img',
-            //   mode: 'aspectFill',
-            //   source: './pic-poster_bg@2x.png',
-            //   unLoad: false
-            // },
+            {
+              el: '.poster-bg',
+              drawType: 'img',
+              mode: 'aspectFill',
+              source: this.$imageUrl + '/exchange/pic-poster_bg@2x.png',
+              unLoad: false
+            },
             {
               el: '.poster-banner',
               drawType: 'img',
@@ -128,9 +133,8 @@
               el: '.poster-wrapper .tag-img',
               drawType: 'img',
               mode: 'aspectFill',
-              source: this.shareInfo.img,
+              source: this.$imageUrl + '/exchange/pic-enrolment@2x.png',
               unLoad: false,
-              xAdjust: -20,
               yAdjust: -2
             },
             {
@@ -138,16 +142,14 @@
               drawType: 'text',
               source: this.shareInfo.title,
               fontSize: 18,
-              color: '#1D2023',
-              xAdjust: -20
+              color: '#1D2023'
             },
             {
               el: '.poster-wrapper .title-residual',
               drawType: 'text',
               source: this.shareInfo.title2,
               fontSize: 18,
-              color: '#1D2023',
-              xAdjust: -16
+              color: '#1D2023'
             },
             {
               el: '.poster-wrapper .code-text',
@@ -296,8 +298,8 @@
     left: -200vw
     margin: auto
     background: #fff
-    width: 100vw
-    height: auto
+    width: px-change-vw(375)
+    height: px-change-vw(500)
     padding: px-change-vw(15)
     z-index: -9
     .poster-bg
