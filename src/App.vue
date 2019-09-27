@@ -41,6 +41,7 @@ export default {
         if (res.error_code !== this.$ERR_OK) return
         this.$storage('token', res.data.access_token)
         this.$storage('userInfo', res.data.customer_info)
+        wx.setStorageSync('phone', res.data.link_us_phone)
         HTTP.setHeaders({ Authorization: res.data.access_token })
       }
     }

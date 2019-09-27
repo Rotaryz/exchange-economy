@@ -192,6 +192,7 @@ export async function silentAuthorization() {
     if (tokenJson.error_code === ERR_OK) {
       wx.setStorageSync('token', tokenJson.data.access_token)
       wx.setStorageSync('userInfo', tokenJson.data.customer_info)
+      wx.setStorageSync('phone', tokenJson.data.link_us_phone)
       HTTP.setHeaders({Authorization: tokenJson.data.access_token})
       await getCurrentPages()[getCurrentPages().length - 1].onLoad()
       await getCurrentPages()[getCurrentPages().length - 1].onShow()
