@@ -40,9 +40,6 @@
       this.phoneNum = wx.getStorageSync('phone') || ''
       this._getUserInfo()
     },
-    onShow() {
-      this._getUserInfo()
-    },
     methods: {
       _getUserInfo() {
         API.Customer.getUserInfo({}).then(res => {
