@@ -80,13 +80,13 @@
       </section>
     </div>
     <div class="poster-wrapper" id="sharePoster">
-      <img v-if="imageUrl" :src="imageUrl+'/exchange/pic-poster_bg@2x.png'" class="poster-bg" mode="aspectFill">
+      <img src="" class="poster-bg" mode="aspectFill">
       <div class="poster-con">
-        <img :src="shareInfo.img" class="poster-banner" mode="aspectFill">
+        <img src="" class="poster-banner" mode="aspectFill">
         <div class="poster-title">
-          <img v-if="imageUrl" :src="imageUrl+'/exchange/pic-enrolment@2x.png'" class="tag-img" mode="aspectFill">
-          <span class="share-title">{{shareInfo.title}}</span>
-          <div class="title-residual">{{shareInfo.title2}}</div>
+          <img src="" class="tag-img" mode="aspectFill">
+          <span class="share-title"></span>
+          <div class="title-residual"></div>
         </div>
         <div class="code-box">
           <img src="" class="code-img" mode="aspectFill">
@@ -118,6 +118,7 @@
         goodsMsg: {},
         swiperIdx: 0,
         currentNum: 1,
+        screenW: 375,
         isIos: false,
         videoPoster: '',
         videoPlaying: false,
@@ -126,8 +127,7 @@
         videoContext: '',
         shareInfo: {
           title: '',
-          title2: '',
-          img: 'https://exchange-platform-1254297111.picgz.myqcloud.com/dev/2019/09/25/1569397929504-168145.jpeg?imageMogr2/thumbnail/750x750'
+          title2: ''
         },
         showShare: false,
         shareQRCode: '',
@@ -181,6 +181,7 @@
         let res = wx.getSystemInfoSync()
         let system = res.system
         this.isIos = /Ios/i.test(system)
+        this.screenW = res.screenWidth
       },
       // 获取课程详情
       _getCourseInfo() {
@@ -203,6 +204,14 @@
             if (!this.isIos) {
               this.videoPoster = this.goodsMsg.banner_videos[0].video_cover_image
             }
+          }
+          const maxLength = parseInt((this.screenW - 120) / 18)
+          let overLength = this.goodsMsg.name.length - maxLength
+          if (overLength > 0) {
+            this.shareInfo.title = this.goodsMsg.name.slice(0, maxLength)
+            this.shareInfo.title2 = this.goodsMsg.name.slice(maxLength)
+          } else {
+            this.shareInfo.title = this.goodsMsg.name
           }
         })
       },
@@ -268,18 +277,22 @@
         this.showShare = false
       },
       // 获取分享二维码
-      _getQrCode() {
+      _getQrCode(savePoster = false) {
         this.shareQRCode = 'https://social-shopping-api-1254297111.picgz.myqcloud.com/corp1%2F2019%2F07%2F01%2F1561952187961-%E5%BC%80%E5%BF%83%E6%9E%9C.jpg'
-        // this._handleSavePoster()
+        savePoster && this._handleSavePoster()
       },
       // 保存海报按钮
       _handleSavePoster() {
-        console.log('_handleSavePoster')
         if (!this.shareQRCode) {
           // 没有二维码，重新获取二维码并画海报
-          this._getQrCode()
+          this._getQrCode(true)
           return
         }
+        // 如果已画过图，就直接保存
+        // if (this.shareImg) {
+        //   this._savePoster(this.shareImg)
+        //   return
+        // }
         let options = {
           canvasId: 'we-paint',
           multiple: 1,
@@ -317,7 +330,7 @@
             {
               el: '.poster-wrapper .share-title',
               drawType: 'text',
-              source: this.goodsMsg.name,
+              source: this.shareInfo.title,
               fontSize: 18,
               color: '#1D2023'
             },
@@ -341,7 +354,7 @@
               drawType: 'img',
               mode: 'aspectFill',
               source: this.shareQRCode,
-              yAdjust: 15
+              yAdjust: 16
             }
           ]
         }
