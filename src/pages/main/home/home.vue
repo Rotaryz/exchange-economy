@@ -55,7 +55,7 @@
       <section class="goods"></section>
       <ul class="goods-list">
         <li class="goods-item-wrap" v-for="item in goodsList" :key="item.id" @click="goodsJump(item)">
-          <image :src="item.goods_cover_image" lazy-load mode="widthFix" alt="" class="goods-item-top">
+          <image :src="item.goods_cover_image" lazy-load mode="aspectFill" alt="" class="goods-item-top">
             <img v-if="item.video.id" src="./icon-play_big@2x.png" lazy-load mode="widthFix" alt="" class="goods-play-auto">
           </image>
           <div class="goods-item-content">
@@ -260,6 +260,7 @@
         width: 100%
         display: block
         position: relative
+        height: px2vw(194)
       .goods-play-auto
         position: absolute
         left: 0
