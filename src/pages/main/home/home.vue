@@ -110,8 +110,6 @@
     async onLoad() {},
     onShow() {
       this.pageDetail()
-      this.params.page = 1
-      this.getCourseList()
     },
     // 下拉加载
     onReachBottom() {
@@ -131,6 +129,12 @@
           .then((res) => {
             if (res.data.code === code) {
               this.CMS = res.data.children
+              this.CMS.forEach((item) => {
+                if (item.code === 'latest_meeting') {
+                  this.params.page = 1
+                  this.getCourseList()
+                }
+              })
             }
           })
         this.isFirstLoad = false
