@@ -85,10 +85,12 @@
       layout()
       align-items: flex-start
       .user-name
+        flex: 1
         margin-bottom: 14px
         font-family: $font-family-medium
         font-size: 20px
         color: $color-text-main
+        no-wrap-plus(1)
       .user-tag
         box-sizing: border-box
         width: auto
