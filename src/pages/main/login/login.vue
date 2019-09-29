@@ -131,10 +131,10 @@
         HTTP.setHeaders({ Authorization: res.data.access_token })
         let form = { form_ids: [this.formId] }
         API.Form.getFormId({ data: form, loading: false, toast: false })
-        this.showPopup = !res.data.customer_info.is_register
-        console.log(this.showPopup)
-        if (!res.data.customer_info.is_register) return
+        // this.showPopup = !res.data.customer_info.is_register
         this._goNextPage()
+        if (!res.data.customer_info.is_register) return
+        console.log(this.showPopup)
       },
       getFormId(e) {
         this.formId = e.mp.detail.formId
