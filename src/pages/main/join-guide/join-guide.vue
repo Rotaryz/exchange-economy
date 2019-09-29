@@ -8,7 +8,7 @@
     </div>
     <div class="guide-con">
       <div class="title">操作指引：</div>
-      <img v-if="imageUrl" :src="imageUrl + '/exchange/join-guide.gif'" alt="" class="guide-img" mode="aspectFill">
+      <img v-if="imageUrl" :src="imageUrl + '/exchange/join-guide.gif'" alt="" class="guide-img">
     </div>
   </div>
 </template>
@@ -84,6 +84,9 @@
     border-radius: 2px
   .guide-con
     padding-top: 25px
+    .title
+      margin-bottom: 15px
     .guide-img
-      margin-top: 15px
+      width: 100%
+      height: px-change-vw(280)
 </style>

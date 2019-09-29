@@ -685,7 +685,7 @@
     background: #fff
     width: px-change-vw(375)
     height: px-change-vw(500)
-    padding: px-change-vw(16)
+    padding: px-change-vw(15.5)
     .poster-bg
       position: absolute
       top: 0
