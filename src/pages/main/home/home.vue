@@ -123,7 +123,7 @@
       },
       // CMS模块
       pageDetail() {
-        const code = 'gift_index'
+        const code = 'market_index'
         const data = { code }
         API.Goods.pageDetail({ data, loading: this.isFirstLoad })
           .then((res) => {
