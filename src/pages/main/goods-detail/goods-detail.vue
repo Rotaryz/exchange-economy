@@ -442,6 +442,7 @@
     .goods-text-box
       border-top-1px($color-line)
       padding: 15px 0
+      word-break: break-all
       .goods-text
         font-family: $font-family-regular
         color: #333
