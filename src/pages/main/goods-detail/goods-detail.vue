@@ -45,7 +45,7 @@
         <div v-if="goodsMsg.appointment_numbers&&goodsMsg.appointment_numbers.length" class="goods-share-title">他们已经报名</div>
         <div class="goods-share-box">
           <div v-if="goodsMsg.appointment_numbers&&goodsMsg.appointment_numbers.length" class="share-box-left">
-            <img v-for="(item, index) in goodsMsg.appointment_numbers" :key="index" :src="item" alt="" class="share-box-img">
+            <img v-for="(item, index) in goodsMsg.appointment_numbers" :key="index" :src="item||imageUrl + '/yx-image/2.1/default_avatar@2x.png'" alt="" class="share-box-img">
           </div>
           <div class="share-box-right" @click="_showShareModal">邀请好友报名</div>
         </div>
