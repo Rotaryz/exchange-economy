@@ -136,7 +136,7 @@
       // 课程列表
       getCourseList() {
         this.loading = true
-        API.Goods.courseList({ data: this.params, loading: false }).then(res => {
+        API.Goods.meetingList({ data: this.params, loading: false }).then(res => {
           if (this.params.page === 1) this.goodsList = []
           this.goodsList = [...this.goodsList, ...res.data]
           this.totalPage = res.meta.last_page

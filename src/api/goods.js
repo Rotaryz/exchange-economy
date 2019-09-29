@@ -7,8 +7,8 @@ export default {
    * @param loading
    * @returns {*}
    */
-  courseList(args) {
-    const url = `/business/course/course/index`
+  meetingList(args) {
+    const url = `/business/meeting/meeting/index`
     return request.get({url, ...args})
   },
   /**
@@ -28,7 +28,7 @@ export default {
    * @returns {*}
    */
   getGoodsDetail(args) {
-    const url = `/business/course/course/show`
+    const url = `/business/meeting/meeting/show`
     return request.get({ url, ...args })
   }
 }

@@ -90,7 +90,7 @@
         </div>
         <div class="code-box">
           <img src="" class="code-img" mode="aspectFill">
-          <div class="code-text">扫一扫立即报名</div>
+          <div class="code-text">扫一扫立即报名</div>r
         </div>
       </div>
     </div>
@@ -185,7 +185,7 @@
       },
       // 获取课程详情
       _getCourseInfo() {
-        API.Course.getCourseInfo({data: {id: this.courseId}}).then(res => {
+        API.Meeting.getMeetingInfo({data: {id: this.courseId}}).then(res => {
           this.goodsMsg = res.data
           this.courseId = res.data.id
           // 有视频的情况
@@ -263,7 +263,7 @@
       },
       // 预约课程，马上进群
       _bookCourse() {
-        API.Course.bookCourse({data: {course_id: this.goodsMsg.id}}).then(res => {
+        API.Meeting.bookMeeting({data: {meeting_id: this.goodsMsg.id}}).then(res => {
           wx.navigateTo({ url: `${this.$routes.main.JOIN_GUIDE}?wechat=${this.goodsMsg.wechat}` })
         })
       },
