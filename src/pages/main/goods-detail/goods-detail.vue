@@ -164,7 +164,7 @@
       const flag = Date.now()
       return {
         title: this.goodsMsg.name,
-        path: `${this.$routes.main.GOODS_DETAIL}?id=${this.goodsId}&flag=${flag}`, // 商品详情
+        path: `${this.$routes.main.GOODS_DETAIL}?id=${this.courseId}&flag=${flag}`, // 商品详情
         imageUrl: this.goodsBanner[0].image_url,
         success: (res) => {
           // 转发成功
