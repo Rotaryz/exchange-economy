@@ -153,7 +153,10 @@
             const type = /webview/i.test(link[1]) ? '&webview=true' : ''
             url = `${this.$routes.main.OUT_HTML}?url=${link[0]}` + type
             break
-          case 3013:// 品牌
+          case 3005:// 小程序链接
+            url = `${item.detail.url}`
+            break
+          case 3013:// 商品
             url = `${this.$routes.main.GOODS_DETAIL}?id=${item.detail.object_id}`
             break
           default:
