@@ -1,6 +1,6 @@
 <template>
   <div class="goods-detail">
-    <navigation-bar title="课程详情"></navigation-bar>
+    <navigation-bar title="会议详情"></navigation-bar>
     <!--轮播图-->
     <section class="banner-box">
       <div class="header-swiper">
@@ -55,7 +55,7 @@
     <section class="goods-detail-box">
       <div class="goods-detail-title">
         <div class="goods-detail-icon"></div>
-        <div class="goods-detail-text">课程介绍</div>
+        <div class="goods-detail-text">会议介绍</div>
       </div>
       <img v-for="(item, index) in goodsMsg.detail_images" v-if="item.image_url" :src="item.image_url" lazy-load="true" class="detail-img" mode="widthFix" :key="index">
     </section>
@@ -183,7 +183,7 @@
         this.isIos = /Ios/i.test(system)
         this.screenW = res.screenWidth
       },
-      // 获取课程详情
+      // 获取会议详情
       _getCourseInfo() {
         API.Meeting.getMeetingInfo({data: {id: this.courseId}}).then(res => {
           this.goodsMsg = res.data
@@ -261,7 +261,7 @@
         this.videoPlaying = false
         this.videoContext.exitFullScreen()
       },
-      // 预约课程，马上进群
+      // 预约会议，马上进群
       _bookCourse() {
         API.Meeting.bookMeeting({data: {meeting_id: this.goodsMsg.id}}).then(res => {
           wx.navigateTo({ url: `${this.$routes.main.JOIN_GUIDE}?wechat=${this.goodsMsg.wechat}` })

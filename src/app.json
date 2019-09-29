@@ -25,7 +25,7 @@
     "selectedColor": "#333",
     "borderStyle": "white",
     "list": [{
-      "text": "课程",
+      "text": "会议",
       "pagePath": "pages/home",
       "iconPath": "static/tabs/icon-curriculum1@2x.png",
       "selectedIconPath": "static/tabs/icon-curriculum2@2x.png"

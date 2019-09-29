@@ -46,11 +46,11 @@
         </div>
       </div>
     </div>
-    <!-- 最新课程 -->
+    <!-- 最新会议 -->
     <div class="goods-box" v-if="goodsList.length">
       <div class="new-goods-title">
         <img src="./icon-new_curriculum@2x.png" alt="" class="new-goods-img">
-        <div class="new-goods-text">最新课程</div>
+        <div class="new-goods-text">最新会议</div>
       </div>
       <section class="goods"></section>
       <ul class="goods-list">
@@ -139,7 +139,7 @@
           })
         this.isFirstLoad = false
       },
-      // 课程列表
+      // 会议列表
       getCourseList() {
         this.loading = true
         API.Goods.meetingList({ data: this.params, loading: false }).then(res => {
