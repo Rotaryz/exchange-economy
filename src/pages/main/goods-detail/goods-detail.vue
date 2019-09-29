@@ -462,7 +462,7 @@
         justify-content: space-between
         .share-box-left
           flex: 1
-          max-width: px-change-vw(200)
+          /*max-width: 55.6vw*/
           overflow: hidden
           layout(row,block,nowrap)
           align-items: center
@@ -477,6 +477,7 @@
           font-family: $font-family-regular
           color: $color-white
           font-size: $font-size-14
+          margin-left: 8px
           width: 104px
           height: 26px
           line-height: 26px
