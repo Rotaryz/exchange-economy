@@ -315,7 +315,6 @@
             {
               el: '.poster-banner',
               drawType: 'img',
-              mode: 'aspectFill',
               source: this.goodsBanner[0].image_url,
               unLoad: false
             },
@@ -680,12 +679,12 @@
     position: fixed
     bottom: -200vh
     left: -200vw
+    z-index: -9
     margin: auto
     background: #fff
     width: px-change-vw(375)
     height: px-change-vw(500)
-    padding: px-change-vw(15)
-    z-index: -9
+    padding: px-change-vw(16)
     .poster-bg
       position: absolute
       top: 0
@@ -697,7 +696,7 @@
       z-index: -1
     .poster-con
       .poster-banner
-        width: px-change-vw(345)
+        width: px-change-vw(343)
         height: px-change-vw(194)
       .poster-title
         box-sizing: border-box
