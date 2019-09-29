@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <navigation-bar title="5G新营销" :showArrow="false" titleColor="#000"></navigation-bar>
+    <navigation-bar headStyle="background: #F2F3F6" title="5G新营销" :showArrow="false" titleColor="#000"></navigation-bar>
     <div class="location-city">
       <img src="./icon-current_city@2x.png" alt="" class="location-img">
       <div class="location-text">当前城市: 广州市</div>
@@ -214,7 +214,6 @@
             background: $image-color
             width: px2vw($bannerWidth)
             height: px2vw(211)
-            border-radius: 2px
     .dot-wrapper
       position: absolute
       right: px2vw(12)
@@ -252,7 +251,7 @@
         color: $color-text-main
         font-size: $font-size-16
     .goods-item-wrap
-      margin-bottom: 20px
+      margin-bottom: 13px
       border-radius: 4px
       overflow: hidden
       .goods-item-top
@@ -269,12 +268,12 @@
           font-size: $font-size-16
           layout(row)
           align-items: center
-          margin-bottom: 12.5px
+          margin-bottom: 10px
           .goods-label
             width: 48px
             height: 17px
             text-align: center
-            line-height: 17px
+            line-height: 18px
             border-radius: 9px
             margin-right: 5px
             color: $color-white

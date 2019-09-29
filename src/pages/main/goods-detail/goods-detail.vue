@@ -433,7 +433,7 @@
       width: 48px
       height: 17px
       text-align: center
-      line-height: 17px
+      line-height: 18px
       color: $color-white
       background: $color-main
       margin-right: 5px
@@ -523,7 +523,7 @@
         width: 22px
         height: @width
         display: block
-        margin: 0 auto 4px
+        margin: 0 auto 3px
       .btn-phone-text
         font-family: $font-family-regular
         color: $color-text-main
