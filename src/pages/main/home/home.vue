@@ -55,7 +55,9 @@
       <section class="goods"></section>
       <ul class="goods-list">
         <li class="goods-item-wrap" v-for="item in goodsList" :key="item.id" @click="goodsJump(item)">
-          <img :src="item.goods_cover_image" lazy-load alt="" class="goods-item-top">
+          <image :src="item.goods_cover_image" lazy-load mode="widthFix" alt="" class="goods-item-top">
+            <img v-if="item.video.id" src="./icon-play_big@2x.png" lazy-load mode="widthFix" alt="" class="goods-play-auto">
+          </image>
           <div class="goods-item-content">
             <div class="goods-item-title">
               <span class="goods-label">报名中</span><p class="goods-title-text">{{item.name}}</p>
@@ -257,7 +259,17 @@
       .goods-item-top
         width: 100%
         display: block
-        height: px2vw(194)
+        position: relative
+      .goods-play-auto
+        position: absolute
+        left: 0
+        right: 0
+        top: 0
+        bottom: 0
+        margin: auto
+        width: 40px
+        height: @width
+        display: block
       .goods-item-content
         background: $color-white
         padding: 13px 10px 13px 13px
