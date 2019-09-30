@@ -256,7 +256,7 @@
         height: 14.5px
         margin-right: 5px
       .new-goods-text
-        font-family: $font-family-medium
+        font-bold()
         color: $color-text-main
         font-size: $font-size-16
     .goods-item-wrap
@@ -283,7 +283,7 @@
         padding: 13px 10px 13px 13px
         box-sizing: border-box
         .goods-item-title
-          font-family: $font-family-medium
+          font-bold()
           color: $color-text-main
           font-size: $font-size-16
           layout(row)

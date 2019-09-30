@@ -59,7 +59,7 @@
   .title
     line-height: 1
     color: $color-text-main
-    font-family: $font-family-medium
+    font-bold()
     font-size: 16px
   .top-box
     border-bottom: 11.5px solid $color-background
@@ -68,7 +68,7 @@
     line-height: 50px
     margin: 25px 0 15px
     color: $color-text-main
-    font-family: $font-family-medium
+    font-bold()
     font-size: 16px
     text-align: center
     background: #fff8f3

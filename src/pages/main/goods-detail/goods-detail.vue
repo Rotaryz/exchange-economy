@@ -410,7 +410,7 @@
     margin-bottom: 12px
     .title
       width: 100%
-      font-family: $font-family-medium
+      font-bold()
       color: $color-text-main
       font-size: $font-size-18
       min-height: 20px
@@ -422,7 +422,7 @@
       margin-bottom: 20px
     .title-label
       font-size: $font-size-12
-      font-family: $font-family-medium
+      font-bold()
       display: inline-block
       border-radius: 9.5px
       width: 48px
@@ -497,7 +497,7 @@
         background: $color-main
         margin-right: 5px
       .goods-detail-text
-        font-family: $font-family-medium
+        font-bold()
         color: $color-text-main
         font-size: $font-size-16
         line-height: $font-size-16
@@ -534,7 +534,7 @@
       text-align: center
       height: 40px
       line-height: 40px
-      font-family: $font-family-medium
+      font-bold()
       color: $color-white
       font-size: $font-size-16
       border-radius: 22.5px
@@ -705,7 +705,7 @@
         box-sizing: border-box
         height: 50px
         padding: 15px
-        font-family: $font-family-medium
+        font-bold()
         font-size: 18px
         color: $color-text-main
         .title-tag

@@ -216,7 +216,7 @@
       width: 80vw
       background: $color-white
       .popup-title
-        font-family: $font-family-medium
+        font-bold()
         color: $color-text-main
         font-size: $font-size-16
         padding: 25px 0
