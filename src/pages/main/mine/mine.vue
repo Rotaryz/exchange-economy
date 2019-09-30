@@ -2,7 +2,7 @@
   <div class="mine">
     <navigation-bar headStyle="background: #f7f7f7" :showArrow="false" titleColor="#333333" title="我的"></navigation-bar>
     <div class="user-box">
-      <img v-if="userInfo.avatar" :src="userInfo.avatar" mode="aspectFill" alt="" class="user-img">
+      <img v-if="userInfo.avatar||imageUrl" :src="userInfo.avatar||imageUrl + '/yx-image/2.1/default_avatar@2x.png'" mode="aspectFill" alt="" class="user-img">
       <div class="user-info">
         <div class="user-name">{{userInfo.nickname}}</div>
         <div class="user-tag">学员</div>

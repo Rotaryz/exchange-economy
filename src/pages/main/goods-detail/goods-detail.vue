@@ -46,6 +46,7 @@
         <div class="goods-share-box">
           <div v-if="goodsMsg.appointment_numbers&&goodsMsg.appointment_numbers.length" class="share-box-left">
             <img v-for="(item, index) in goodsMsg.appointment_numbers" :key="index" :src="item||imageUrl + '/yx-image/2.1/default_avatar@2x.png'" alt="" class="share-box-img">
+            <div v-if="hideAppointment">...</div>
           </div>
           <div class="share-box-right" @click="_showShareModal">邀请好友报名</div>
         </div>
@@ -131,7 +132,8 @@
         },
         showShare: false,
         shareQRCode: '',
-        shareImg: ''
+        shareImg: '',
+        hideAppointment: false
       }
     },
     computed: {
@@ -200,6 +202,12 @@
             this.shareInfo.title2 = this.goodsMsg.name.slice(maxLength)
           } else {
             this.shareInfo.title = this.goodsMsg.name
+          }
+          if (this.goodsMsg.appointment_numbers.length > 5) {
+            this.hideAppointment = true
+            this.goodsMsg.appointment_numbers = this.goodsMsg.appointment_numbers.slice(0, 5)
+          } else {
+            this.hideAppointment = false
           }
         })
       },
@@ -454,6 +462,9 @@
           overflow: hidden
           layout(row,block,nowrap)
           align-items: center
+          font-family: $font-family-regular
+          color: $color-text-sub
+          font-size: $font-size-16
           .share-box-img
             min-width: 24px
             width: 24px
