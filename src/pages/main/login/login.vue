@@ -30,6 +30,7 @@
   import app from '@src/app.json'
   import HTTP from '@utils/http'
   import * as wechat from '@utils/wechat'
+  import storage from '@utils/storage'
 
   let loginTime = 3
   // const ald = getApp()
@@ -90,8 +91,7 @@
           })
       },
       _goNextPage() {
-        let targetPage = wx.getStorageSync('errorUrl')
-        console.log(targetPage, 1111)
+        let targetPage = storage('targetPage')
         if (targetPage) {
           let isTab = TAB_BAR.findIndex((item) => targetPage.includes(item.pagePath))
           // tab页面记录参数
