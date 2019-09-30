@@ -2,7 +2,7 @@
   <div class="meeting-error">
     <navigation-bar :showArrow="false" title="5G新营销"></navigation-bar>
     <img src="./pic-zanwu@2x.png" alt="" class="meeting-img">
-    <p class="meeting-text">会议排期中，敬请期待</p>
+    <p class="meeting-text">找不到该内容</p>
     <div class="btn" @click="_refresh">返回首页</div>
   </div>
 </template>
