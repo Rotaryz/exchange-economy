@@ -47,13 +47,13 @@
       </div>
     </div>
     <!-- 最新会议 -->
-    <div class="goods-box" v-if="goodsList.length">
+    <div class="goods-box">
       <div class="new-goods-title">
         <img src="./icon-new_curriculum@2x.png" alt="" class="new-goods-img">
         <div class="new-goods-text">最新会议</div>
       </div>
       <section class="goods"></section>
-      <ul class="goods-list">
+      <ul class="goods-list" v-if="goodsList.length && totalPage > 0">
         <li class="goods-item-wrap" v-for="item in goodsList" :key="item.id" @click="goodsJump(item)">
           <image :src="item.goods_cover_image" lazy-load mode="aspectFill" alt="" class="goods-item-top">
             <img v-if="item.video.id" src="./icon-play_big@2x.png" lazy-load mode="widthFix" alt="" class="goods-play-auto">
@@ -65,6 +65,7 @@
           </div>
         </li>
       </ul>
+      <empty v-else :imgWidth="109" :paddingTop="2.4" tip="会议排期中，敬请期待"></empty>
     </div>
   </div>
 </template>
@@ -74,6 +75,7 @@
   import API from '@api'
   // import storage from '@utils/storage'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
+  import Empty from '@components/empty/empty'
 
   const PAGE_NAME = 'HOME'
 
@@ -85,7 +87,8 @@
   export default {
     name: PAGE_NAME,
     components: {
-      NavigationBar
+      NavigationBar,
+      Empty
     },
     data() {
       this.isFirstLoad = true
