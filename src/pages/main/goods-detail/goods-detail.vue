@@ -153,12 +153,6 @@
     onShow() {
       this._getCourseInfo()
     },
-    onHide() {
-      this.autoplayTimer && clearTimeout(this.autoplayTimer)
-    },
-    onUnload() {
-      this.autoplayTimer && clearTimeout(this.autoplayTimer)
-    },
     onShareAppMessage() {
       // 分享锁
       const flag = Date.now()
@@ -192,21 +186,15 @@
           if (this.goodsMsg.banner_videos && this.goodsMsg.banner_videos[0] && this.goodsMsg.banner_videos[0].video_url) {
             this.currentNum = 0// 默认为1，如果有视频设为0
             this.videoContext = wx.createVideoContext('goodsVideo')
-            let that = this
-            // 设置自动播放
-            this.autoplayTimer = setTimeout(() => {
-              // 如果还没自动播放就执行播放方法
-              if (!that.videoPlaying && that.playBefore && that.swiperIdx === 0) {
-                that.playVideo && that.playVideo(true)
-              }
-            }, 2000)
             // 如果不是苹果，显示视频封面
             if (!this.isIos) {
               this.videoPoster = this.goodsMsg.banner_videos[0].video_cover_image
             }
           }
-          const maxLength = parseInt((this.screenW - 120) / 18)
-          let overLength = this.goodsMsg.name.length - maxLength
+          let maxLength = parseInt((this.screenW - 120) / 18)
+          let _length = this.goodsMsg.name.replace(/[a-zA-Z0-9]/ig, '').length
+          let overLength = (_length + (this.goodsMsg.name.length - _length) / 2) - maxLength
+          // maxLength为最大宽度，_length为除字母和数字以外的文字长度，overLength为超出最大宽度的部分
           if (overLength > 0) {
             this.shareInfo.title = this.goodsMsg.name.slice(0, maxLength)
             this.shareInfo.title2 = this.goodsMsg.name.slice(maxLength)
@@ -227,7 +215,6 @@
           this.currentNum = curNum
           // 有视频的情况
           if (this.hasVideo && this.videoContext) {
-            this.autoplayTimer && clearTimeout(this.autoplayTimer)
             this.swiperIdx = curNum
             // 不是视频页的时候暂停播放
             if (curNum !== 0) {
@@ -637,12 +624,14 @@
     height: 100vh
     position: fixed
     left: 0
-    bottom: -100vh
+    bottom: 0
     right: 0
-    z-index: 999
-    transition: all .25s
+    z-index: -999
+    transition: opacity .25s
     &.show
-      bottom :0
+      z-index: 999
+      .share-bottom
+        bottom: 0
   .share-mask
     width: 100vw
     height: 100vh
@@ -654,12 +643,13 @@
     display: flex
     box-sizing: border-box
     position: absolute
-    bottom: 0
+    bottom: -200px
     left: 0
     z-index:9
     background: $color-white
     width: 100%
     padding: 28px 0 22px
+    transition: all .25s
     .share-btn
       background: $color-white
       flex: 1
