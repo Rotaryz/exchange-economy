@@ -305,6 +305,7 @@
           font-family: $font-family-regular
           color: $color-text-sub
           font-size: $font-size-14
+          word-wrap:break-word
         .goods-time-bottom
           margin-bottom: 4.5px
 </style>
