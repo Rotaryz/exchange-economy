@@ -104,6 +104,7 @@
   import API from '@api'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
   import WePaint from '@components/we-paint/we-paint'
+  import { baseURL } from '@utils/config'
 
   const PAGE_NAME = 'GOODS_DETAIL'
 
@@ -160,7 +161,7 @@
       const flag = Date.now()
       return {
         title: this.goodsMsg.name,
-        path: `${this.$routes.main.GOODS_DETAIL}?id=${this.courseId}&flag=${flag}`, // 商品详情
+        path: `${this.$routes.main.GOODS_DETAIL}?imageMogr2/thumbnail/!425x340r%7CimageView2/1/w/425/h/340&id=${this.courseId}&flag=${flag}`, // 商品详情
         imageUrl: this.goodsBanner[0].image_url,
         success: (res) => {
           // 转发成功
@@ -273,7 +274,7 @@
       },
       // 获取分享二维码
       _getQrCode(savePoster = false) {
-        this.shareQRCode = 'https://social-shopping-api-1254297111.picgz.myqcloud.com/corp1%2F2019%2F07%2F01%2F1561952187961-%E5%BC%80%E5%BF%83%E6%9E%9C.jpg'
+        this.shareQRCode = `${baseURL.api}/common/file/qrcode/miniprogram-load?program=business&path=pages/goods-detail?id=${this.courseId}`
         savePoster && this._handleSavePoster()
       },
       // 保存海报按钮
@@ -310,7 +311,7 @@
             {
               el: '.poster-banner',
               drawType: 'img',
-              source: this.goodsBanner[0].image_url,
+              source: this.goodsBanner[0].image_url + '?imageMogr2/thumbnail/!690x388r%7CimageView2/1/w/690/h/388',
               unLoad: false
             },
             {
