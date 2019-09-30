@@ -105,6 +105,8 @@
   import NavigationBar from '@components/navigation-bar/navigation-bar'
   import WePaint from '@components/we-paint/we-paint'
   import { baseURL } from '@utils/config'
+  import AppPromise from '@utils/app-promise'
+  import { resolveQueryScene } from '@utils/common'
 
   const PAGE_NAME = 'GOODS_DETAIL'
 
@@ -116,6 +118,7 @@
     },
     data() {
       return {
+        onLoad: true,
         courseId: '',
         goodsMsg: {},
         swiperIdx: 0,
@@ -149,12 +152,24 @@
       }
       // ...Helpers.computed,
     },
-    onLoad(option) {
-      this.courseId = option.id
+    onLoad(options) {
+      AppPromise.getInstance().then(res => {
+        if (options.scene) {
+          // 小程序扫码进来
+          console.log(options.scene, 'options.scene')
+          let query = resolveQueryScene(options.query.scene)
+          this.courseId = query.id
+        } else {
+          // 普通参数进来
+          this.courseId = options.id
+        }
+        this.onLoad && this._getCourseInfo()
+      })
       this.getSystemInfo()
     },
     onShow() {
-      this._getCourseInfo()
+      !this.onLoad && this._getCourseInfo()
+      this.onLoad = false
     },
     onShareAppMessage() {
       // 分享锁
