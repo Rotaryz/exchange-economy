@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/home",
+    "pages/meeting-error",
     "pages/out-html",
     "pages/login",
     "pages/goods-detail",
@@ -20,20 +21,20 @@
     "navigationStyle": "custom"
   },
   "tabBar": {
-    "color": "#999",
+    "color": "#111111",
     "backgroundColor": "#fafafa",
-    "selectedColor": "#333",
+    "selectedColor": "#F54949",
     "borderStyle": "white",
     "list": [{
-      "text": "课程",
+      "text": "会议",
       "pagePath": "pages/home",
-      "iconPath": "static/tabs/icon-curriculum1@2x.png",
-      "selectedIconPath": "static/tabs/icon-curriculum2@2x.png"
+      "iconPath": "static/tabs/icon-gift.png",
+      "selectedIconPath": "static/tabs/icon-gift_pressed.png"
     }, {
       "text": "我的",
       "pagePath": "pages/mine",
-      "iconPath": "static/tabs/icon-my1@2x.png",
-      "selectedIconPath": "static/tabs/icon-my2@2x.png"
+      "iconPath": "static/tabs/icon-mine.png",
+      "selectedIconPath": "static/tabs/icon-mine_pressed.png"
     }],
 
     "position": "bottom"

@@ -3,6 +3,7 @@ import { showLoading, hideLoading, showToast } from '@utils/wechat'
 import { baseURL, ERR_OK, TIME_OUT } from '@utils/config'
 import { silentAuthorization } from './common'
 import storage from '@utils/storage'
+import $$routes from '@utils/routes'
 
 const COMMON_HEADER = {
   'Authorization': storage('token')
@@ -44,10 +45,11 @@ HTTP.setCallback({
       errorCodeHandle(res.error_code, url)
       // 2 可自定义处理toast错误
       if (typeof toast === 'function') {
-        console.log(3333)
         toast(res)
       } else if (toast) {
-        showToast(res.message)
+        if (res.error_code !== 10000) {
+          showToast(res.message)
+        }
       }
       // 3 错误处理
       console.error(url + ' <<<<<<接口异常>>>>> ' + JSON.stringify(res))
@@ -73,16 +75,20 @@ function errorCodeHandle(code) {
       }
       ErrorNum++
       break
+    case 2600101: // 活动不存在
     case 2010101: // 商品不存在
     case 2020101: // 服务不存在
-    case 2600101: // 活动不存在
       // wx.redirectTo({ url: $$routes.main.PAGE_MISSING })
       break
     case 2010102: // 商品已下架
     case 2020102: // 服务已下架
     case 2600102: // 活动已下架、结束
     case 3500105: // 大转盘活动实效
-      // wx.redirectTo({ url: $$routes.main.PAGE_MISSING })
+    case 2800101: // 会议删除
+      wx.redirectTo({ url: $$routes.main.MEETING_ERROR })
+      break
+    case 2800102: // 会议下架
+      wx.redirectTo({ url: $$routes.main.MEETING_ERROR })
       break
     default:
       break

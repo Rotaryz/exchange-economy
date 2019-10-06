@@ -11,6 +11,7 @@ export default {
     GOODS_DETAIL:`${MAIN}/goods-detail`,
     LOGIN:`${MAIN}/login`,
     OUT_HTML:`${MAIN}/out-html`,
+    MEETING_ERROR:`${MAIN}/meeting-error`,
     // main
   }
 }

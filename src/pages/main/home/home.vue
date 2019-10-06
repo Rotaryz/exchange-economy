@@ -46,16 +46,18 @@
         </div>
       </div>
     </div>
-    <!-- 最新课程 -->
-    <div class="goods-box" v-if="goodsList.length">
+    <!-- 最新会议 -->
+    <div class="goods-box">
       <div class="new-goods-title">
         <img src="./icon-new_curriculum@2x.png" alt="" class="new-goods-img">
-        <div class="new-goods-text">最新课程</div>
+        <div class="new-goods-text">最新会议</div>
       </div>
       <section class="goods"></section>
-      <ul class="goods-list">
+      <ul class="goods-list" v-if="goodsList.length && totalPage > 0">
         <li class="goods-item-wrap" v-for="item in goodsList" :key="item.id" @click="goodsJump(item)">
-          <img :src="item.goods_cover_image" lazy-load alt="" class="goods-item-top">
+          <image :src="item.goods_cover_image" lazy-load mode="aspectFill" alt="" class="goods-item-top">
+            <img v-if="item.video.id" src="./icon-play_big@2x.png" lazy-load mode="widthFix" alt="" class="goods-play-auto">
+          </image>
           <div class="goods-item-content">
             <div class="goods-item-title">
               <span class="goods-label">报名中</span><p class="goods-title-text">{{item.name}}</p>
@@ -63,6 +65,7 @@
           </div>
         </li>
       </ul>
+      <empty v-else :imgWidth="109" :paddingTop="2.4" tip="会议排期中，敬请期待"></empty>
     </div>
   </div>
 </template>
@@ -72,6 +75,7 @@
   import API from '@api'
   // import storage from '@utils/storage'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
+  import Empty from '@components/empty/empty'
 
   const PAGE_NAME = 'HOME'
 
@@ -83,7 +87,8 @@
   export default {
     name: PAGE_NAME,
     components: {
-      NavigationBar
+      NavigationBar,
+      Empty
     },
     data() {
       this.isFirstLoad = true
@@ -108,8 +113,6 @@
     async onLoad() {},
     onShow() {
       this.pageDetail()
-      this.params.page = 1
-      this.getCourseList()
     },
     // 下拉加载
     onReachBottom() {
@@ -129,11 +132,17 @@
           .then((res) => {
             if (res.data.code === code) {
               this.CMS = res.data.children
+              this.CMS.forEach((item) => {
+                if (item.code === 'latest_meeting') {
+                  this.params.page = 1
+                  this.getCourseList()
+                }
+              })
             }
           })
         this.isFirstLoad = false
       },
-      // 课程列表
+      // 会议列表
       getCourseList() {
         this.loading = true
         API.Goods.meetingList({ data: this.params, loading: false }).then(res => {
@@ -247,7 +256,7 @@
         height: 14.5px
         margin-right: 5px
       .new-goods-text
-        font-family: $font-family-medium
+        font-bold()
         color: $color-text-main
         font-size: $font-size-16
     .goods-item-wrap
@@ -257,13 +266,24 @@
       .goods-item-top
         width: 100%
         display: block
+        position: relative
         height: px2vw(194)
+      .goods-play-auto
+        position: absolute
+        left: 0
+        right: 0
+        top: 0
+        bottom: 0
+        margin: auto
+        width: 40px
+        height: @width
+        display: block
       .goods-item-content
         background: $color-white
         padding: 13px 10px 13px 13px
         box-sizing: border-box
         .goods-item-title
-          font-family: $font-family-medium
+          font-bold()
           color: $color-text-main
           font-size: $font-size-16
           layout(row)
@@ -288,6 +308,7 @@
           font-family: $font-family-regular
           color: $color-text-sub
           font-size: $font-size-14
+          word-wrap:break-word
         .goods-time-bottom
           margin-bottom: 4.5px
 </style>

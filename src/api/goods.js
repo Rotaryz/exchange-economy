@@ -2,7 +2,7 @@ import request from '@utils/http'
 
 export default {
   /**
-   * 课程列表[v1.5.3]
+   * 会议列表[v1.5.3]
    * @param data
    * @param loading
    * @returns {*}
@@ -22,7 +22,7 @@ export default {
     return request.get({ url, ...args })
   },
   /**
-   * 课程详情[v1.5.3]
+   * 会议详情[v1.5.3]
    * @param data
    * @param loading
    * @returns {*}

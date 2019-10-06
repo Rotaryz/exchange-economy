@@ -1,13 +1,13 @@
 <template>
   <div class="login">
     <navigation-bar title="登录" :isOpacity="true" :translucent="true" :showArrow="false"></navigation-bar>
-    <img src="./bg-login@2x.png" class="bg">
+    <img src="./bg-sqdl@2x.png" class="bg">
     <div class="login-img-box">
-      <img class="login-img" src="./pic-logo@2x.png">
-      <img class="login-name" src="./pic-zbyp@2x.png">
+      <img class="login-img" src="./icon-logo@2x.png">
+      <div class="login-text">5G新营销</div>
       <form class="lost" action="" report-submit @submit="getFormId">
         <button hover-class="none" class="login-btn" lang="zh_CN" @getuserinfo="_login" open-type="getUserInfo" formType="submit">
-          <img src="./icon-wechat@2x.png" class="wx-logo">
+          <img src="./Shape@2x.png" class="wx-logo">
           <span class="title">微信授权登录</span>
         </button>
       </form>
@@ -30,6 +30,7 @@
   import app from '@src/app.json'
   import HTTP from '@utils/http'
   import * as wechat from '@utils/wechat'
+  import storage from '@utils/storage'
 
   let loginTime = 3
   // const ald = getApp()
@@ -90,8 +91,7 @@
           })
       },
       _goNextPage() {
-        let targetPage = wx.getStorageSync('errorUrl')
-        console.log(targetPage, 1111)
+        let targetPage = storage('targetPage')
         if (targetPage) {
           let isTab = TAB_BAR.findIndex((item) => targetPage.includes(item.pagePath))
           // tab页面记录参数
@@ -167,32 +167,34 @@
     .login-img
       position: relative
       z-index: 10
-      height: 88px
+      height: 100px
       width: @height
-    .login-name
+    .login-text
+      font-family: $font-family-regular
+      color: #1D2023
+      font-size: $font-size-21
+      margin-top: 13px
+      text-align: center
       position: relative
       z-index: 10
-      width: 102.1px
-      margin-top: 20.5px
-      height: 20.85px
     .login-btn
       display: flex
       padding: 0
       margin: 24.4vh 0
       justify-content: center
       align-items: center
-      width: 74.667vw
-      height: 12vw
+      width: 195px
+      height: 39px
       border-radius: 22.5px
       transition: all 0.3s
-      background: $color-main
+      border: 1px solid $color-main
       .wx-logo
         width: 20px
-        height: 20px
+        height: 17px
         margin-right: 8px
       .title
         font-size: $font-size-16
-        color: $color-white
+        color: $color-main
         font-family: $font-family-regular
       &:after
         border: none
@@ -216,7 +218,7 @@
       width: 80vw
       background: $color-white
       .popup-title
-        font-family: $font-family-medium
+        font-bold()
         color: $color-text-main
         font-size: $font-size-16
         padding: 25px 0
