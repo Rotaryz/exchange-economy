@@ -121,36 +121,36 @@ export function $checkIsTabPage(path) {
 //   return urlWithArgs
 // }
 //
-// /**
-//  * 解析永久二维码参数
-//  * @param scene
-//  * @returns {{}}
-//  */
-// export function resolveQrCode(scene) {
-//   if (!scene) {
-//     return {}
-//   }
-//   let params = {}
-//   let strs = scene.split('&')
-//   for (let i = 0; i < strs.length; i++) {
-//     params[strs[i].split('=')[0]] = unescape(strs[i].split('=')[1])
-//   }
-//   return params
-// }
-//
-// // 解析永久二维码参数
-// export function getParams(scene) {
-//   if (!scene) {
-//     return {}
-//   }
-//   let params = {}
-//   let strs = scene.split('&')
-//   for (let i = 0; i < strs.length; i++) {
-//     params[strs[i].split('=')[0]] = unescape(strs[i].split('=')[1])
-//   }
-//   return params
-// }
-//
+/**
+ * 解析永久二维码参数
+ * @param scene
+ * @returns {{}}
+ */
+export function resolveQrCode(scene) {
+  if (!scene) {
+    return {}
+  }
+  let params = {}
+  let strs = scene.split('&')
+  for (let i = 0; i < strs.length; i++) {
+    params[strs[i].split('=')[0]] = unescape(strs[i].split('=')[1])
+  }
+  return params
+}
+
+// 解析永久二维码参数
+export function getParams(scene) {
+  if (!scene) {
+    return {}
+  }
+  let params = {}
+  let strs = scene.split('&')
+  for (let i = 0; i < strs.length; i++) {
+    params[strs[i].split('=')[0]] = unescape(strs[i].split('=')[1])
+  }
+  return params
+}
+
 // 解析url
 function getUrl(path = '', query = {}) {
   let url = path
@@ -254,8 +254,6 @@ export function resolveQueryScene(scene = '') {
   let goodsId = 0
   let shopId = 0
   let activityId = 0
-  let marketId = 0
-  let employeeId = 0
   if (scene) {
     try {
       let sceneMsg = decodeURIComponent(scene)
@@ -263,8 +261,6 @@ export function resolveQueryScene(scene = '') {
       shopId = +params.shopId || +params.s || 0
       goodsId = +params.id || +params.g || 0
       activityId = +params.activityId || +params.a || 0
-      marketId = +params.marketId || +params.m || 0
-      employeeId = +params.employeeId || +params.e || 0
     } catch (e) {
       console.error(e)
     }
@@ -272,9 +268,7 @@ export function resolveQueryScene(scene = '') {
   return {
     shopId,
     goodsId,
-    activityId,
-    marketId,
-    employeeId
+    activityId
   }
 }
 

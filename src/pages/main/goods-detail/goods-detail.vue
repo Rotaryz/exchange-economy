@@ -157,13 +157,13 @@
         if (options.scene) {
           // 小程序扫码进来
           console.log(options.scene, 'options.scene')
-          let query = resolveQueryScene(options.query.scene)
-          this.courseId = query.id
+          let query = resolveQueryScene(options.scene)
+          this.courseId = query.goodsId
         } else {
           // 普通参数进来
           this.courseId = options.id
         }
-        this.onLoad && this._getCourseInfo()
+        this._getCourseInfo()
       })
       this.getSystemInfo()
     },
@@ -197,6 +197,7 @@
       },
       // 获取课程详情
       _getCourseInfo() {
+        console.log(`this.courseId = ` + this.courseId)
         API.Meeting.getMeetingInfo({data: {id: this.courseId}}).then(res => {
           this.goodsMsg = res.data
           this.courseId = res.data.id
@@ -289,7 +290,7 @@
       },
       // 获取分享二维码
       _getQrCode(savePoster = false) {
-        this.shareQRCode = `${baseURL.api}/common/file/qrcode/miniprogram-load?program=business&path=pages/goods-detail?id=${this.courseId}`
+        this.shareQRCode = `${baseURL.api}/common/file/qrcode/miniprogram-load?program=business&path=pages/goods-detail?g=${this.courseId}`
         savePoster && this._handleSavePoster()
       },
       // 保存海报按钮
