@@ -186,7 +186,6 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   $bannerWidth = 375
   @import "~@design"
-
   .home
     min-height: 100vh
     background: $color-background
