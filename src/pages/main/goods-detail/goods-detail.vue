@@ -65,7 +65,7 @@
         <img src="./icon-tel@2x.png" alt="" class="btn-phone-img">
         <div class="btn-phone-text">打电话</div>
       </div>
-      <div class="fixed-btn-btn" @click="_bookCourse">马上进群</div>
+      <div class="fixed-btn-btn" @click="_bookCourse">马上报名</div>
     </div>
     <div class="share-modal" :class="{show: showShare}">
       <div class="share-mask" @click="_hideShareModal"></div>
@@ -273,7 +273,7 @@
         this.videoPlaying = false
         this.videoContext.exitFullScreen()
       },
-      // 预约会议，马上进群
+      // 预约会议，马上报名
       _bookCourse() {
         API.Meeting.bookMeeting({data: {meeting_id: this.goodsMsg.id}}).then(res => {
           wx.navigateTo({ url: `${this.$routes.main.JOIN_GUIDE}?wechat=${this.goodsMsg.wechat}` })

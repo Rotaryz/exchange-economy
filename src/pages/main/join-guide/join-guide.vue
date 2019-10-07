@@ -1,6 +1,6 @@
 <template>
   <div class="mine">
-    <navigation-bar  title="5G新营销加群"></navigation-bar>
+    <navigation-bar  title="5G新营销报名"></navigation-bar>
     <div class="top-box">
       <div class="title">报名请加微信号，还能获得更多会议 ↓↓↓</div>
       <div class="copy-con">{{wxNum}}</div>
@@ -8,7 +8,7 @@
     </div>
     <div class="guide-con">
       <div class="title">操作指引：</div>
-      <img v-if="imageUrl" :src="imageUrl + '/exchange/join-guide.gif'" alt="" class="guide-img">
+      <img v-if="imageUrl" :src="imageUrl + '/exchange/join-guide01.gif'" alt="" class="guide-img">
     </div>
   </div>
 </template>
