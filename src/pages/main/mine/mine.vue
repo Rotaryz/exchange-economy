@@ -11,19 +11,20 @@
     <div class="item-list">
       <div class="item" @click="_navigateTo('meeting')">
         <div class="item-label">我的会议</div>
+        <img mode="aspectFill" src="/static/images/icon-right_arrow.png" alt="" class="item-arrow">
       </div>
       <div class="item" @click="phoneCall">
         <div class="item-label">联系我们</div>
         <div class="text-con">
           <div class="item-text">{{phoneNum}}</div>
-          <img mode="aspectFill" src="/static/images/icon-tel@2x.png" alt="" class="item-icon">
         </div>
+        <img mode="aspectFill" src="/static/images/icon-right_arrow.png" alt="" class="item-arrow">
       </div>
     </div>
     <div class="item-list">
       <div class="item" @click="_navigateTo('workbench')">
         <div class="item-label">工作台</div>
-        <!--<img mode="aspectFill" src="/static/images/icon-tel@2x.png" alt="" class="item-icon">-->
+        <img mode="aspectFill" src="/static/images/icon-right_arrow.png" alt="" class="item-arrow">
       </div>
     </div>
   </div>
@@ -64,8 +65,8 @@
       },
       _navigateTo(type) {
         let navigateArr = {
-          meeting: `${this.$routes.main.JOIN_GUIDE}`,
-          workbench: `${this.$routes.main.VERIFICATION}`
+          meeting: `${this.$routes.main.VERIFICATION}`,
+          workbench: `${this.$routes.main.WORKBENCH}`
         }
         wx.navigateTo({ url: navigateArr[type] })
       }
@@ -121,10 +122,11 @@
         border-1px(#fc3e3e,9px)
   .item-list
     .item
+      position: relative
       box-sizing: border-box
       width: 100%
       height: 60px
-      padding: 0 15px
+      padding: 0 30px 0 15px
       layout(row)
       align-items: center
       justify-content: space-between
@@ -137,8 +139,12 @@
       .text-con
         layout(row)
         justify-content: flex-end
-      .item-icon
-        width: 20px
-        height: 20px
-        margin-left: 10px
+      .item-arrow
+        position: absolute
+        right: 15px
+        top: 0
+        bottom: 0
+        margin: auto
+        width: 12px
+        height: 12px
 </style>
