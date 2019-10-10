@@ -8,7 +8,7 @@
   // import * as Helpers from './modules/helpers'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
 
-  const PAGE_NAME = 'MINE'
+  const PAGE_NAME = 'VERIFICATION'
 
   export default {
     name: PAGE_NAME,

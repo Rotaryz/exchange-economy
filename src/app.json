@@ -14,7 +14,8 @@
     {
       "root": "package-work/",
       "pages": [
-        "workbench"
+        "workbench",
+        "work-login"
       ]
     }
   ],

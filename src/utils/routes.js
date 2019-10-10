@@ -6,6 +6,7 @@ export default {
   work: {
     PACKAGE: WORK,
     WORKBENCH:`${WORK}/workbench`,
+    WORK_LOGIN:`${WORK}/work-login`,
     // package-work
   },
   main: {

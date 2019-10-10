@@ -53,7 +53,7 @@
   import NavigationBar from '@components/navigation-bar/navigation-bar'
   import Popup from './popup/popup'
 
-  const PAGE_NAME = 'MINE'
+  const PAGE_NAME = 'WORKBENCH'
 
   export default {
     name: PAGE_NAME,
