@@ -3,18 +3,19 @@
     <navigation-bar  title="登录"></navigation-bar>
     <div class="title">员工可输入账号登录</div>
     <div class="from-item">
-      <input v-model="phone" type="number" placeholder-style="color: #999999; font-size:15px;font-family: PingFangSC-Regular;" maxlength="11" placeholder="请输入手机号" class="from-input">
-      <div :class="[phone.length===11?'active':'']" class="from-btn" @click="_getVerifyCode">{{verifyText}}</div>
+      <input v-model="params.mobile" type="number" placeholder-style="color: #999999; font-size:15px;font-family: PingFangSC-Regular;" maxlength="11" placeholder="请输入手机号" class="from-input">
+      <div :class="[params.mobile.length===11?'active':'']" class="from-btn" @click="_getVerifyCode">{{verifyText}}</div>
     </div>
     <div class="from-item">
-      <input v-model="code" type="text" placeholder-style="color: #999999; font-size:15px;font-family: PingFangSC-Regular;" maxlength="11" placeholder="请输入短信验证码" class="from-input">
+      <input v-model="params.code" type="text" placeholder-style="color: #999999; font-size:15px;font-family: PingFangSC-Regular;" maxlength="11" placeholder="请输入短信验证码" class="from-input">
     </div>
-    <div :class="[phone&&code?'active':'']" class="sub-btn" @click="_loginFun">登录</div>
+    <div :class="[params.mobile&&params.code?'active':'']" class="sub-btn" @click="_loginFun">登录</div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   // import * as Helpers from './modules/helpers'
+  import API from '@api'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
 
   const PAGE_NAME = 'WORK_LOGIN'
@@ -27,15 +28,17 @@
     data() {
       return {
         verifyText: '获取验证码',
-        phone: '',
-        code: ''
+        params: {
+          mobile: '13570085835',
+          code: '147159'
+        }
       }
     },
     onLoad(option) {
     },
     methods: {
       _getVerifyCode() {
-        if (!this.phone) return
+        if (!this.params.mobile) return
         this.verifyText = 60
         let self = this
         this.codeTimer = setInterval(() => {
@@ -48,16 +51,21 @@
         }, 1000)
       },
       _loginFun() {
-        if (!this.phone) {
+        if (!this.params.mobile) {
           wx.showToast('请输入手机号')
           return
         }
-        if (!this.code) {
+        if (!this.params.code) {
           wx.showToast('请输入短信验证码')
           return
         }
-        console.log('1111')
-        wx.navigateTo({ url: `${this.$routes.work.WORKBENCH}` })
+        console.log('managerLogin')
+        API.BusinessManager.managerLogin({data: this.params}).then(res => {
+          if (res.data && res.data.access_token) {
+            wx.setStorageSync('businessToken', res.data.access_token)
+            wx.navigateTo({ url: `${this.$routes.work.WORKBENCH}` })
+          }
+        })
       }
     }
   }

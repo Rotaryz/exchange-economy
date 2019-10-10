@@ -2,13 +2,14 @@
   <div class="verifier">
     <navigation-bar  title="凭证核销"></navigation-bar>
     <div class="title">输码核销</div>
-    <input v-model="number" type="number" placeholder-style="color: #999999;font-size: 16px;font-family: PingFangSC-Regular;font-weight: 200;letter-spacing: 1px;" maxlength="8" placeholder="输入8位凭证号" class="input-box">
-    <div :class="[number?'active':'']" class="sub-btn" @click="_verifyFun">核销</div>
+    <input v-model="code" type="number" placeholder-style="color: #999999;font-size: 16px;font-family: PingFangSC-Regular;font-weight: 200;letter-spacing: 1px;" maxlength="8" placeholder="输入8位凭证号" class="input-box">
+    <div :class="[code?'active':'']" class="sub-btn" @click="_verifyFun">核销</div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   // import * as Helpers from './modules/helpers'
+  import API from '@api'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
 
   const PAGE_NAME = 'VERIFIER'
@@ -20,14 +21,19 @@
     },
     data() {
       return {
-        number: ''
+        code: ''
       }
     },
     onLoad(option) {
     },
     methods: {
+      // 核销
       _verifyFun() {
-        wx.navigateTo({ url: `${this.$routes.work.VERIFY_RESULT}` })
+        API.BusinessManager.verify({data: {code: this.code}}).then(res => {
+          let result = res.data
+          console.log(result)
+          wx.navigateTo({ url: `${this.$routes.work.VERIFY_RESULT}` })
+        })
       }
     }
   }

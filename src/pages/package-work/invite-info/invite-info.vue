@@ -6,20 +6,20 @@
       <div :style="{left: type*50+'%'}" class="tab-line"></div>
     </div>
     <div :style="{'transform': ' translateX('+ -(type * 100) +'vw)', 'transition': boxTransition}" class="content">
-      <div v-for="(item, idx) in tabList" :key="idx" class="list">
+      <div v-for="(tab, idx) in tabList" :key="idx" class="list">
         <div class="list-header list-item">
           <div class="left-box">邀请客户</div>
           <div class="right-box">时间</div>
         </div>
-        <div class="list-item">
+        <div v-for="(item, index) in listData" :key="index" class="list-item">
           <div class="left-box">
-            <img mode="aspectFill" src="/static/images/user.png" alt="" class="item-img">
+            <img v-if="item.avatar||imageUrl" :src="item.avatar||imageUrl + '/yx-image/2.1/default_avatar@2x.png'" alt="" class="item-img" mode="aspectFill">
             <div class="name-box">
-              客户
-              <div v-if="idx===1" class="status-box">已参会</div>
+              {{item.nickname}}
+              <div v-if="idx===1&&item.participants_status_text" :class="[item.participants_status===1?'ed':'']" class="status-box">{{item.participants_status_text}}</div>
             </div>
           </div>
-          <div class="right-box">1232-52-23</div>
+          <div class="right-box">{{item.created_at}}</div>
         </div>
       </div>
     </div>
@@ -28,6 +28,7 @@
 
 <script type="text/ecmascript-6">
   // import * as Helpers from './modules/helpers'
+  import API from '@api'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
 
   const PAGE_NAME = 'INVITE_INFO'
@@ -45,7 +46,9 @@
           {name: '购票', type: 1}
         ],
         type: 0,
-        boxTransition: 'all 0.25s'
+        boxTransition: 'all 0.25s',
+        listData: {},
+        listParams: {page: 1, limit: 20}
       }
     },
     onLoad(option) {
@@ -55,6 +58,11 @@
     methods: {
       _tabChange(type) {
         this.type = type
+      },
+      _getListData() {
+        API.BusinessManager.verify({data: {code: this.code}}).then(res => {
+          this.listData = res.data
+        })
       }
     }
   }
@@ -136,6 +144,10 @@
             color: #d2d2d2
             font-size: 10px
             border-1px(#d2d2d2,7px)
+            &.ed
+              background: #FFF8F3
+              color: #FF802F
+              border-1px(#FF802F,7px)
       .right-box
         font-size: 12px
         color: #999999
