@@ -105,6 +105,8 @@
 
   .my-meeting
     width: 100%
+    min-height: 100vh
+    background: $color-background
     .header-tab
       height: 50px
       background: $color-white
