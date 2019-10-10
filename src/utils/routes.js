@@ -7,7 +7,7 @@ export default {
     PACKAGE: WORK,
     WORKBENCH:`${WORK}/workbench`,
     INVITE_INFO:`${WORK}/invite-info`,
-    VERIFICATION:`${WORK}/verifier`,
+    VERIFIER:`${WORK}/verifier`,
     VERIFY_RESULT:`${WORK}/verify-result`,
     WORK_LOGIN:`${WORK}/work-login`,
     // package-work

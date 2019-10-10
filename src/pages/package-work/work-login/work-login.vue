@@ -3,7 +3,7 @@
     <navigation-bar  title="登录"></navigation-bar>
     <div class="title">员工可输入账号登录</div>
     <div class="from-item">
-      <input v-model="phone" type="text" placeholder-style="color: #999999; font-size:15px;font-family: PingFangSC-Regular;" maxlength="11" placeholder="请输入手机号" class="from-input">
+      <input v-model="phone" type="number" placeholder-style="color: #999999; font-size:15px;font-family: PingFangSC-Regular;" maxlength="11" placeholder="请输入手机号" class="from-input">
       <div :class="[phone.length===11?'active':'']" class="from-btn" @click="_getVerifyCode">{{verifyText}}</div>
     </div>
     <div class="from-item">

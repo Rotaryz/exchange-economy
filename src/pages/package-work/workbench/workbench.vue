@@ -42,7 +42,6 @@
         </div>
       </div>
     </div>
-    <exit-popup></exit-popup>
     <exit-popup confirmText="确认" popUpType="confirm" tip="确认要退出登录？" :showPopup.sync="showPopup" @confirm="loginOut"></exit-popup>
   </div>
 </template>
@@ -65,7 +64,8 @@
       return {
         userInfo: {},
         barHeight: 20,
-        showPopup: false
+        showPopup: false,
+        code: ''
       }
     },
     onLoad(option) {
@@ -80,7 +80,7 @@
         })
       },
       _navigateTo(page) {
-        // page && wx.navigateTo({ url: `${this.$routes.work[page]}` })
+        page && wx.navigateTo({ url: `${this.$routes.work[page]}` })
       },
       loginOut() {
         wx.navigateTo({ url: `${this.$routes.work.WORK_LOGIN}` })
@@ -93,7 +93,7 @@
             const codeRes = JSON.parse(res.result)
             if (codeRes && codeRes.code) {
               self.code = codeRes.code
-              self._verifyOrder()
+              // self._verifyOrder()
             } else {
               wx.showToast('获取核销码失败!')
             }
