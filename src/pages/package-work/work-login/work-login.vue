@@ -57,7 +57,7 @@
           return
         }
         console.log('1111')
-        // wx.navigateTo({ url: `${this.$routes.main.WORKBENCH}` })
+        wx.navigateTo({ url: `${this.$routes.work.WORKBENCH}` })
       }
     }
   }

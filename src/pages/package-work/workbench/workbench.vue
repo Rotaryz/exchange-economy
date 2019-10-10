@@ -82,7 +82,9 @@
       _navigateTo() {
         wx.navigateTo({ url: `${this.$routes.main.VERIFICATION}` })
       },
-      loginOut() {}
+      loginOut() {
+        wx.navigateTo({ url: `${this.$routes.work.WORK_LOGIN}` })
+      }
     }
   }
 </script>

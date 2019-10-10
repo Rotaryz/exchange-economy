@@ -7,14 +7,16 @@
     "pages/goods-detail",
     "pages/mine",
     "pages/demo",
-    "pages/join-guide",
-    "pages/verification"
+    "pages/join-guide"
   ],
   "subPackages": [
     {
       "root": "package-work/",
       "pages": [
         "workbench",
+        "invite-info",
+        "pages/verification",
+        "verify-result",
         "work-login"
       ]
     }
