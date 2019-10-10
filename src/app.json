@@ -12,6 +12,12 @@
     "pages/workbench"
   ],
   "subPackages": [
+    {
+      "root": "package-work/",
+      "pages": [
+        "workbench"
+      ]
+    }
   ],
   "preloadRule": {
   },
