@@ -19,7 +19,6 @@ export default {
     OUT_HTML:`${MAIN}/out-html`,
     MEETING_ERROR:`${MAIN}/meeting-error`,
     VERIFICATION:`${MAIN}/verification`,
-    WORKBENCH:`${MAIN}/workbench`,
     // main
   }
 }
