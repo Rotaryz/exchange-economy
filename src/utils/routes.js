@@ -22,6 +22,11 @@ export default {
     LOGIN:`${MAIN}/login`,
     OUT_HTML:`${MAIN}/out-html`,
     MEETING_ERROR:`${MAIN}/meeting-error`,
+    COURSE_LIST:`${MAIN}/course-list`,
+    COURSE_DETAIL:`${MAIN}/course-detail`,
+    COURSE_GUIDE:`${MAIN}/course-guide`,
+    MY_MEETING:`${MAIN}/my-meeting`,
+    MY_MEETING_DETAIL:`${MAIN}/my-meeting-detail`,
     // main
   }
 }
