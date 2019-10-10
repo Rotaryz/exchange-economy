@@ -15,6 +15,16 @@
     "pages/join-guide"
   ],
   "subPackages": [
+    {
+      "root": "package-work/",
+      "pages": [
+        "workbench",
+        "invite-info",
+        "verifier",
+        "verify-result",
+        "work-login"
+      ]
+    }
   ],
   "preloadRule": {
   },
