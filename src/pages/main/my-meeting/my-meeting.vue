@@ -26,7 +26,7 @@
                 </div>
               </div>
               <div class="bottom-space">
-                <span class="see-btn" @click="showCode(item)">查看凭证</span>
+                <span class="see-btn" @click="goCodePage(item)">查看凭证</span>
               </div>
             </div>
             <empty v-if="!willList.length && loaded" :image="empty" :paddingTop="100" tip="暂无会议"></empty>
@@ -55,7 +55,7 @@
 
 <script type="text/ecmascript-6">
   // import * as Helpers from './modules/helpers'
-  // import API from '@api'
+  import API from '@api'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
 
   const PAGE_NAME = 'MY_MEETING'
@@ -68,33 +68,61 @@
     data() {
       return {
         tabList: [
-          {txt: '课程内容', id: 0, list: 'willList'},
-          {txt: '课程介绍', id: 1, list: 'completeList'}
+          {txt: '待使用', id: 0, list: 'willList', status: 10},
+          {txt: '已完成', id: 1, list: 'completeList', status: 100}
         ],
         tabIdx: 0,
-        willList: [1, 2],
-        completeList: [1, 2],
-        loaded: false
+        willList: [],
+        completeList: [],
+        meetingList: {},
+        loaded: false,
+        page: 1,
+        status: 10
       }
     },
     computed: {
       // ...Helpers.computed,
     },
+    onLoad() {
+      this.getMeetingList(true)
+    },
     onShow() {
+    },
+    onReachBottom() {
+      this.page++
       this.getMeetingList()
     },
     methods: {
-      getMeetingList() {
+      getMeetingList(loading) {
+        console.log(111)
+        API.Meeting.getMyMeetingList({
+          data: {
+            page: this.page,
+            status: this.status
+          },
+          loading
+        })
+          .then(res => {
+            if (this.page === 1) {
+              this.willList = []
+              this.completeList = []
+            }
+            this.loaded = true
+            this.willList = [...this.willList, ...res.data]
+          })
       },
-      changeTab(idx) {
+      changeTab(idx, item) {
         this.tabIdx = idx * 1
+        this.status = item.status
+        this.getMeetingList()
       },
       goMeetingDetail(item) {
         let url = `${this.$routes.main.MY_MEETING_DETAIL}?id=${item.id}`
         this.$checkIsTabPage(url) ? wx.switchTab({ url }) : wx.navigateTo({ url })
       },
-      showCode(item) {
-        console.log(item)
+      goCodePage(item) {
+        let url = `${this.$routes.main.MEETING_CODE}?id=${item.id}`
+        this.$checkIsTabPage(url) ? wx.switchTab({ url }) : wx.navigateTo({ url })
       }
     }
   }

@@ -27,6 +27,7 @@ export default {
     COURSE_GUIDE:`${MAIN}/course-guide`,
     MY_MEETING:`${MAIN}/my-meeting`,
     MY_MEETING_DETAIL:`${MAIN}/my-meeting-detail`,
+    MEETING_CODE:`${MAIN}/meeting-code`,
     // main
   }
 }

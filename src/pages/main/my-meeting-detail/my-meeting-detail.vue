@@ -23,7 +23,7 @@
           <img :src="item.usable ? usableTicket : unusableTicket" class="ticket-icon" mode="aspectFill">
           <span class="ticket-num" :class="{'ticket-grey': !item.usable}">123456778</span>
         </p>
-        <p class="right-btn" :class="{'ticket-usable': item.usable}">{{item.usable ? '查看凭证' : '已使用'}}</p>
+        <p class="right-btn" :class="{'ticket-usable': item.usable}" @click="goCodePage(item)">{{item.usable ? '查看凭证' : '已使用'}}</p>
       </div>
     </div>
 
@@ -73,6 +73,11 @@
             wx.showToast({title: '复制成功', icon: 'none'})
           }
         })
+      },
+      goCodePage(item) {
+        if (!item.usable) return
+        let url = `${this.$routes.main.MEETING_CODE}?id=${item.id}`
+        this.$checkIsTabPage(url) ? wx.switchTab({ url }) : wx.navigateTo({ url })
       }
     }
   }
