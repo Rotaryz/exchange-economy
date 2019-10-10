@@ -1,6 +1,6 @@
 <template>
   <div class="verification">
-    <navigation-bar  title="5G新营销报名"></navigation-bar>
+    <navigation-bar  title="凭证核销"></navigation-bar>
   </div>
 </template>
 
