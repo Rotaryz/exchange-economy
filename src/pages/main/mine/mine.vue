@@ -65,7 +65,7 @@
       },
       _navigateTo(type) {
         let navigateArr = {
-          meeting: `${this.$routes.main.VERIFICATION}`,
+          meeting: ``,
           workbench: `${this.$routes.work.WORKBENCH}`
         }
         wx.navigateTo({ url: navigateArr[type] })

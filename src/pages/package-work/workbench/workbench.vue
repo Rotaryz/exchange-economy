@@ -13,7 +13,7 @@
     </div>
     <div class="content">
       <div class="wrapper">
-        <div class="top-bar">
+        <div class="top-bar" @click="_navigateTo('INVITE_INFO')">
           邀请总览
           <img mode="aspectFill" src="/static/images/icon-right_arrow.png" alt="" class="item-arrow">
         </div>
@@ -31,13 +31,13 @@
       <div class="wrapper">
         <div class="top-bar">凭证核销</div>
         <div class="list service">
-          <div class="item">
+          <div class="item" @click="_navigateTo('VERIFIER')">
             <img mode="aspectFill" src="./icon-write_off1@3x.png" alt="" class="item-icon">
-            <div class="label">拉新</div>
+            <div class="label">输入凭证号</div>
           </div>
-          <div class="item">
+          <div class="item" @click="_scanQRCode">
             <img mode="aspectFill" src="./icon-write_off2@2x.png" alt="" class="item-icon">
-            <div class="label">购票</div>
+            <div class="label">扫一扫</div>
           </div>
         </div>
       </div>
@@ -79,11 +79,26 @@
           this.userInfo = res.data
         })
       },
-      _navigateTo() {
-        wx.navigateTo({ url: `${this.$routes.main.VERIFICATION}` })
+      _navigateTo(page) {
+        // page && wx.navigateTo({ url: `${this.$routes.work[page]}` })
       },
       loginOut() {
         wx.navigateTo({ url: `${this.$routes.work.WORK_LOGIN}` })
+      },
+      // 扫一扫
+      _scanQRCode() {
+        const self = this
+        wx.scanCode({
+          success(res) {
+            const codeRes = JSON.parse(res.result)
+            if (codeRes && codeRes.code) {
+              self.code = codeRes.code
+              self._verifyOrder()
+            } else {
+              wx.showToast('获取核销码失败!')
+            }
+          }
+        })
       }
     }
   }
@@ -171,14 +186,14 @@
         width: 12px
         height: 12px
     .service.list .item
-      flex: 0.25
+      flex: 0.3
     .list
       layout(row)
       .item
         flex: 1
         padding: 24px 0 22px 0
         layout()
-        align-content: center
+        align-items: center
         .val
           margin-top: 10px
           margin-bottom: 15px

@@ -1,5 +1,5 @@
 <template>
-  <div class="verification">
+  <div class="work-login">
     <navigation-bar  title="登录"></navigation-bar>
     <div class="title">员工可输入账号登录</div>
     <div class="from-item">
@@ -66,7 +66,7 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~@design"
 
-  .verification
+  .work-login
     box-sizing: border-box
     width: 100%
     padding: 0 40px
