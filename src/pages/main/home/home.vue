@@ -49,8 +49,14 @@
     <!-- 最新会议 -->
     <div class="goods-box">
       <div class="new-goods-title">
-        <img src="./icon-new_curriculum@2x.png" alt="" class="new-goods-img">
-        <div class="new-goods-text">最新会议</div>
+        <div class="new-goods-left">
+          <img src="./icon-news@2x.png" alt="" class="new-goods-img">
+          <div class="new-goods-text">最新会议</div>
+        </div>
+        <div class="new-goods-right">
+          <div class="new-right-text">全部</div>
+          <img src="./icon-news@2x.png" alt="" class="new-goods-img">
+        </div>
       </div>
       <section class="goods"></section>
       <ul class="goods-list" v-if="goodsList.length && totalPage > 0">
@@ -245,19 +251,6 @@
   .goods-box
     padding: 0 15px
     box-sizing: border-box
-    .new-goods-title
-      layout(row)
-      align-items: center
-      padding: 25px 0 15px
-      .new-goods-img
-        display: block
-        width: 12.5px
-        height: 14.5px
-        margin-right: 5px
-      .new-goods-text
-        font-bold()
-        color: $color-text-main
-        font-size: $font-size-16
     .goods-item-wrap
       margin-bottom: 13px
       border-radius: 4px
@@ -310,4 +303,28 @@
           word-wrap:break-word
         .goods-time-bottom
           margin-bottom: 4.5px
+  .new-goods-title
+    layout(row)
+    align-items: center
+    padding: 29px 0 15px
+    justify-content: space-between
+    .new-goods-left
+      layout(row)
+      align-items: center
+    .new-goods-right
+      layout(row)
+      align-items: center
+      .new-right-text
+        font-family: $font-family-regular
+        color: #999
+        font-size: $font-size-14
+    .new-goods-img
+      display: block
+      width: 19px
+      height: @width
+      margin-right: 5px
+    .new-goods-text
+      font-bold()
+      color: $color-text-main
+      font-size: $font-size-16
 </style>
