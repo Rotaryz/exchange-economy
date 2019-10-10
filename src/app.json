@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/home",
+    "pages/meeting-list",
     "pages/meeting-error",
     "pages/out-html",
     "pages/login",

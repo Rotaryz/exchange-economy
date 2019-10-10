@@ -20,6 +20,7 @@ export default {
     MEETING_ERROR:`${MAIN}/meeting-error`,
     VERIFICATION:`${MAIN}/verification`,
     WORKBENCH:`${MAIN}/workbench`,
+    MEETING_LIST:`${MAIN}/meeting-list`,
     // main
   }
 }

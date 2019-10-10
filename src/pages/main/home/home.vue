@@ -55,10 +55,9 @@
         </div>
         <div class="new-goods-right">
           <div class="new-right-text">全部</div>
-          <img src="./icon-news@2x.png" alt="" class="new-goods-img">
+          <img src="/static/images/icon-right_arrow.png" alt="" class="new-right-img">
         </div>
       </div>
-      <section class="goods"></section>
       <ul class="goods-list" v-if="goodsList.length && totalPage > 0">
         <li class="goods-item-wrap" v-for="item in goodsList" :key="item.id" @click="goodsJump(item)">
           <image :src="item.goods_cover_image" lazy-load mode="aspectFill" alt="" class="goods-item-top">
@@ -67,11 +66,35 @@
           <div class="goods-item-content">
             <div class="goods-item-title">
               <span class="goods-label">报名中</span><p class="goods-title-text">{{item.name}}</p>
-            </div><text class="goods-time">{{item.description}}</text>
+            </div>
+            <div class="describe-goods-time">时间：2019-09-22 9:00</div>
+            <div class="describe-goods-time">地点：广州白云区喜来登大酒店2楼会议厅广州白云区喜来登大酒店2楼会议厅</div>
           </div>
         </li>
       </ul>
       <empty v-else :imgWidth="109" :paddingTop="2.4" tip="会议排期中，敬请期待"></empty>
+    </div>
+    <!-- 热门课程 -->
+    <div class="course-box">
+      <div class="new-goods-title">
+        <div class="new-goods-left">
+          <img src="./icon-hot@2x.png" alt="" class="new-goods-img">
+          <div class="new-goods-text">热门课程</div>
+        </div>
+        <div class="new-goods-right">
+          <div class="new-right-text">全部</div>
+          <img src="/static/images/icon-right_arrow.png" alt="" class="new-right-img">
+        </div>
+      </div>
+      <ul class="course-list">
+        <li class="course-item">
+          <image class="course-img"></image>
+          <div class="course-info">
+            <div class="course-info-top">第二届移动互联网营销将在上海举办第二届移动互联网营销将在上海举办</div>
+            <div class="course-info-bottom">90人已观看</div>
+          </div>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -124,7 +147,7 @@
     onReachBottom() {
       if (this.params.page + 1 > this.totalPage || this.loading) return
       this.params.page++
-      this.getCourseList()
+      // this.getCourseList()
     },
     methods: {
       handleSetBannerIndex(e) {
@@ -153,6 +176,7 @@
         this.loading = true
         API.Goods.meetingList({ data: this.params, loading: false }).then(res => {
           if (this.params.page === 1) this.goodsList = []
+          res.data = res.data.slice(0, 1)
           this.goodsList = [...this.goodsList, ...res.data]
           this.totalPage = res.meta.last_page
           this.loading = false
@@ -252,7 +276,6 @@
     padding: 0 15px
     box-sizing: border-box
     .goods-item-wrap
-      margin-bottom: 13px
       border-radius: 4px
       overflow: hidden
       .goods-item-top
@@ -296,9 +319,9 @@
             flex: 1
             no-wrap()
 
-        .goods-time
-          font-family: $font-family-regular
-          color: $color-text-sub
+        .describe-goods-time
+          font-bold()
+          color: #999
           font-size: $font-size-14
           word-wrap:break-word
         .goods-time-bottom
@@ -318,6 +341,10 @@
         font-family: $font-family-regular
         color: #999
         font-size: $font-size-14
+      .new-right-img
+        width: 14px
+        height: @width
+        display: block
     .new-goods-img
       display: block
       width: 19px
@@ -327,4 +354,32 @@
       font-bold()
       color: $color-text-main
       font-size: $font-size-16
+  .course-box
+    padding: 0 15px
+    box-sizing: border-box
+    .course-item
+      layout(row)
+      align-items: center
+      margin-bottom: 20px
+      .course-img
+        width: 160px
+        height: 90px
+        display: block
+        background: #333
+        border-radius: 2px
+        margin-right: 10px
+      .course-info
+        height: 90px
+        flex: 1
+        layout()
+        justify-content: space-between
+        .course-info-top
+          font-bold()
+          color: $color-text-main
+          font-size: $font-size-15
+          no-wrap-plus()
+        .course-info-bottom
+          font-family: $font-family-regular
+          color: $color-999
+          font-size: $font-size-14
 </style>
