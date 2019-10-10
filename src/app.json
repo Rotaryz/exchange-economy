@@ -7,7 +7,9 @@
     "pages/goods-detail",
     "pages/mine",
     "pages/demo",
-    "pages/join-guide"
+    "pages/join-guide",
+    "pages/verification",
+    "pages/workbench"
   ],
   "subPackages": [
     {

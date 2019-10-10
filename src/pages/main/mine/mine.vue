@@ -8,11 +8,23 @@
         <div class="user-tag">学员</div>
       </div>
     </div>
-    <div class="item" @click="phoneCall">
-      <div class="item-label">联系我们</div>
-      <div class="text-con">
-        <div class="item-text">{{phoneNum}}</div>
-        <img mode="aspectFill" src="/static/images/icon-tel@2x.png" alt="" class="item-icon">
+    <div class="item-list">
+      <div class="item" @click="_navigateTo('meeting')">
+        <div class="item-label">我的会议</div>
+        <img mode="aspectFill" src="/static/images/icon-right_arrow.png" alt="" class="item-arrow">
+      </div>
+      <div class="item" @click="phoneCall">
+        <div class="item-label">联系我们</div>
+        <div class="text-con">
+          <div class="item-text">{{phoneNum}}</div>
+        </div>
+        <img mode="aspectFill" src="/static/images/icon-right_arrow.png" alt="" class="item-arrow">
+      </div>
+    </div>
+    <div class="item-list">
+      <div class="item" @click="_navigateTo('workbench')">
+        <div class="item-label">工作台</div>
+        <img mode="aspectFill" src="/static/images/icon-right_arrow.png" alt="" class="item-arrow">
       </div>
     </div>
   </div>
@@ -50,6 +62,13 @@
         wx.makePhoneCall({
           phoneNumber: this.phoneNum
         })
+      },
+      _navigateTo(type) {
+        let navigateArr = {
+          meeting: `${this.$routes.main.VERIFICATION}`,
+          workbench: `${this.$routes.main.WORKBENCH}`
+        }
+        wx.navigateTo({ url: navigateArr[type] })
       }
     }
   }
@@ -64,17 +83,17 @@
     min-height: 100vh
     padding: 0 15px
     background: $color-background
-  .user-box,.item
+  .user-box,.item-list
     box-sizing: border-box
     width: 100%
-    padding: 0 15px
+    margin-bottom: 15px
     background: #fff
     layout(row)
     align-items: center
     border-radius: 4px
   .user-box
     height: 140px
-    margin-bottom: 15px
+    padding: 0 15px
     .user-img
       width: 70px
       height: @width
@@ -101,18 +120,31 @@
         font-size: 14px
         color: #fc3e3e
         border-1px(#fc3e3e,9px)
-  .item
-    height: 60px
-    justify-content: space-between
-    color: $color-text-main
-    font-size: 14px
-    font-family: $font-family-regular
-    .item-label
-    .text-con
+  .item-list
+    .item
+      position: relative
+      box-sizing: border-box
+      width: 100%
+      height: 60px
+      padding: 0 30px 0 15px
       layout(row)
-      justify-content: flex-end
-    .item-icon
-      width: 20px
-      height: 20px
-      margin-left: 10px
+      align-items: center
+      justify-content: space-between
+      color: $color-text-main
+      font-size: 14px
+      font-family: $font-family-regular
+      border-bottom-1px()
+      &:last-child
+        border-none()
+      .text-con
+        layout(row)
+        justify-content: flex-end
+      .item-arrow
+        position: absolute
+        right: 15px
+        top: 0
+        bottom: 0
+        margin: auto
+        width: 12px
+        height: 12px
 </style>
