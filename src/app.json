@@ -1,6 +1,11 @@
 {
   "pages": [
     "pages/home",
+    "pages/my-meeting-detail",
+    "pages/my-meeting",
+    "pages/course-guide",
+    "pages/course-detail",
+    "pages/course-list",
     "pages/meeting-error",
     "pages/out-html",
     "pages/login",
