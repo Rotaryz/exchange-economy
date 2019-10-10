@@ -1,7 +1,13 @@
 // PACKAGE_PATH
+const WORK = '/package-work'
 const MAIN = '/pages'
 /* eslint-disable */
 export default {
+  work: {
+    PACKAGE: WORK,
+    WORKBENCH:`${WORK}/workbench`,
+    // package-work
+  },
   main: {
     PACKAGE: MAIN,
     HOME:`${MAIN}/home`,

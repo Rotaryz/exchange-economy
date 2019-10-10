@@ -10,6 +10,12 @@
     "pages/join-guide"
   ],
   "subPackages": [
+    {
+      "root": "package-work/",
+      "pages": [
+        "workbench"
+      ]
+    }
   ],
   "preloadRule": {
   },
