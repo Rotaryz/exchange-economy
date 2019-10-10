@@ -21,6 +21,8 @@ export default {
     VERIFICATION:`${MAIN}/verification`,
     WORKBENCH:`${MAIN}/workbench`,
     MEETING_LIST:`${MAIN}/meeting-list`,
+    APPLY_INFO:`${MAIN}/apply-info`,
+    APPLY_SUCCESS:`${MAIN}/apply-success`,
     // main
   }
 }

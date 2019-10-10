@@ -2,44 +2,62 @@
   <div class="goods-detail">
     <navigation-bar title="会议详情"></navigation-bar>
     <!--轮播图-->
-    <section class="banner-box">
-      <div class="header-swiper">
-        <swiper v-if="goodsBanner && goodsBanner.length" :current="swiperIdx" class="banner" @change="bannerChange" interval="5000">
-          <block v-if="hasVideo">
-            <swiper-item class="banner-item">
-              <video class="item-img" id="goodsVideo" :src="goodsMsg.banner_videos[0].video_url" :poster="videoPoster" :muted="true" :show-mute-btn="true" :show-center-play-btn="false" :enable-progress-gesture="false" @ended='videoEnd' @waiting="videoWaiting" @progress="videoLoaded"></video>
-              <img v-if="goodsBanner[0].image_url" :class="!playBefore?'hide':''" :src="goodsBanner[0].image_url" mode="aspectFill" class="item-img video-img">
-              <div class="play-btn" @click="playVideo && playVideo(false)">
-                <img v-if="imageUrl&&!videoPlaying" :src="imageUrl + '/yx-image/2.6.5/icon-play_big@2x.png'" mode="aspectFill" class="play-btn-icon" @click.stop="playVideo && playVideo(true)">
+    <div class="banner-box-white">
+      <section class="banner-box">
+        <div class="header-swiper" v-if="hasVideo">
+          <div class="banner">
+            <block>
+              <div class="banner-item">
+                <video class="item-img" id="goodsVideo" :src="goodsMsg.banner_videos[0].video_url" :poster="videoPoster" :muted="true" :show-mute-btn="true" :show-center-play-btn="false" :enable-progress-gesture="false" @ended='videoEnd' @waiting="videoWaiting" @progress="videoLoaded"></video>
+                <img v-if="goodsBanner[0].image_url" :class="!playBefore?'hide':''" :src="goodsBanner[0].image_url" mode="aspectFill" class="item-img video-img">
+                <div class="play-btn" @click="playVideo && playVideo(false)">
+                  <img v-if="imageUrl&&!videoPlaying" :src="imageUrl + '/yx-image/2.6.5/icon-play_big@2x.png'" mode="aspectFill" class="play-btn-icon" @click.stop="playVideo && playVideo(true)">
+                </div>
               </div>
-            </swiper-item>
-          </block>
-          <block v-for="(item, index) in goodsBanner" :key="index">
-            <swiper-item class="banner-item">
-              <img :src="item.image_url + '?' + goodsMsg.image_view" class="item-img item-img-one" mode="aspectFill">
-              <img :src="item.image_url" class="item-img item-img-two" mode="aspectFill">
-            </swiper-item>
-          </block>
-        </swiper>
-        <article class="banner-number" v-if="goodsBannerLength !== 0">
-          <div></div>
-          <div v-if="hasVideo" class="banner-btn-con">
-            <div :class="currentNum===0?'active':''" class="banner-number-box banner-btn" @click="changeCurrentNum(0)">
-              <img v-if="imageUrl&&currentNum===0" :src="imageUrl + '/yx-image/2.6.5/icon-play_white@2x.png'" mode="aspectFill" class="banner-btn-icon">
-              <img v-if="imageUrl&&currentNum!==0" :src="imageUrl + '/yx-image/2.6.5/icon-play_black@2x.png'" mode="aspectFill" class="banner-btn-icon">
-              视频
-            </div>
-            <div :class="currentNum!==0?'active':''" class="banner-number-box banner-btn" @click="changeCurrentNum(1)">图片</div>
+            </block>
           </div>
-          <div :style="{opacity: currentNum!==0?'1':'0'}" class="banner-number-box">{{currentNum}}/{{goodsBannerLength}}</div>
-        </article>
-      </div>
-    </section>
+        </div>
+        <div class="header-swiper" v-else>
+          <swiper v-if="goodsBanner && goodsBanner.length" :current="swiperIdx" class="banner" @change="bannerChange" interval="5000">
+            <block v-for="(item, index) in goodsBanner" :key="index">
+              <swiper-item class="banner-item">
+                <img :src="item.image_url + '?' + goodsMsg.image_view" class="item-img item-img-one" mode="aspectFill">
+                <img :src="item.image_url" class="item-img item-img-two" mode="aspectFill">
+              </swiper-item>
+            </block>
+          </swiper>
+          <article class="banner-number" v-if="goodsBannerLength !== 0">
+            <div></div>
+            <!--<div v-if="hasVideo" class="banner-btn-con">-->
+              <!--<div :class="currentNum===0?'active':''" class="banner-number-box banner-btn" @click="changeCurrentNum(0)">-->
+                <!--<img v-if="imageUrl&&currentNum===0" :src="imageUrl + '/yx-image/2.6.5/icon-play_white@2x.png'" mode="aspectFill" class="banner-btn-icon">-->
+                <!--<img v-if="imageUrl&&currentNum!==0" :src="imageUrl + '/yx-image/2.6.5/icon-play_black@2x.png'" mode="aspectFill" class="banner-btn-icon">-->
+                <!--视频-->
+              <!--</div>-->
+              <!--<div :class="currentNum!==0?'active':''" class="banner-number-box banner-btn" @click="changeCurrentNum(1)">图片</div>-->
+            <!--</div>-->
+            <div :style="{opacity: currentNum!==0?'1':'0'}" class="banner-number-box">{{currentNum}}/{{goodsBannerLength}}</div>
+          </article>
+        </div>
+      </section>
+    </div>
     <!--商品信息-->
     <section class="goods-info">
-      <div class="title has-title"><span class="title-label">报名中</span>{{goodsMsg.name}}</div>
-      <div class="goods-text-box">
-        <text class="goods-text">{{goodsMsg.description}}</text>
+      <div class="title has-title">
+        <!--<span class="title-label">报名中</span>-->
+        {{goodsMsg.name}}
+      </div>
+      <div class="meeting-number">会议人数: {{goodsMsg.meeting_number}}</div>
+      <!--<div class="goods-text-box">-->
+        <!--<text class="goods-text">{{goodsMsg.description}}</text>-->
+      <!--</div>-->
+      <div class="meeting-des-box">
+        <img src="./time@2x.png" alt="" class="des-box-img">
+        <div class="des-box-text">{{goodsMsg.meeting_time}}</div>
+      </div>
+      <div class="meeting-des-box">
+        <img src="./icon-current@2x.png" alt="" class="des-box-img">
+        <div class="des-box-text">{{goodsMsg.description}}</div>
       </div>
       <div class="goods-share">
         <div v-if="goodsMsg.appointment_numbers&&goodsMsg.appointment_numbers.length" class="goods-share-title">他们已经报名</div>
@@ -61,11 +79,11 @@
       <img v-for="(item, index) in goodsMsg.detail_images" v-if="item.image_url" :src="item.image_url" lazy-load="true" class="detail-img" mode="widthFix" :key="index">
     </section>
     <div class="fixed-btn">
-      <div class="fixed-btn-phone" @click="phoneCall">
+      <div class="fixed-btn-phone" @click="_bookCourse">
         <img src="./icon-tel@2x.png" alt="" class="btn-phone-img">
-        <div class="btn-phone-text">打电话</div>
+        <div class="btn-phone-text">咨询</div>
       </div>
-      <div class="fixed-btn-btn" @click="_bookCourse">马上报名</div>
+      <div class="fixed-btn-btn" @click="_bookCourse">现在报名</div>
     </div>
     <div class="share-modal" :class="{show: showShare}">
       <div class="share-mask" @click="_hideShareModal"></div>
@@ -422,7 +440,7 @@
     padding-bottom: 60px
     box-sizing: border-box
   .goods-info
-    padding: 24px 15px 15px
+    padding: 20px 15px 15px
     background: $color-white
     margin-bottom: 12px
     .title
@@ -436,7 +454,28 @@
     .has-title
       width: 100%
       no-wrap-plus()
-      margin-bottom: 20px
+      margin-bottom: 12px
+    .meeting-number
+      font-bold()
+      color: $color-text-main
+      font-size: $font-size-15
+      padding-bottom: 18px
+      border-bottom-1px($color-line)
+    .meeting-des-box
+      padding: 18px 0
+      layout(row)
+      align-items: center
+      border-bottom-1px($color-line)
+      .des-box-img
+        width: 14px
+        height: @width
+        display: block
+        margin-right: 6.5px
+      .des-box-text
+        font-bold()
+        color: $color-999
+        font-size: $font-size-15
+        flex: 1
     .title-label
       font-size: $font-size-12
       font-bold()
@@ -464,6 +503,7 @@
       border-radius: 2px
       padding: 10px
       box-sizing: border-box
+      margin-top: 18px
       .goods-share-title
         font-family: $font-family-regular
         color: $color-text-sub
@@ -556,8 +596,15 @@
       font-size: $font-size-16
       border-radius: 22.5px
   // banner图
+      .banner-box-white
+        background: $color-white
+        padding-top: 18px
+        box-sizing: border-box
       .banner-box
         position :relative
+        border-radius: 2px
+        margin: 0 15px
+        overflow: hidden
         .header-title-wrapper
           position: absolute
           left: 12px
@@ -565,11 +612,11 @@
           bottom: 0
           transition: opacity 0.3s
   .header-swiper
-    width: 100vw
+    width: 100%
     height: px-change-vw(211)
     position: relative
     .banner
-      width: 100vw
+      width: 100%
       height: px-change-vw(211)
       .banner-item
         width: 100%
