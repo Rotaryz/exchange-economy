@@ -79,11 +79,15 @@
       <img v-for="(item, index) in goodsMsg.detail_images" v-if="item.image_url" :src="item.image_url" lazy-load="true" class="detail-img" mode="widthFix" :key="index">
     </section>
     <div class="fixed-btn">
+      <div class="fixed-btn-phone" @click="_bookBack">
+        <img src="./icon-index1@2x.png" alt="" class="btn-phone-img">
+        <div class="btn-phone-text">首页</div>
+      </div>
       <div class="fixed-btn-phone" @click="_bookCourse">
         <img src="./icon-tel@2x.png" alt="" class="btn-phone-img">
         <div class="btn-phone-text">咨询</div>
       </div>
-      <div class="fixed-btn-btn" @click="_bookCourse">现在报名</div>
+      <div class="fixed-btn-btn" :class="{'fixed-btn-null': goodsMsg.saleable * 1 === 0}" @click="_bookApply">{{goodsMsg.saleable * 1 === 0 ? '人数已满' : '现在报名'}}</div>
     </div>
     <div class="share-modal" :class="{show: showShare}">
       <div class="share-mask" @click="_hideShareModal"></div>
@@ -296,6 +300,13 @@
         API.Meeting.bookMeeting({data: {meeting_id: this.goodsMsg.id}}).then(res => {
           wx.navigateTo({ url: `${this.$routes.main.JOIN_GUIDE}?wechat=${this.goodsMsg.wechat}` })
         })
+      },
+      _bookBack() {
+        wx.switchTab({ url: `${this.$routes.main.HOME}` })
+      },
+      _bookApply() {
+        if (this.goodsMsg.saleable * 1 === 0) return
+        wx.navigateTo({ url: `${this.$routes.main.APPLY_INFO}?id=${this.goodsMsg.id}` })
       },
       // 显示分享modal
       _showShareModal() {
@@ -574,7 +585,7 @@
     padding-right: 15px
     box-sizing: border-box
     .fixed-btn-phone
-      width: 90px
+      padding: 0 15px
       .btn-phone-img
         width: 22px
         height: @width
@@ -595,6 +606,9 @@
       color: $color-white
       font-size: $font-size-16
       border-radius: 22.5px
+    .fixed-btn-null
+      color: $color-white
+      background: $color-999
   // banner图
       .banner-box-white
         background: $color-white

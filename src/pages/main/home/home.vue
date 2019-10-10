@@ -53,7 +53,7 @@
           <img src="./icon-news@2x.png" alt="" class="new-goods-img">
           <div class="new-goods-text">最新会议</div>
         </div>
-        <div class="new-goods-right">
+        <div class="new-goods-right" @click="jumpAllMeeting">
           <div class="new-right-text">全部</div>
           <img src="/static/images/icon-right_arrow.png" alt="" class="new-right-img">
         </div>
@@ -67,8 +67,8 @@
             <div class="goods-item-title">
               <span class="goods-label">报名中</span><p class="goods-title-text">{{item.name}}</p>
             </div>
-            <div class="describe-goods-time">时间：2019-09-22 9:00</div>
-            <div class="describe-goods-time">地点：广州白云区喜来登大酒店2楼会议厅广州白云区喜来登大酒店2楼会议厅</div>
+            <div class="describe-goods-time">时间：{{item.meeting_time}}</div>
+            <div class="describe-goods-time">地点：{{item.description}}</div>
           </div>
         </li>
       </ul>
@@ -81,17 +81,17 @@
           <img src="./icon-hot@2x.png" alt="" class="new-goods-img">
           <div class="new-goods-text">热门课程</div>
         </div>
-        <div class="new-goods-right">
+        <div class="new-goods-right"@click="jumpAllCourse">
           <div class="new-right-text">全部</div>
           <img src="/static/images/icon-right_arrow.png" alt="" class="new-right-img">
         </div>
       </div>
       <ul class="course-list">
-        <li class="course-item">
-          <image class="course-img"></image>
+        <li class="course-item" v-for="item in courseList" :key="item.id" @click="courseJump(item)">
+          <image class="course-img" :src="item.cover_image"></image>
           <div class="course-info">
-            <div class="course-info-top">第二届移动互联网营销将在上海举办第二届移动互联网营销将在上海举办</div>
-            <div class="course-info-bottom">90人已观看</div>
+            <div class="course-info-top">{{item.name}}</div>
+            <div class="course-info-bottom">{{item.read_count}}人已观看</div>
           </div>
         </li>
       </ul>
@@ -125,12 +125,17 @@
         bannerIndex: 0,
         CMS: [],
         params: {
+          limit: 1,
+          page: 1
+        },
+        courseParams: {
           limit: 10,
           page: 1
         },
         loading: false,
         totalPage: 0,
-        goodsList: []
+        goodsList: [],
+        courseList: []
       }
     },
     computed: {
@@ -142,12 +147,13 @@
     async onLoad() {},
     onShow() {
       this.pageDetail()
+      this.getCourseList()
     },
     // 下拉加载
     onReachBottom() {
       if (this.params.page + 1 > this.totalPage || this.loading) return
       this.params.page++
-      // this.getCourseList()
+      // this.getMeetingList()
     },
     methods: {
       handleSetBannerIndex(e) {
@@ -164,7 +170,7 @@
               this.CMS.forEach((item) => {
                 if (item.code === 'latest_meeting') {
                   this.params.page = 1
-                  this.getCourseList()
+                  this.getMeetingList()
                 }
               })
             }
@@ -172,16 +178,23 @@
         this.isFirstLoad = false
       },
       // 会议列表
-      getCourseList() {
+      getMeetingList() {
         this.loading = true
         API.Goods.meetingList({ data: this.params, loading: false }).then(res => {
           if (this.params.page === 1) this.goodsList = []
-          res.data = res.data.slice(0, 1)
           this.goodsList = [...this.goodsList, ...res.data]
           this.totalPage = res.meta.last_page
           this.loading = false
         }).catch(() => {
           this.loading = false
+        })
+      },
+      // 课程列表
+      getCourseList() {
+        API.Goods.getCourseList({ data: this.courseParams, loading: false }).then(res => {
+          if (this.courseParams.page === 1) this.courseList = []
+          this.courseList = [...this.courseList, ...res.data]
+        }).catch(() => {
         })
       },
       handleBannerJump(item) {
@@ -208,6 +221,18 @@
       goodsJump(item) {
         let url = `${this.$routes.main.GOODS_DETAIL}?id=${item.id}`
         this.$checkIsTabPage(url) ? wx.switchTab({ url }) : wx.navigateTo({ url })
+      },
+      courseJump(item) {
+        let url = `${this.$routes.main.COURSE_DETAIL}?id=${item.id}`
+        this.$checkIsTabPage(url) ? wx.switchTab({ url }) : wx.navigateTo({ url })
+      },
+      jumpAllMeeting() {
+        let url = `${this.$routes.main.MEETING_LIST}`
+        wx.navigateTo({url})
+      },
+      jumpAllCourse() {
+        let url = `${this.$routes.main.COURSE_LIST}`
+        wx.navigateTo({url})
       }
     }
   }
@@ -365,8 +390,7 @@
         width: 160px
         height: 90px
         display: block
-        background: #333
-        border-radius: 2px
+        border-radius: 4px
         margin-right: 10px
       .course-info
         height: 90px

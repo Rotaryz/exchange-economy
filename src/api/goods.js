@@ -12,6 +12,16 @@ export default {
     return request.get({url, ...args})
   },
   /**
+   * 会议列表[v1.5.3]
+   * @param data
+   * @param loading
+   * @returns {*}
+   */
+  getCourseList(args) {
+    const url = `/business/course/course/index`
+    return request.get({url, ...args})
+  },
+  /**
    * 页面详情
    * @param data
    * @param loading
