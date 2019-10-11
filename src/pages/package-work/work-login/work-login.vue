@@ -68,7 +68,7 @@
           if (res.data && res.data.access_token) {
             this.$storage('businessToken', res.data.access_token)
             HTTP.setHeaders({ BusinessAuthorization: res.data.access_token })
-            wx.navigateTo({ url: `${this.$routes.work.WORKBENCH}` })
+            wx.redirectTo({ url: `${this.$routes.work.WORKBENCH}` })
           }
         })
       }
