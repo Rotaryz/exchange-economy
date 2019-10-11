@@ -5,11 +5,13 @@
   "author": "Ben",
   "private": true,
   "scripts": {
+    "local:wx": "node build/dev-server.js wx local",
     "dev:wx": "node build/dev-server.js wx dev",
     "test:wx": "node build/dev-server.js wx test",
     "prod:wx": "node build/dev-server.js wx production",
     "build:wx": "node build/build.js wx",
     "start": "npm run dev:wx",
+    "local": "npm run local:wx",
     "dev": "npm run dev:wx",
     "test": "npm run test:wx",
     "prod": "npm run prod:wx",
