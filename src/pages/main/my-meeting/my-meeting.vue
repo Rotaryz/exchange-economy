@@ -93,8 +93,7 @@
       this.getMeetingList()
     },
     methods: {
-      getMeetingList(loading) {
-        console.log(111)
+      getMeetingList(loading = false) {
         API.Meeting.getMyMeetingList({
           data: {
             page: this.page,
@@ -114,6 +113,7 @@
       changeTab(idx, item) {
         this.tabIdx = idx * 1
         this.status = item.status
+        this.page = 1
         this.getMeetingList()
       },
       goMeetingDetail(item) {
@@ -121,6 +121,7 @@
         this.$checkIsTabPage(url) ? wx.switchTab({ url }) : wx.navigateTo({ url })
       },
       goCodePage(item) {
+        this.$store.dispatch('myMeeting/setCode', item.coupon_list)
         let url = `${this.$routes.main.MEETING_CODE}?id=${item.id}`
         this.$checkIsTabPage(url) ? wx.switchTab({ url }) : wx.navigateTo({ url })
       }

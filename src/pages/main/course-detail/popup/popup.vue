@@ -1,9 +1,7 @@
 <template>
   <div class="popup " :class="showPopup ? 'fade-modal-enter-active' : 'hide-popup'" @click="close">
     <div class="popup-content">
-      <img src="./pic-voucher_bg@2x.png" alt="" class="code-bg" mode="widthFix">
-      <p class="number">12345678</p>
-      <img src="" alt="" class="code-image">
+      <video :src="video" id="video" ref="video" autoplay :show-mute-btn="true" object-fit="contain" class="video"></video>
     </div>
   </div>
 </template>
@@ -22,15 +20,22 @@
         type: Boolean,
         default: false
       },
-      // 点击阴影是否可以关闭弹窗
-      isSituationClose: {
-        type: Boolean,
-        default: true
+      video: {
+        type: String,
+        default: ''
       }
     },
     data() {
       return {
-        isShow: false
+        isShow: false,
+        videoContext: wx.createVideoContext('video')
+      }
+    },
+    watch: {
+      showPopup(newValue, old) {
+        if (newValue) {
+          this.videoContext.play()
+        }
       }
     },
     onUnload() {
@@ -39,7 +44,11 @@
     methods: {
       // 点击阴影是否可以关闭弹窗
       close() {
-        if (!this.isSituationClose) return
+        // this.videoContext = wx.createVideoContext('video')
+        this.videoContext.pause()
+        setTimeout(() => {
+          this.videoContext.seek(0)
+        }, 300)
         this.$emit('update:showPopup', false)
         this.$emit('hidePopup')
       }
@@ -64,10 +73,14 @@
     transform: scale(.5)
     transition: all 0.5s
 
+  .hide-popup
+    opacity: 0
+    z-index: -1
+    transition: all 0.2s
   .popup
     padding-top: 32.5vh
     box-sizing: border-box
-    background: rgba(39, 39, 62, .7)
+    background: rgba(39, 39, 62, .9)
     position: fixed
     top: 0
     left: 0
@@ -75,28 +88,13 @@
     right: 0
   .popup-content
     position: relative
-    width: 280px
+    width: 100%
     margin: 0 auto
     border-radius: 2px
     font-size: 0
     text-align: center
-    .code-bg
-      width: 280px
-    .number
-      font-size: 26px
-      font-family: $font-family-medium
-      color: $color-text-main
-      font-bold()
-      position: absolute
-      left: 96px
-      top: 15px
-    .code-image
-      width: 174px
-      height: @width
-      position: absolute
-      top: 108px
-      left: 50%
-      transform: translateX(-50%)
-      background: #ccc
+  .video
+    width: 100%
+
 
 </style>

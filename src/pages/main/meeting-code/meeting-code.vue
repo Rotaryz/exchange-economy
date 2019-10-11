@@ -24,11 +24,14 @@
     },
     data() {
       return {
-        codeList: [1, 2]
+        codeList: []
       }
     },
     computed: {
       // ...Helpers.computed,
+    },
+    onLoad() {
+      this.codeList = this.$store.getters['myMeeting/codeList']
     },
     methods: {
       // ...Helpers.methods,

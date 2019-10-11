@@ -16,13 +16,15 @@
   // import * as Helpers from './modules/helpers'
   import API from '@api'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
+  import Empty from '@components/empty/empty'
 
   const PAGE_NAME = 'COURSE_LIST'
 
   export default {
     name: PAGE_NAME,
     components: {
-      NavigationBar
+      NavigationBar,
+      Empty
     },
     data() {
       return {

@@ -70,7 +70,7 @@
           <div class="list-container">
             <div class="list-item" v-for="(item, index) in courseList" :key="item.id">
               <p class="course-title">{{item.video_name}}</p>
-              <div class="right-btn">
+              <div class="right-btn" @click="playVideo(item)">
                 <img src="./icon-play@2x.png" alt="" class="play-icon">
                 <span class="play-text">播放</span>
               </div>
@@ -88,6 +88,7 @@
     <div class="footer-btn">
       <div class="btn" @click="goGuide">课程咨询</div>
     </div>
+    <popup :showPopup.sync="showPopup" :video="video"></popup>
   </div>
 </template>
 
@@ -96,6 +97,7 @@
   import API from '@api'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
   import Empty from '@components/empty/empty'
+  import Popup from './popup/popup'
 
   const PAGE_NAME = 'COURSE_DETAIL'
 
@@ -103,7 +105,8 @@
     name: PAGE_NAME,
     components: {
       NavigationBar,
-      Empty
+      Empty,
+      Popup
     },
     data() {
       return {
@@ -118,7 +121,9 @@
         courseList: [],
         courseImage: [],
         loaded: false,
-        id: ''
+        id: '',
+        showPopup: false,
+        video: ''
       }
     },
     onShareAppMessage() {
@@ -169,6 +174,10 @@
           this.courseList = []
           this.courseImage = this.courseDetail.detail_images
         }
+      },
+      playVideo(item) {
+        this.showPopup = true
+        this.video = item.video_url
       },
       goGuide() {
         let url = `${this.$routes.main.COURSE_GUIDE}?wechat=${this.courseDetail.wechat}`

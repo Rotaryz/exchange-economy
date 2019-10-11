@@ -40,7 +40,7 @@
         wx.setClipboardData({
           data: this.wxNum,
           success: () => {
-            wx.showToast({title: '复制成功', icon: 'none'})
+            // wx.showToast({title: '复制成功', icon: 'none'})
           }
         })
       }
