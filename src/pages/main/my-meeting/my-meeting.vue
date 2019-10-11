@@ -18,18 +18,18 @@
           <div class="list-container">
             <div class="list-item" v-for="(item, index) in willList" :key="item.id">
               <div class="item-detail" @click="goMeetingDetail(item)">
-                <img src="" alt="" class="meeting-image">
+                <img :src="item.detail[0].meeting_cover_image" alt="" class="meeting-image">
                 <div class="meeting-right">
-                  <p class="meeting-title">如何布局短视频矩阵，如何布局短视频矩阵</p>
-                  <p class="meeting-time">时间: 2019.09.22 9：00</p>
-                  <p class="meeting-addr">地点: 广东省广州市白云区国际会议中心</p>
+                  <p class="meeting-title">{{item.detail[0].meeting_name}}</p>
+                  <p class="meeting-time">时间: {{item.detail[0].meeting_time}}</p>
+                  <p class="meeting-addr">地点: {{item.detail[0].meeting_description}}</p>
                 </div>
               </div>
               <div class="bottom-space">
                 <span class="see-btn" @click="goCodePage(item)">查看凭证</span>
               </div>
             </div>
-            <empty v-if="!willList.length && loaded" :image="empty" :paddingTop="100" tip="暂无会议"></empty>
+            <empty v-if="!willList.length && loaded" :image="empty" :imgWidth="100" :paddingTop="100" tip="暂无会议"></empty>
           </div>
         </div>
         <div class="container-item">
@@ -38,14 +38,14 @@
               <div class="item-detail complete-detail">
                 <img src="" alt="" class="meeting-image">
                 <div class="meeting-right">
-                  <p class="meeting-title">如何布局短视频矩阵，如何布局短视频矩阵</p>
-                  <p class="meeting-time">时间: 2019.09.22 9：00</p>
-                  <p class="meeting-addr">地点: 广东省广州市白云区国际会议中心</p>
+                  <p class="meeting-title">{{item.detail[0].meeting_name}}</p>
+                  <p class="meeting-time">时间: {{item.detail[0].meeting_time}}</p>
+                  <p class="meeting-addr">地点: {{item.detail[0].meeting_description}}</p>
                 </div>
               </div>
             </div>
 
-            <empty v-if="!completeList.length && loaded" :image="empty" :paddingTop="100" tip="暂无会议"></empty>
+            <empty v-if="!completeList.length && loaded" :image="empty" :imgWidth="100" :paddingTop="100" tip="暂无会议"></empty>
           </div>
         </div>
       </div>
@@ -57,13 +57,15 @@
   // import * as Helpers from './modules/helpers'
   import API from '@api'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
+  import Empty from '@components/empty/empty'
 
   const PAGE_NAME = 'MY_MEETING'
 
   export default {
     name: PAGE_NAME,
     components: {
-      NavigationBar
+      NavigationBar,
+      Empty
     },
     data() {
       return {
@@ -77,7 +79,8 @@
         meetingList: {},
         loaded: false,
         page: 1,
-        status: 10
+        status: 10,
+        listType: 'willList'
       }
     },
     computed: {
@@ -107,13 +110,14 @@
               this.completeList = []
             }
             this.loaded = true
-            this.willList = [...this.willList, ...res.data]
+            this[this.listType] = [...this[this.listType], ...res.data]
           })
       },
       changeTab(idx, item) {
         this.tabIdx = idx * 1
         this.status = item.status
         this.page = 1
+        this.listType = item.list
         this.getMeetingList()
       },
       goMeetingDetail(item) {
@@ -122,7 +126,7 @@
       },
       goCodePage(item) {
         this.$store.dispatch('myMeeting/setCode', item.coupon_list)
-        let url = `${this.$routes.main.MEETING_CODE}?id=${item.id}`
+        let url = `${this.$routes.main.MEETING_CODE}`
         this.$checkIsTabPage(url) ? wx.switchTab({ url }) : wx.navigateTo({ url })
       }
     }

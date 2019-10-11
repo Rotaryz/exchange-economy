@@ -2,7 +2,7 @@
   <div class="my-meeting-detail">
     <navigation-bar title="我的会议"></navigation-bar>
     <div class="meeting-detail">
-      <img :src="meetingDetail.meeting_cover_images" alt="" class="meeting-image">
+      <img :src="meetingDetail.meeting_cover_image" alt="" class="meeting-image">
       <div class="meeting-right">
         <p class="meeting-title">{{meetingDetail.meeting_name}}</p>
         <p class="meeting-time">时间: {{meetingDetail.meeting_time}}</p>
@@ -14,16 +14,14 @@
 
     <div class="ticket-list">
       <p class="ticket-title">
-        参会凭证(
-        <span class="ticket-number">{{ticketList.length}}</span>
-        张可用)
+        参会凭证(<span class="ticket-number">{{ticketList.length}}</span>张可用)
       </p>
       <div v-for="(item, index) in ticketList" :key="index" class="ticket-item">
         <p class="ticket-msg">
           <img :src="item.usable ? usableTicket : unusableTicket" class="ticket-icon" mode="aspectFill">
-          <span class="ticket-num" :class="{'ticket-grey': !item.status}">{{item.code}}</span>
+          <span class="ticket-num" :class="{'ticket-grey': item.status}">{{item.code}}</span>
         </p>
-        <p class="right-btn" :class="{'ticket-usable':  item.status}" @click="goCodePage(item)">{{ item.status ? '查看凭证' : '已使用'}}</p>
+        <p class="right-btn" :class="{'ticket-usable': !item.status}" @click="goCodePage(item)">{{ item.status ? '已使用' : '查看凭证'}}</p>
       </div>
     </div>
 
@@ -81,7 +79,7 @@
         })
           .then(res => {
             this.meetingMsg = res.data
-            this.meetingDetail = res.data.detail
+            this.meetingDetail = res.data.detail[0]
             this.ticketList = res.data.coupon_list
           })
       },
@@ -94,10 +92,10 @@
         })
       },
       goCodePage(item) {
-        if (+item.status === 0) return
+        if (item.status) return
         // 保存核销码
         this.$store.dispatch('myMeeting/setCode', [item])
-        let url = `${this.$routes.main.MEETING_CODE}?id=${item.id}`
+        let url = `${this.$routes.main.MEETING_CODE}`
         this.$checkIsTabPage(url) ? wx.switchTab({ url }) : wx.navigateTo({ url })
       }
     }

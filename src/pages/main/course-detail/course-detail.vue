@@ -75,7 +75,7 @@
                 <span class="play-text">播放</span>
               </div>
             </div>
-            <empty v-if="!courseList.length && loaded" :image="empty" :paddingTop="100" tip="暂无课程"></empty>
+            <empty v-if="!courseList.length && loaded" :image="empty" :imgWidth="100" :paddingTop="100" tip="暂无课程"></empty>
           </div>
         </div>
         <div class="container-item">
