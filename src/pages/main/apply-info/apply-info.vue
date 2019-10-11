@@ -33,20 +33,20 @@
         <div class="input-item">
           <div class="input-item-left">姓名</div>
           <div class="input-item-right">
-            <input type="text" class="info-input" placeholder="请输入姓名" placeholder-class="info-input-placeholder">
+            <input v-model="name" type="text" class="info-input" placeholder="请输入姓名" placeholder-class="info-input-placeholder">
           </div>
         </div>
         <div class="input-item">
           <div class="input-item-left">手机号</div>
           <div class="input-item-right">
-            <input type="number" class="info-input" placeholder="请输入手机号" placeholder-class="info-input-placeholder">
-            <div class="input-btn">微信授权手机</div>
+            <input v-model="mobile" type="number" class="info-input" placeholder="请输入手机号" placeholder-class="info-input-placeholder">
+            <button class="input-btn" formType="submit" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">微信授权手机</button>
           </div>
         </div>
       </div>
     </div>
     <div class="sure-box">
-      <div class="sure-box-btn sure-box-btn-fail">确认报名</div>
+      <div class="sure-box-btn" :class="{'sure-box-btn-fail': !isSubmit}" @click="_sureSubmit">确认报名</div>
     </div>
   </div>
 </template>
@@ -55,8 +55,10 @@
   // import * as Helpers from './modules/helpers'
   import API from '@api'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
+  import * as wechat from '@utils/wechat'
 
   const PAGE_NAME = 'APPLY_INFO'
+  const REGPHONE = /^(13[0-9]|14[0-9]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/
 
   export default {
     name: PAGE_NAME,
@@ -68,7 +70,9 @@
         showOrderNum: true,
         orderNum: 1,
         courseId: '',
-        goodsMsg: {}
+        goodsMsg: {},
+        mobile: '18820785496',
+        name: 'eleven'
       }
     },
     onLoad(options) {
@@ -78,6 +82,9 @@
     },
     computed: {
       // ...Helpers.computed,
+      isSubmit() {
+        return (this.name && this.mobile.length === 11)
+      }
     },
     methods: {
       // 获取会议详情
@@ -85,7 +92,6 @@
         console.log(`this.courseId = ` + this.courseId)
         API.Meeting.getMeetingInfo({data: {id: this.courseId}}).then(res => {
           this.goodsMsg = res.data
-          console.log(this.goodsMsg)
           this.courseId = res.data.id
         })
       },
@@ -102,6 +108,72 @@
           this.showOrderNum = false
         }
         this.orderNum++
+      },
+      // 微信授权手机
+      async getPhoneNumber(e) {
+        console.log(e)
+        this.codeMsg = await wechat.login()
+        let data = {
+          code: this.codeMsg.code,
+          iv: e.mp.detail.iv,
+          encrypted_data: e.mp.detail.encryptedData
+        }
+        API.Goods.getWechatMobile({data})
+          .then(res => {
+            if (res.error_code !== this.$ERR_OK) {
+              return
+            }
+            if (res.data.mobile.length === 0) {
+              return
+            }
+            this.mobile = res.data.mobile ? res.data.mobile : ''
+            // this.userInfo.mobile = this.mobile
+            // this.$wechat.setStorage('userInfo', this.userInfo)
+          })
+      },
+      _sureSubmit() {
+        if (!this.isSubmit) return
+        if (!REGPHONE.test(this.mobile)) {
+          this.$wechat.showToast('请输入正确的手机号码')
+          return false
+        }
+        let data = {
+          meeting: [{
+            meeting_id: this.courseId,
+            num: this.orderNum
+          }],
+          name: this.name,
+          mobile: this.mobile
+        }
+        console.log(data)
+        this.$wechat.showLoading()
+        this._paySubmit(data)
+      },
+      _paySubmit(data) {
+        API.Goods.createOrder({data})
+          .then(res => {
+            // 保存用户手机号码
+            // API.Goods.saveMobile({data: {mobile: this.mobile}})
+            let payData = res.data
+            let payRes = res.data.pay_config
+            let that = this
+            const { timestamp, nonceStr, signType, paySign } = payRes
+            wx.requestPayment({
+              timeStamp: timestamp,
+              nonceStr,
+              package: payRes.package,
+              signType,
+              paySign,
+              success(res) {
+                wx.redirectTo({ url: `${that.$routes.main.APPLY_SUCCESS}?orderId=${payData.id}` })
+                that.$wechat.hideLoading()
+              },
+              fail(res) {
+                that.$wechat.hideLoading()
+                // wx.redirectTo({ url: `${$$routes.main.ORDER_DETAIL}?id=${orderId}&&type=0` })
+              }
+            })
+          })
       }
       // ...Helpers.methods,
     }
@@ -203,6 +275,7 @@
           right: 0
           top: 0
           bottom: 0
+          z-index: 11
           margin: auto
           font-family: $font-family-regular
           color: $color-white

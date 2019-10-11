@@ -1,11 +1,11 @@
 <template>
   <div class="apply-success">
-    <navigation-bar title="报名成功"></navigation-bar>
+    <navigation-bar title="报名成功" :showArrow="false"></navigation-bar>
     <div class="apply-success-box">
       <img src="./pic-payok@2x.png" alt="" class="apply-icon">
       <p class="apply-text">报名成功</p>
-      <div class="success-btn">查看报名</div>
-      <div class="success-btn success-back">回到首页</div>
+      <div class="success-btn" @click="_lookOrder">查看报名</div>
+      <div class="success-btn success-back" @click="_bookBack">回到首页</div>
     </div>
   </div>
 </template>
@@ -24,13 +24,23 @@
     },
     data() {
       return {
+        orderId: ''
       }
+    },
+    onLoad(options) {
+      this.orderId = options.orderId
     },
     computed: {
       // ...Helpers.computed,
     },
     methods: {
       // ...Helpers.methods,
+      _lookOrder() {
+        wx.redirectTo({ url: `${this.$routes.main.MY_MEETING_DETAIL}?id=${this.orderId.id}` })
+      },
+      _bookBack() {
+        wx.switchTab({ url: `${this.$routes.main.HOME}` })
+      }
     }
   }
 </script>

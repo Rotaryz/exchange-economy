@@ -40,5 +40,35 @@ export default {
   getGoodsDetail(args) {
     const url = `/business/meeting/meeting/show`
     return request.get({ url, ...args })
+  },
+  /**
+   * 解析手机号码[v1.5.5]
+   * @param data
+   * @param loading
+   * @returns {*}
+   */
+  getWechatMobile(args) {
+    const url = `/business/business-customer/customer/get-mobile`
+    return request.post({ url, ...args })
+  },
+  /**
+   * 下单[v1.5.5]
+   * @param data
+   * @param loading
+   * @returns {*}
+   */
+  createOrder(args) {
+    const url = `/business/meeting-order/order/create`
+    return request.post({ url, ...args })
+  },
+  /**
+   * 下单[v1.5.5]
+   * @param data
+   * @param loading
+   * @returns {*}
+   */
+  saveMobile(args) {
+    const url = `/business/business-customer/customer/set-mobile`
+    return request.get({ url, ...args })
   }
 }
