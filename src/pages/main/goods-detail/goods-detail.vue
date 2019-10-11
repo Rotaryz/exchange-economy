@@ -84,7 +84,7 @@
         <div class="btn-phone-text">首页</div>
       </div>
       <div class="fixed-btn-phone" @click="_bookCourse">
-        <img src="./icon-tel@2x.png" alt="" class="btn-phone-img">
+        <img src="./icon-consultation@2x.png" alt="" class="btn-phone-img">
         <div class="btn-phone-text">咨询</div>
       </div>
       <div class="fixed-btn-btn" :class="{'fixed-btn-null': goodsMsg.saleable * 1 === 0}" @click="_bookApply">{{goodsMsg.saleable * 1 === 0 ? '人数已满' : '现在报名'}}</div>
@@ -129,6 +129,7 @@
   import { baseURL } from '@utils/config'
   import AppPromise from '@utils/app-promise'
   import { resolveQueryScene } from '@utils/common'
+  import { goodsComputed, goodsMethods } from '@state/helpers'
 
   const PAGE_NAME = 'GOODS_DETAIL'
 
@@ -163,6 +164,7 @@
       }
     },
     computed: {
+      ...goodsComputed,
       goodsBanner() {
         return this.goodsMsg.banner_images || []
       },
@@ -210,6 +212,7 @@
     },
     methods: {
       // ...Helpers.methods,
+      ...goodsMethods,
       // 获取系统信息
       getSystemInfo() {
         let res = wx.getSystemInfoSync()
@@ -297,9 +300,10 @@
       },
       // 预约会议，马上报名
       _bookCourse() {
-        API.Meeting.bookMeeting({data: {meeting_id: this.goodsMsg.id}}).then(res => {
-          wx.navigateTo({ url: `${this.$routes.main.JOIN_GUIDE}?wechat=${this.goodsMsg.wechat}` })
-        })
+        this.setLinkList(this.goodsMsg.meeting_wechats)
+        wx.navigateTo({ url: `${this.$routes.main.JOIN_GUIDE}` })
+        // API.Meeting.bookMeeting({data: {meeting_id: this.goodsMsg.id}}).then(res => {
+        // })
       },
       _bookBack() {
         wx.switchTab({ url: `${this.$routes.main.HOME}` })

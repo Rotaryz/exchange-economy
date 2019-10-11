@@ -13,13 +13,13 @@ export const globalMethods = {
 //   ...mapGetters('cart', ['count'])
 // }
 //
-// export const orderComputed = {
-//   ...mapGetters('order', ['goodsList', 'total', 'deliverAt', 'couponInfo', 'beforeTotal', 'commodityItem'])
-// }
+export const goodsComputed = {
+  ...mapGetters('goods', ['linkList'])
+}
 //
-// export const orderMethods = {
-//   ...mapActions('order', ['setOrderInfo', 'submitOrder', 'saveCoupon', 'setCommodityItem'])
-// }
+export const goodsMethods = {
+  ...mapActions('goods', ['setLinkList'])
+}
 //
 // export const cartMethods = {
 //   ...mapActions('cart', ['setCartCount'])

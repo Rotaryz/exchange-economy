@@ -67,8 +67,9 @@
         API.BusinessManager.managerLogin({data: this.params}).then(res => {
           if (res.data && res.data.access_token) {
             this.$storage('businessToken', res.data.access_token)
+            this.$storage('businessUserInfo', res.data.customer_info)
             HTTP.setHeaders({ BusinessAuthorization: res.data.access_token })
-            wx.navigateTo({ url: `${this.$routes.work.WORKBENCH}` })
+            wx.redirectTo({ url: `${this.$routes.work.WORKBENCH}` })
           }
         })
       }
