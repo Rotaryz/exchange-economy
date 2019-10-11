@@ -36,7 +36,7 @@
     methods: {
       // ...Helpers.methods,
       _lookOrder() {
-        wx.redirectTo({ url: `${this.$routes.main.MY_MEETING_DETAIL}?id=${this.orderId.id}` })
+        wx.redirectTo({ url: `${this.$routes.main.MY_MEETING_DETAIL}?id=${this.orderId}` })
       },
       _bookBack() {
         wx.switchTab({ url: `${this.$routes.main.HOME}` })
