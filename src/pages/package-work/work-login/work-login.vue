@@ -16,6 +16,7 @@
 <script type="text/ecmascript-6">
   // import * as Helpers from './modules/helpers'
   import API from '@api'
+  import HTTP from '@utils/http'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
 
   const PAGE_NAME = 'WORK_LOGIN'
@@ -29,8 +30,8 @@
       return {
         verifyText: '获取验证码',
         params: {
-          mobile: '13570085835',
-          code: '147159'
+          mobile: '',
+          code: ''
         }
       }
     },
@@ -39,16 +40,19 @@
     methods: {
       _getVerifyCode() {
         if (!this.params.mobile) return
-        this.verifyText = 60
-        let self = this
-        this.codeTimer = setInterval(() => {
-          if (self.verifyText > 0) {
-            self.verifyText--
-          } else {
-            clearInterval(this.codeTimer)
-            self.verifyText = '重新获取验证码'
-          }
-        }, 1000)
+        API.BusinessManager.getVerifyCode({data: {mobile: this.params.mobile}}).then(res => {
+          wx.showToast('短信验证码已发送')
+          this.verifyText = 60
+          let self = this
+          this.codeTimer = setInterval(() => {
+            if (self.verifyText > 0) {
+              self.verifyText--
+            } else {
+              clearInterval(this.codeTimer)
+              self.verifyText = '重新获取验证码'
+            }
+          }, 1000)
+        })
       },
       _loginFun() {
         if (!this.params.mobile) {
@@ -62,7 +66,8 @@
         console.log('managerLogin')
         API.BusinessManager.managerLogin({data: this.params}).then(res => {
           if (res.data && res.data.access_token) {
-            wx.setStorageSync('businessToken', res.data.access_token)
+            this.$storage('businessToken', res.data.access_token)
+            HTTP.setHeaders({ BusinessAuthorization: res.data.access_token })
             wx.navigateTo({ url: `${this.$routes.work.WORKBENCH}` })
           }
         })

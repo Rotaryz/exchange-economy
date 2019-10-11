@@ -8,10 +8,10 @@
     <div :style="{'transform': ' translateX('+ -(type * 100) +'vw)', 'transition': boxTransition}" class="content">
       <div v-for="(tab, idx) in tabList" :key="idx" class="list">
         <div class="list-header list-item">
-          <div class="left-box">邀请客户</div>
+          <div class="left-box">{{idx===1?'购票':'邀请'}}客户</div>
           <div class="right-box">时间</div>
         </div>
-        <div v-for="(item, index) in listData" :key="index" class="list-item">
+        <div v-if="listData.length" v-for="(item, index) in listData" :key="index" class="list-item">
           <div class="left-box">
             <img v-if="item.avatar||imageUrl" :src="item.avatar||imageUrl + '/yx-image/2.1/default_avatar@2x.png'" alt="" class="item-img" mode="aspectFill">
             <div class="name-box">
@@ -21,6 +21,7 @@
           </div>
           <div class="right-box">{{item.created_at}}</div>
         </div>
+        <empty v-if="!hasMore&&!listData.length" :imgWidth="72" :paddingTop="38" tipSub="暂无数据"></empty>
       </div>
     </div>
   </div>
@@ -30,13 +31,15 @@
   // import * as Helpers from './modules/helpers'
   import API from '@api'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
+  import Empty from '@components/empty/empty'
 
   const PAGE_NAME = 'INVITE_INFO'
 
   export default {
     name: PAGE_NAME,
     components: {
-      NavigationBar
+      NavigationBar,
+      Empty
     },
     data() {
       return {
@@ -48,7 +51,14 @@
         type: 0,
         boxTransition: 'all 0.25s',
         listData: {},
-        listParams: {page: 1, limit: 20}
+        listParams: {page: 1, limit: 20},
+        hasMore: false
+      }
+    },
+    onReachBottom() {
+      if (this.hasMore) {
+        this.listParams.page++
+        this._getListData()
       }
     },
     onLoad(option) {
@@ -58,10 +68,15 @@
     methods: {
       _tabChange(type) {
         this.type = type
+        this.listData = []
+        this.listParams.page = 1
+        this._getListData()
       },
       _getListData() {
-        API.BusinessManager.verify({data: {code: this.code}}).then(res => {
+        let apiArr = ['getCustomerList', 'getBuyTicketList']
+        API.BusinessManager[apiArr[this.type]]({data: this.listParams}).then(res => {
           this.listData = res.data
+          this.hasMore = res.meta.current_page < res.meta.last_page
         })
       }
     }
@@ -74,6 +89,7 @@
 
   .invite-info
     width: 100%
+    min-height: 100vh
   .top-tab
     position: fixed
     top: 64px

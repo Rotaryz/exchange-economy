@@ -49,6 +49,7 @@
 <script type="text/ecmascript-6">
   // import * as Helpers from './modules/helpers'
   import API from '@api'
+  import HTTP from '@utils/http'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
   import Popup from './popup/popup'
 
@@ -75,13 +76,15 @@
       this._getUserInfo()
     },
     methods: {
-      // 获取用户信息
+      // 获取管理人员信息
       _getUserInfo() {
         API.BusinessManager.getManagerInfo({}).then(res => {
           this.userInfo = res.data
           if (res.data.role_type === 1) {
+            // 分销员还需要请求总览数据
             this._getInviteInfo()
           }
+          // 头像用用户头像
           let userInfo = wx.getStorageSync('userInfo') || {}
           if (userInfo && userInfo.avatar) {
             this.userInfo.avatar = userInfo.avatar
@@ -94,18 +97,20 @@
           this.inviteInfo = res.data
         })
       },
+      // 跳转方法
       _navigateTo(page) {
-        page && wx.navigateTo({ url: `${this.$routes.work[page]}` })
+        (page && this.$routes.work[page]) && wx.navigateTo({ url: `${this.$routes.work[page]}` })
       },
+      // 退出登录
       loginOut() {
-        wx.navigateTo({ url: `${this.$routes.work.WORK_LOGIN}` })
+        HTTP.setHeaders({ BusinessAuthorization: '' })
+        wx.removeStorageSync('businessToken')
+        wx.redirectTo({ url: `${this.$routes.work.WORK_LOGIN}` })
       },
       // 核销
       _verifyFun() {
         API.BusinessManager.verify({data: {code: this.code}}).then(res => {
-          let result = res.data
-          console.log(result)
-          wx.navigateTo({ url: `${this.$routes.work.VERIFY_RESULT}` })
+          wx.navigateTo({ url: `${this.$routes.work.VERIFY_RESULT}?status=1` })
         })
       },
       // 扫一扫

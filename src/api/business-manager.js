@@ -11,6 +11,11 @@ export default {
     const url = `/business-manager/business/auth/post-login`
     return request.post({url, ...args})
   },
+  // 获取登录验证码
+  getVerifyCode(args) {
+    const url = `/common/business/mobile-code/send`
+    return request.post({url, ...args})
+  },
   // 邀请总览数据
   getInviteInfo(args) {
     const url = `/business-manager/business/manager/data-statistics`

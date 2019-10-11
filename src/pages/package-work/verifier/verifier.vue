@@ -32,7 +32,7 @@
         API.BusinessManager.verify({data: {code: this.code}}).then(res => {
           let result = res.data
           console.log(result)
-          wx.navigateTo({ url: `${this.$routes.work.VERIFY_RESULT}` })
+          wx.navigateTo({ url: `${this.$routes.work.VERIFY_RESULT}?status=1` })
         })
       }
     }

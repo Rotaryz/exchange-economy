@@ -6,7 +6,8 @@ import storage from '@utils/storage'
 import $$routes from '@utils/routes'
 
 const COMMON_HEADER = {
-  'Authorization': storage('token')
+  'Authorization': storage('token'),
+  'BusinessAuthorization': storage('businessToken')
 }
 let ErrorNum = 0
 
@@ -74,6 +75,11 @@ function errorCodeHandle(code) {
         ErrorNum = -1
       }
       ErrorNum++
+      break
+    // 管理人员登录凭证失效的时候
+    case 2040101:
+      console.log(code)
+      wx.redirectTo({ url: $$routes.work.WORK_LOGIN })
       break
     case 2600101: // 活动不存在
     case 2010101: // 商品不存在

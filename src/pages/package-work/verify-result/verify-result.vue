@@ -38,6 +38,7 @@
       }
     },
     onLoad(option) {
+      this.verifyStatus = option.status || 0
     },
     methods: {
       _goBack() {
