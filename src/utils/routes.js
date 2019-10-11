@@ -22,6 +22,11 @@ export default {
     LOGIN:`${MAIN}/login`,
     OUT_HTML:`${MAIN}/out-html`,
     MEETING_ERROR:`${MAIN}/meeting-error`,
+    VERIFICATION:`${MAIN}/verification`,
+    WORKBENCH:`${MAIN}/workbench`,
+    MEETING_LIST:`${MAIN}/meeting-list`,
+    APPLY_INFO:`${MAIN}/apply-info`,
+    APPLY_SUCCESS:`${MAIN}/apply-success`,
     COURSE_LIST:`${MAIN}/course-list`,
     COURSE_DETAIL:`${MAIN}/course-detail`,
     COURSE_GUIDE:`${MAIN}/course-guide`,
@@ -32,6 +37,7 @@ export default {
     MEETING_LIST:`${MAIN}/meeting-list`,
     APPLY_INFO:`${MAIN}/apply-info`,
     APPLY_SUCCESS:`${MAIN}/apply-success`,
+    MEETING_CODE:`${MAIN}/meeting-code`,
     // main
   }
 }

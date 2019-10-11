@@ -40,8 +40,8 @@
 
     <div class="course-msg">
       <div class="left-msg">
-        <p class="title">第一期赞播《美业5G新营销》</p>
-        <p class="describtion">随着5G时代的到来，美妆电商行业即将开始</p>
+        <p class="title">{{courseDetail.name}}</p>
+        <p class="describtion">{{courseDetail.description}}</p>
       </div>
       <button open-type="share" class="right-share">
         <img src="./icon-share_details@2x.png" class="share-icon" alt="" mode="aspectFill">
@@ -69,8 +69,8 @@
         <div class="container-item">
           <div class="list-container">
             <div class="list-item" v-for="(item, index) in courseList" :key="item.id">
-              <p class="course-title">让你张口就说，把我任何关键时刻</p>
-              <div class="right-btn">
+              <p class="course-title">{{item.video_name}}</p>
+              <div class="right-btn" @click="playVideo(item)">
                 <img src="./icon-play@2x.png" alt="" class="play-icon">
                 <span class="play-text">播放</span>
               </div>
@@ -80,7 +80,7 @@
         </div>
         <div class="container-item">
           <div class="list-container">
-            <img v-for="(item, index) in courseImage" :key="index" src="" alt="" class="course-image">
+            <img v-for="(item, index) in courseImage" :key="index" :src="item.image_url" alt="" mode="widthFix" class="course-image">
           </div>
         </div>
       </div>
@@ -88,14 +88,16 @@
     <div class="footer-btn">
       <div class="btn" @click="goGuide">课程咨询</div>
     </div>
+    <popup :showPopup.sync="showPopup" :video="video"></popup>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   // import * as Helpers from './modules/helpers'
-  // import API from '@api'
+  import API from '@api'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
   import Empty from '@components/empty/empty'
+  import Popup from './popup/popup'
 
   const PAGE_NAME = 'COURSE_DETAIL'
 
@@ -103,27 +105,32 @@
     name: PAGE_NAME,
     components: {
       NavigationBar,
-      Empty
+      Empty,
+      Popup
     },
     data() {
       return {
-        bannerArray: [1],
+        bannerArray: [],
         bannerIndex: 0,
         tabIdx: 0,
+        courseDetail: {},
         tabList: [
           {txt: '课程内容', id: 0},
           {txt: '课程介绍', id: 1}
         ],
-        courseList: [1, 2],
-        courseImage: [1, 2],
-        loaded: false
+        courseList: [],
+        courseImage: [],
+        loaded: false,
+        id: '',
+        showPopup: false,
+        video: ''
       }
     },
     onShareAppMessage() {
       // 分享锁
       // const flag = Date.now()
       return {
-        title: this.goodsMsg.name,
+        title: this.courseDetail.name,
         path: `${this.$routes.main.COURSE_DETAIL}`,
         imageUrl: this.bannerArray[0].image_url,
         success: (res) => {
@@ -134,15 +141,46 @@
         }
       }
     },
+    onLoad(options) {
+      this.id = options.id || ''
+      this.getCourseDetail()
+    },
+    onShow() {
+    },
     methods: {
+      getCourseDetail() {
+        API.Course.getCourseDetail({
+          data: {
+            id: this.id
+          }
+        })
+          .then(res => {
+            this.loaded = true
+            this.courseDetail = res.data
+            this.bannerArray = res.data.banner_images
+            this.courseList = res.data.banner_videos
+            // this.courseImage = res.data.detail_images
+          })
+      },
       handleSetBannerIndex(e) {
         this.bannerIndex = e.target.current
       },
       changeTab(idx) {
         this.tabIdx = idx * 1
+        if (idx === 0) {
+          this.courseList = this.courseDetail.banner_videos
+          this.courseImage = []
+        } else {
+          this.courseList = []
+          this.courseImage = this.courseDetail.detail_images
+        }
+      },
+      playVideo(item) {
+        this.showPopup = true
+        this.video = item.video_url
       },
       goGuide() {
-        let url = `${this.$routes.main.COURSE_GUIDE}`
+        let url = `${this.$routes.main.COURSE_GUIDE}?wechat=${this.courseDetail.wechat}`
         this.$checkIsTabPage(url) ? wx.switchTab({ url }) : wx.navigateTo({ url })
       }
     }
@@ -198,6 +236,7 @@
       padding: 20px 15px 25px
       display: flex
       align-items: center
+      justify-content: space-between
       .title
         font-size: $font-size-18
         color: #1D2023
@@ -210,7 +249,7 @@
         font-size: $font-size-15
       .right-share
         reset-button()
-        flex: 1
+        flex: 0 0 auto
         width: 100px
         height: 76px
         padding: 5px 0 5px 40px
@@ -287,6 +326,9 @@
           box-sizing: border-box
         .list-container
           padding: 15px 15px
+          font-size: 0
+        .course-image
+          width: 100%
         .list-item
           margin-bottom: 10px
           border-radius: 2px

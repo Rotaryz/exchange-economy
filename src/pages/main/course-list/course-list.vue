@@ -2,26 +2,29 @@
   <div class="course-list">
     <navigation-bar title="热门课程"></navigation-bar>
     <div v-for="(item, index) in courseList" :key="index" class="course-item" @click="goDetail(item)">
-      <img src="" alt="" class="course-image" mode="aspectFill">
+      <img :src="item.cover_image" alt="" class="course-image" mode="aspectFill">
       <div class="course-msg">
-        <p class="course-title">第二届移动互联网营销将在上海举行</p>
-        <p class="count">200人已观看</p>
+        <p class="course-title">{{item.name}}</p>
+        <p class="count">{{item.read_count}}人已观看</p>
       </div>
     </div>
+    <empty v-if="!courseList.length && loaded" :image="empty" :paddingTop="100" tip="暂无会议"></empty>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   // import * as Helpers from './modules/helpers'
-  // import API from '@api'
+  import API from '@api'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
+  import Empty from '@components/empty/empty'
 
   const PAGE_NAME = 'COURSE_LIST'
 
   export default {
     name: PAGE_NAME,
     components: {
-      NavigationBar
+      NavigationBar,
+      Empty
     },
     data() {
       return {
@@ -30,13 +33,37 @@
             name: '课程',
             id: 1
           }
-        ]
+        ],
+        page: 1,
+        loaded: false
       }
     },
     computed: {
       // ...Helpers.computed,
     },
+    onShow() {
+      this.getCourseList(true)
+    },
+    onReachBottom() {
+      this.page++
+      this.getCourseList(false)
+    },
     methods: {
+      getCourseList(loading) {
+        API.Course.getCourseList({
+          data: {
+            page: this.page
+          },
+          loading
+        })
+          .then(res => {
+            if (this.page === 1) {
+              this.courseList = []
+              this.loaded = true
+            }
+            this.courseList = [...this.courseList, ...res.data]
+          })
+      },
       goDetail(item) {
         let url = `${this.$routes.main.COURSE_DETAIL}?id=${item.id}`
         this.$checkIsTabPage(url) ? wx.switchTab({ url }) : wx.navigateTo({ url })

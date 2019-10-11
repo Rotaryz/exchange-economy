@@ -2,11 +2,11 @@
   <div class="my-meeting-detail">
     <navigation-bar title="我的会议"></navigation-bar>
     <div class="meeting-detail">
-      <img src="" alt="" class="meeting-image">
+      <img :src="meetingDetail.meeting_cover_images" alt="" class="meeting-image">
       <div class="meeting-right">
-        <p class="meeting-title">如何布局短视频矩阵，如何布局短视频矩阵</p>
-        <p class="meeting-time">时间: 2019.09.22 9：00</p>
-        <p class="meeting-addr">地点: 广东省广州市白云区国际会议中心</p>
+        <p class="meeting-title">{{meetingDetail.meeting_name}}</p>
+        <p class="meeting-time">时间: {{meetingDetail.meeting_time}}</p>
+        <p class="meeting-addr">地点: {{meetingDetail.meeting_description}}</p>
       </div>
     </div>
 
@@ -15,15 +15,15 @@
     <div class="ticket-list">
       <p class="ticket-title">
         参会凭证(
-        <span class="ticket-number">2</span>
+        <span class="ticket-number">{{ticketList.length}}</span>
         张可用)
       </p>
       <div v-for="(item, index) in ticketList" :key="index" class="ticket-item">
         <p class="ticket-msg">
           <img :src="item.usable ? usableTicket : unusableTicket" class="ticket-icon" mode="aspectFill">
-          <span class="ticket-num" :class="{'ticket-grey': !item.usable}">123456778</span>
+          <span class="ticket-num" :class="{'ticket-grey': !item.status}">{{item.code}}</span>
         </p>
-        <p class="right-btn" :class="{'ticket-usable': item.usable}">{{item.usable ? '查看凭证' : '已使用'}}</p>
+        <p class="right-btn" :class="{'ticket-usable':  item.status}" @click="goCodePage(item)">{{ item.status ? '查看凭证' : '已使用'}}</p>
       </div>
     </div>
 
@@ -31,15 +31,15 @@
 
     <div class="msg">
       <p class="msg-title">报名信息</p>
-      <p class="code"><span>报名编号: 123456789</span><span class="copy" @click="copyNumber">复制</span></p>
-      <p class="time">报名时间: 2019-10-10 15:00</p>
+      <p class="code"><span>报名编号: {{meetingMsg.order_sn}}</span><span class="copy" @click="copyNumber">复制</span></p>
+      <p class="time">报名时间: {{meetingMsg.created_at}}</p>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   // import * as Helpers from './modules/helpers'
-  // import API from '@api'
+  import API from '@api'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
 
   const PAGE_NAME = 'MY_MEETING_DETAIL'
@@ -59,13 +59,32 @@
           {usable: false}
         ],
         usableTicket: USABLE_TICKET,
-        unusableTicket: UNUSABLE_TICKET
+        unusableTicket: UNUSABLE_TICKET,
+        id: '',
+        meetingDetail: {},
+        meetingMsg: {}
       }
     },
     computed: {
       // ...Helpers.computed,
     },
+    onLoad(options) {
+      this.id = options.id || ''
+      this.getMyMeetingDetail()
+    },
     methods: {
+      getMyMeetingDetail() {
+        API.Meeting.getMyMeetingDetail({
+          data: {
+            id: this.id
+          }
+        })
+          .then(res => {
+            this.meetingMsg = res.data
+            this.meetingDetail = res.data.detail
+            this.ticketList = res.data.coupon_list
+          })
+      },
       copyNumber() {
         wx.setClipboardData({
           data: this.wxNum,
@@ -73,6 +92,13 @@
             wx.showToast({title: '复制成功', icon: 'none'})
           }
         })
+      },
+      goCodePage(item) {
+        if (+item.status === 0) return
+        // 保存核销码
+        this.$store.dispatch('myMeeting/setCode', [item])
+        let url = `${this.$routes.main.MEETING_CODE}?id=${item.id}`
+        this.$checkIsTabPage(url) ? wx.switchTab({ url }) : wx.navigateTo({ url })
       }
     }
   }
