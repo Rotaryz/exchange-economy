@@ -6,6 +6,10 @@ export default {
   work: {
     PACKAGE: WORK,
     WORKBENCH:`${WORK}/workbench`,
+    INVITE_INFO:`${WORK}/invite-info`,
+    VERIFICATION:`${WORK}/verifier`,
+    VERIFY_RESULT:`${WORK}/verify-result`,
+    WORK_LOGIN:`${WORK}/work-login`,
     // package-work
   },
   main: {
@@ -23,6 +27,12 @@ export default {
     MEETING_LIST:`${MAIN}/meeting-list`,
     APPLY_INFO:`${MAIN}/apply-info`,
     APPLY_SUCCESS:`${MAIN}/apply-success`,
+    COURSE_LIST:`${MAIN}/course-list`,
+    COURSE_DETAIL:`${MAIN}/course-detail`,
+    COURSE_GUIDE:`${MAIN}/course-guide`,
+    MY_MEETING:`${MAIN}/my-meeting`,
+    MY_MEETING_DETAIL:`${MAIN}/my-meeting-detail`,
+    MEETING_CODE:`${MAIN}/meeting-code`,
     // main
   }
 }

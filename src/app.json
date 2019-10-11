@@ -4,21 +4,29 @@
     "pages/apply-success",
     "pages/apply-info",
     "pages/meeting-list",
+    "pages/meeting-code",
+    "pages/my-meeting-detail",
+    "pages/my-meeting",
+    "pages/course-guide",
+    "pages/course-detail",
+    "pages/course-list",
     "pages/meeting-error",
     "pages/out-html",
     "pages/login",
     "pages/goods-detail",
     "pages/mine",
     "pages/demo",
-    "pages/join-guide",
-    "pages/verification",
-    "pages/workbench"
+    "pages/join-guide"
   ],
   "subPackages": [
     {
       "root": "package-work/",
       "pages": [
-        "workbench"
+        "workbench",
+        "invite-info",
+        "verifier",
+        "verify-result",
+        "work-login"
       ]
     }
   ],

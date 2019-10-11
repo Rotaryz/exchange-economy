@@ -15,5 +15,15 @@ export default {
   bookMeeting(args) {
     const url = `/business/meeting-appointment/appointment/create`
     return request.post({url, ...args})
+  },
+  // 我的会议列表
+  getMyMeetingList(args) {
+    const url = `/business/meeting-order/order/index`
+    return request.get({url, loading: false, ...args})
+  },
+  // 我的会议详情
+  getMyMeetingDetail(args) {
+    const url = `/business/meeting-order/order/show`
+    return request.get({url, loading: false, ...args})
   }
 }
