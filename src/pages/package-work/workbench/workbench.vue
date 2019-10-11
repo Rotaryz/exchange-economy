@@ -6,29 +6,29 @@
         <img v-if="userInfo.avatar||imageUrl" :src="userInfo.avatar||imageUrl + '/yx-image/2.1/default_avatar@2x.png'" mode="aspectFill" alt="" class="user-img">
       </div>
       <div class="user-info">
-        <div class="user-name">{{userInfo.nickname}}</div>
-        <div class="user-tag">学员</div>
+        <div class="user-name">{{userInfo.name}}</div>
+        <div class="user-tag">{{userInfo.role_type_text}}</div>
       </div>
       <img mode="aspectFill" src="/static/images/icon-sign_out@2x.png" alt="" class="login-out" @click="showPopup = true">
     </div>
     <div class="content">
-      <div class="wrapper">
+      <div v-if="userInfo.role_type===1" class="wrapper">
         <div class="top-bar" @click="_navigateTo('INVITE_INFO')">
           邀请总览
           <img mode="aspectFill" src="/static/images/icon-right_arrow.png" alt="" class="item-arrow">
         </div>
         <div class="list">
           <div class="item">
-            <div class="val">242</div>
+            <div class="val">{{inviteInfo.new_customer}}</div>
             <div class="label">拉新</div>
           </div>
           <div class="item">
-            <div class="val">33</div>
+            <div class="val">{{inviteInfo.buy_ticket}}</div>
             <div class="label">购票</div>
           </div>
         </div>
       </div>
-      <div class="wrapper">
+      <div v-if="userInfo.role_type===2" class="wrapper">
         <div class="top-bar">凭证核销</div>
         <div class="list service">
           <div class="item" @click="_navigateTo('VERIFIER')">
@@ -42,7 +42,6 @@
         </div>
       </div>
     </div>
-    <exit-popup></exit-popup>
     <exit-popup confirmText="确认" popUpType="confirm" tip="确认要退出登录？" :showPopup.sync="showPopup" @confirm="loginOut"></exit-popup>
   </div>
 </template>
@@ -50,6 +49,7 @@
 <script type="text/ecmascript-6">
   // import * as Helpers from './modules/helpers'
   import API from '@api'
+  import HTTP from '@utils/http'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
   import Popup from './popup/popup'
 
@@ -63,9 +63,11 @@
     },
     data() {
       return {
-        userInfo: {},
+        userInfo: {avatar: '', role_type: ''},
         barHeight: 20,
-        showPopup: false
+        showPopup: false,
+        code: '',
+        inviteInfo: {}
       }
     },
     onLoad(option) {
@@ -74,16 +76,42 @@
       this._getUserInfo()
     },
     methods: {
+      // 获取管理人员信息
       _getUserInfo() {
-        API.Customer.getUserInfo({}).then(res => {
+        API.BusinessManager.getManagerInfo({}).then(res => {
           this.userInfo = res.data
+          if (res.data.role_type === 1) {
+            // 分销员还需要请求总览数据
+            this._getInviteInfo()
+          }
+          // 头像用用户头像
+          let userInfo = wx.getStorageSync('userInfo') || {}
+          if (userInfo && userInfo.avatar) {
+            this.userInfo.avatar = userInfo.avatar
+          }
         })
       },
-      _navigateTo(page) {
-        // page && wx.navigateTo({ url: `${this.$routes.work[page]}` })
+      // 获取邀请总览数据
+      _getInviteInfo() {
+        API.BusinessManager.getInviteInfo({}).then(res => {
+          this.inviteInfo = res.data
+        })
       },
+      // 跳转方法
+      _navigateTo(page) {
+        (page && this.$routes.work[page]) && wx.navigateTo({ url: `${this.$routes.work[page]}` })
+      },
+      // 退出登录
       loginOut() {
-        wx.navigateTo({ url: `${this.$routes.work.WORK_LOGIN}` })
+        HTTP.setHeaders({ BusinessAuthorization: '' })
+        wx.removeStorageSync('businessToken')
+        wx.redirectTo({ url: `${this.$routes.work.WORK_LOGIN}` })
+      },
+      // 核销
+      _verifyFun() {
+        API.BusinessManager.verify({data: {code: this.code}}).then(res => {
+          wx.navigateTo({ url: `${this.$routes.work.VERIFY_RESULT}?status=1` })
+        })
       },
       // 扫一扫
       _scanQRCode() {
@@ -93,7 +121,7 @@
             const codeRes = JSON.parse(res.result)
             if (codeRes && codeRes.code) {
               self.code = codeRes.code
-              self._verifyOrder()
+              self._verifyFun()
             } else {
               wx.showToast('获取核销码失败!')
             }

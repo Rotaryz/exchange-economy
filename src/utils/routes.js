@@ -7,7 +7,7 @@ export default {
     PACKAGE: WORK,
     WORKBENCH:`${WORK}/workbench`,
     INVITE_INFO:`${WORK}/invite-info`,
-    VERIFICATION:`${WORK}/verifier`,
+    VERIFIER:`${WORK}/verifier`,
     VERIFY_RESULT:`${WORK}/verify-result`,
     WORK_LOGIN:`${WORK}/work-login`,
     // package-work
@@ -32,6 +32,11 @@ export default {
     COURSE_GUIDE:`${MAIN}/course-guide`,
     MY_MEETING:`${MAIN}/my-meeting`,
     MY_MEETING_DETAIL:`${MAIN}/my-meeting-detail`,
+    VERIFICATION:`${MAIN}/verification`,
+    WORKBENCH:`${MAIN}/workbench`,
+    MEETING_LIST:`${MAIN}/meeting-list`,
+    APPLY_INFO:`${MAIN}/apply-info`,
+    APPLY_SUCCESS:`${MAIN}/apply-success`,
     MEETING_CODE:`${MAIN}/meeting-code`,
     // main
   }
