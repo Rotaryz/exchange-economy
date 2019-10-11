@@ -10,8 +10,6 @@
     "pages/course-guide",
     "pages/course-detail",
     "pages/course-list",
-    "pages/apply-success",
-    "pages/apply-info",
     "pages/meeting-list",
     "pages/meeting-error",
     "pages/out-html",
