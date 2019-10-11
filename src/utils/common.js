@@ -254,6 +254,7 @@ export function resolveQueryScene(scene = '') {
   let goodsId = 0
   let shopId = 0
   let activityId = 0
+  let shareId = 0
   if (scene) {
     try {
       let sceneMsg = decodeURIComponent(scene)
@@ -261,6 +262,7 @@ export function resolveQueryScene(scene = '') {
       shopId = +params.shopId || +params.s || 0
       goodsId = +params.id || +params.g || 0
       activityId = +params.activityId || +params.a || 0
+      shareId = +params.shareId || +params.si || 0
     } catch (e) {
       console.error(e)
     }
@@ -268,7 +270,8 @@ export function resolveQueryScene(scene = '') {
   return {
     shopId,
     goodsId,
-    activityId
+    activityId,
+    shareId
   }
 }
 
