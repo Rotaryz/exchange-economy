@@ -39,7 +39,7 @@
     methods: {
       createdCodeImage() {
         this.codeList.forEach(item => {
-          let code = createQrCode.svg(item.code)
+          let code = createQrCode.svg(`{code: ${item.code}}`)
           this.codeImage.push(code)
         })
       }
