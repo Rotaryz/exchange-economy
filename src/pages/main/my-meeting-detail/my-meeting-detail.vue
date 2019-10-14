@@ -68,6 +68,8 @@
     },
     onLoad(options) {
       this.id = options.id || ''
+    },
+    onShow() {
       this.getMyMeetingDetail()
     },
     methods: {
@@ -123,7 +125,6 @@
         flex: 0 0 auto
       .meeting-right
         padding: 2px 0 2px 10px
-        height: 90px
         flex: 1
         overflow: hidden
         box-sizing: border-box
@@ -132,6 +133,7 @@
         font-family: $font-family-medium
         font-bold()
         font-size: $font-size-15
+        line-height: 26px
         text-overflow: ellipsis
         overflow: hidden
         white-space: nowrap
@@ -140,6 +142,7 @@
         color: #999
         font-family: $font-family-medium
         font-bold()
+        line-height: 18px
         font-size: $font-size-14
       .meeting-addr
         margin-top: 0
