@@ -80,6 +80,9 @@
             }
             this.courseList = [...this.courseList, ...res.data]
           })
+          .catch(() => {
+            this.isLoading = false
+          })
       },
       goDetail(item) {
         let url = `${this.$routes.main.COURSE_DETAIL}?id=${item.id}`

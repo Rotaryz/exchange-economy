@@ -157,6 +157,7 @@
       }
     },
     onShow() {
+      this.addReadCount()
     },
     onShareAppMessage() {
       // 分享锁
@@ -194,6 +195,13 @@
             this.courseList = res.data.banner_videos
             // this.courseImage = res.data.detail_images
           })
+      },
+      addReadCount() {
+        API.Course.addReadCount({
+          data: {
+            course_id: this.id
+          }
+        })
       },
       handleSetBannerIndex(e) {
         this.bannerIndex = e.target.current

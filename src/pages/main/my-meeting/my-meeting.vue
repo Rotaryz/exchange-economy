@@ -126,6 +126,9 @@
             }
             this[this.listType] = [...this[this.listType], ...res.data]
           })
+          .catch(() => {
+            this.isLoading = false
+          })
       },
       changeTab(idx, item) {
         this.tabIdx = idx * 1
