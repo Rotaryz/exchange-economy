@@ -63,7 +63,6 @@
           wx.showToast('请输入短信验证码')
           return
         }
-        console.log('managerLogin')
         API.BusinessManager.managerLogin({data: this.params}).then(res => {
           if (res.data && res.data.access_token) {
             this.$storage('businessToken', res.data.access_token)
