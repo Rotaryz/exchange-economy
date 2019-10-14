@@ -71,8 +71,8 @@
         orderNum: 1,
         courseId: '',
         goodsMsg: {},
-        mobile: '18820785496',
-        name: 'eleven'
+        mobile: '',
+        name: ''
       }
     },
     onLoad(options) {
