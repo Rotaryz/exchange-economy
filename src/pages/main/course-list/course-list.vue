@@ -8,7 +8,7 @@
         <p class="count">{{item.read_count}}人已观看</p>
       </div>
     </div>
-    <empty v-if="!courseList.length && loaded" :image="empty" :imgWidth="100" :paddingTop="100" tip="暂无会议"></empty>
+    <empty v-if="!courseList.length && loaded" :image="empty" :imgWidth="100" :paddingTop="100" tip="暂无课程"></empty>
     <loading-more v-if="isLoading"></loading-more>
     <isEnd v-if="isEnd && courseList.length"></isEnd>
   </div>
