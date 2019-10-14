@@ -218,7 +218,6 @@
       } else {
         url = `${this.$routes.main.GOODS_DETAIL}?imageMogr2/thumbnail/!425x340r%7CimageView2/1/w/425/h/340&id=${this.courseId}&flag=${flag}`
       }
-      console.log(url)
       return {
         title: this.goodsMsg.name,
         path: url, // 商品详情
@@ -329,7 +328,9 @@
       _bookBack() {
         wx.switchTab({ url: `${this.$routes.main.HOME}` })
       },
-      _bookApply() {
+      async _bookApply() {
+        let tokenCheck = await this.$checkToken()
+        if (!tokenCheck) return
         if (this.goodsMsg.saleable * 1 === 0) return
         wx.navigateTo({ url: `${this.$routes.main.APPLY_INFO}?id=${this.goodsMsg.id}` })
       },
