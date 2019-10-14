@@ -1,7 +1,7 @@
 <template>
   <div class="workbench service">
     <navigation-bar :isOpacity="true" :translucent="true" arrowColor="white" titleColor="#ffffff" title="工作台"></navigation-bar>
-    <div :style="{padding: barHeight+44+14+'px 15px 25px 15px'}" class="user-box">
+    <div v-if="isLogin" :style="{padding: barHeight+44+14+'px 15px 25px 15px'}" class="user-box">
       <div class="img-box">
         <img v-if="userInfo.avatar||imageUrl" :src="userInfo.avatar||imageUrl + '/yx-image/2.1/default_avatar@2x.png'" mode="aspectFill" alt="" class="user-img">
       </div>
@@ -11,7 +11,7 @@
       </div>
       <img mode="aspectFill" src="/static/images/icon-sign_out@2x.png" alt="" class="login-out" @click="showPopup = true">
     </div>
-    <div class="content">
+    <div v-if="isLogin" class="content">
       <div v-if="userInfo.role_type===1" class="wrapper">
         <div class="top-bar" @click="_navigateTo('INVITE_INFO')">
           邀请总览
@@ -67,19 +67,28 @@
         barHeight: 20,
         showPopup: false,
         code: '',
-        inviteInfo: {}
+        inviteInfo: {},
+        isLogin: false
       }
     },
-    onLoad(option) {
-      let res = wx.getSystemInfoSync()
-      this.barHeight = res.statusBarHeight
-      this._getUserInfo()
+    onLoad() {
+      let token = wx.getStorageSync('businessToken') || ''
+      let userInfo = wx.getStorageSync('businessUserInfo') || false
+      if (!token || !userInfo) {
+        // 检查是否登录了，没有登录直接跳登录页
+        wx.redirectTo({ url: `${this.$routes.work.WORK_LOGIN}` })
+      } else {
+        let res = wx.getSystemInfoSync()
+        this.barHeight = res.statusBarHeight
+        this._getUserInfo()
+      }
     },
     methods: {
       // 获取管理人员信息
       _getUserInfo() {
         API.BusinessManager.getManagerInfo({}).then(res => {
           this.userInfo = res.data
+          this.isLogin = true
           if (res.data.role_type === 1) {
             // 分销员还需要请求总览数据
             this._getInviteInfo()
@@ -105,6 +114,7 @@
       loginOut() {
         HTTP.setHeaders({ BusinessAuthorization: '' })
         wx.removeStorageSync('businessToken')
+        wx.removeStorageSync('businessUserInfo')
         wx.redirectTo({ url: `${this.$routes.work.WORK_LOGIN}` })
       },
       // 核销
