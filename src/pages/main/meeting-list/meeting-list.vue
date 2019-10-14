@@ -20,7 +20,7 @@
       <empty v-else :imgWidth="109" :paddingTop="2.4" tip="会议排期中，敬请期待"></empty>
     </div>
     <loading-more v-if="loading"></loading-more>
-    <isEnd v-if="params.page + 1 > totalPage"></isEnd>
+    <isEnd v-if="params.page + 1 > totalPage && goodsList.length"></isEnd>
   </div>
 </template>
 
