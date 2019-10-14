@@ -70,5 +70,15 @@ export default {
   saveMobile(args) {
     const url = `/business/business-customer/customer/set-mobile`
     return request.get({ url, ...args })
+  },
+  /**
+   * 下单[v1.5.5]
+   * @param data
+   * @param loading
+   * @returns {*}
+   */
+  bindShare(args) {
+    const url = `/business/business-share/record/bind-share-record`
+    return request.post({ url, ...args })
   }
 }

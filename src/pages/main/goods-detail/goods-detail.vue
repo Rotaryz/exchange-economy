@@ -130,6 +130,7 @@
   import AppPromise from '@utils/app-promise'
   import { resolveQueryScene } from '@utils/common'
   import { goodsComputed, goodsMethods } from '@state/helpers'
+  import storage from '@utils/storage'
 
   const PAGE_NAME = 'GOODS_DETAIL'
 
@@ -160,7 +161,8 @@
         showShare: false,
         shareQRCode: '',
         shareImg: '',
-        hideAppointment: false
+        hideAppointment: false,
+        shareId: ''
       }
     },
     computed: {
@@ -183,13 +185,25 @@
           console.log(options.scene, 'options.scene')
           let query = resolveQueryScene(options.scene)
           this.courseId = query.goodsId
+          this.shareId = query.shareId
         } else {
           // 普通参数进来
           this.courseId = options.id
+          this.shareId = options.shareId
         }
         this._getCourseInfo()
       })
       this.getSystemInfo()
+      if (this.shareId && this.shareId > 0) {
+        storage('shareId', this.shareId)
+        if (!storage('token')) return
+        this.bindShareAction()
+        return
+      }
+      if (storage('token') && storage('shareId')) {
+        this.shareId = storage('shareId')
+        this.bindShareAction()
+      }
     },
     onShow() {
       !this.onLoad && this._getCourseInfo()
@@ -197,10 +211,18 @@
     },
     onShareAppMessage() {
       // 分享锁
+      let url
       const flag = Date.now()
+      console.log(storage('businessUserInfo'))
+      if (storage('businessUserInfo').id) {
+        url = `${this.$routes.main.GOODS_DETAIL}?imageMogr2/thumbnail/!425x340r%7CimageView2/1/w/425/h/340&id=${this.courseId}&flag=${flag}&shareId=${storage('businessUserInfo').id}`
+      } else {
+        url = `${this.$routes.main.GOODS_DETAIL}?imageMogr2/thumbnail/!425x340r%7CimageView2/1/w/425/h/340&id=${this.courseId}&flag=${flag}`
+      }
+      console.log(url)
       return {
         title: this.goodsMsg.name,
-        path: `${this.$routes.main.GOODS_DETAIL}?imageMogr2/thumbnail/!425x340r%7CimageView2/1/w/425/h/340&id=${this.courseId}&flag=${flag}`, // 商品详情
+        path: url, // 商品详情
         imageUrl: this.goodsBanner[0].image_url,
         success: (res) => {
           // 转发成功
@@ -323,7 +345,13 @@
       },
       // 获取分享二维码
       _getQrCode(savePoster = false) {
-        this.shareQRCode = `${baseURL.api}/common/file/qrcode/miniprogram-load?program=business&path=pages/goods-detail?g=${this.courseId}`
+        let url
+        if (storage('businessUserInfo').id) {
+          url = `${baseURL.api}/common/file/qrcode/miniprogram-load?program=business&path=pages/goods-detail?g=${this.courseId}&si=${storage('businessUserInfo').id}`
+        } else {
+          url = `${baseURL.api}/common/file/qrcode/miniprogram-load?program=business&path=pages/goods-detail?g=${this.courseId}`
+        }
+        this.shareQRCode = url
         savePoster && this._handleSavePoster()
       },
       // 保存海报按钮
@@ -439,6 +467,17 @@
         let num = wx.getStorageSync('phone')
         wx.makePhoneCall({
           phoneNumber: num
+        })
+      },
+      // 绑定关系
+      bindShareAction() {
+        let data = {
+          share_manager_id: this.shareId,
+          object_id: storage('userInfo').id,
+          object_type: 1
+        }
+        API.Goods.bindShare({data}).then(res => {
+          wx.removeStorageSync('shareId')
         })
       }
     }
