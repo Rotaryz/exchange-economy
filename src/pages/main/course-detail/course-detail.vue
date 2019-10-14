@@ -291,16 +291,25 @@
       display: flex
       align-items: center
       justify-content: space-between
+      .left-msg
+        flex: 1
+        overflow: hidden
       .title
         font-size: $font-size-18
         color: #1D2023
         font-family: $font-family-medium
         font-bold()
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap
       .describtion
         margin-top: 12px
         font-family: $font-family-regular
         color: #999
         font-size: $font-size-15
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap
       .right-share
         reset-button()
         flex: 0 0 auto
@@ -403,6 +412,7 @@
         .right-btn
           display: flex
           align-items: center
+          flex: 0 0 auto
         .play-icon
           width: 20px
           height: 20px
@@ -421,6 +431,7 @@
       left: 0
       width: 100vw
       box-sizing: border-box
+      background: $color-white
       .btn
         height: 40px
         border-radius: 40px
