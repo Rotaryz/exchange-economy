@@ -61,9 +61,10 @@
         this._getListData()
       }
     },
-    onLoad(option) {
+    onLoad() {
       let res = wx.getSystemInfoSync()
       this.statusBarHeight = res.statusBarHeight ? res.statusBarHeight + 44 : 64
+      this._getListData()
     },
     methods: {
       _tabChange(type) {

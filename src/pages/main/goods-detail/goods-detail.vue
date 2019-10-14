@@ -113,7 +113,7 @@
         </div>
         <div class="code-box">
           <img src="" class="code-img" mode="aspectFill">
-          <div class="code-text">扫一扫立即报名</div>r
+          <div class="code-text">扫一扫立即报名</div>
         </div>
       </div>
     </div>
@@ -213,8 +213,7 @@
       // 分享锁
       let url
       const flag = Date.now()
-      console.log(storage('businessUserInfo'))
-      if (storage('businessUserInfo').id) {
+      if (storage('businessUserInfo').id && storage('businessUserInfo').role_type * 1 === 1) {
         url = `${this.$routes.main.GOODS_DETAIL}?imageMogr2/thumbnail/!425x340r%7CimageView2/1/w/425/h/340&id=${this.courseId}&flag=${flag}&shareId=${storage('businessUserInfo').id}`
       } else {
         url = `${this.$routes.main.GOODS_DETAIL}?imageMogr2/thumbnail/!425x340r%7CimageView2/1/w/425/h/340&id=${this.courseId}&flag=${flag}`
@@ -346,7 +345,7 @@
       // 获取分享二维码
       _getQrCode(savePoster = false) {
         let url
-        if (storage('businessUserInfo').id) {
+        if (storage('businessUserInfo').id && storage('businessUserInfo').role_type * 1 === 1) {
           url = `${baseURL.api}/common/file/qrcode/miniprogram-load?program=business&path=pages/goods-detail?g=${this.courseId}&si=${storage('businessUserInfo').id}`
         } else {
           url = `${baseURL.api}/common/file/qrcode/miniprogram-load?program=business&path=pages/goods-detail?g=${this.courseId}`

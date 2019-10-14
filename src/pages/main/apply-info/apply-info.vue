@@ -75,9 +75,10 @@
         name: ''
       }
     },
-    onLoad(options) {
+    async onLoad(options) {
       console.log(options.id)
       this.courseId = options.id
+      this.codeMsg = await wechat.login()
       this._getCourseInfo()
     },
     computed: {
@@ -112,7 +113,6 @@
       // 微信授权手机
       async getPhoneNumber(e) {
         console.log(e)
-        this.codeMsg = await wechat.login()
         let data = {
           code: this.codeMsg.code,
           iv: e.mp.detail.iv,
@@ -187,6 +187,7 @@
     background: $color-background
     overflow-x: hidden
     box-sizing: border-box
+    padding-bottom: 60px
   .apply-box
     padding: 10px 15px 0
     box-sizing: border-box
@@ -290,6 +291,7 @@
     background: $color-white
     padding: 10px 15px
     box-sizing: border-box
+    z-index: 22
     .sure-box-btn
       font-bold()
       color: $color-white

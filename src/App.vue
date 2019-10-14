@@ -5,6 +5,11 @@ import API from '@api'
 import { globalMethods } from '@state/helpers'
 // import $$routes from '@utils/routes'
 export default {
+  data() {
+    return {
+      codeMsg: ''
+    }
+  },
   created () {
     // 调用API从本地缓存中获取数据
     /*
@@ -19,6 +24,7 @@ export default {
   },
   onShow() {
     AppPromise.getInstance(async resolve => {
+      this.codeMsg = await this.$wechat.login()
       await this.silenceLogin()
       resolve(true)
     })
@@ -28,13 +34,13 @@ export default {
     // 静默
     async silenceLogin() {
       // 初始化获取静默授权
-      this.codeMsg = await this.$wechat.login()
       if (!this.$storage('token')) {
         let res = await API.Login.getToken({
           data: { code: this.codeMsg.code },
           loading: false,
           toast: false,
-          doctor() {
+          async doctor() {
+            this.codeMsg = await this.$wechat.login()
             // wx.reLaunch({url: $$routes.main.LOGIN})
           }
         })
