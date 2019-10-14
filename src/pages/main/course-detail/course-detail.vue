@@ -98,6 +98,9 @@
   import NavigationBar from '@components/navigation-bar/navigation-bar'
   import Empty from '@components/empty/empty'
   import Popup from './popup/popup'
+  import AppPromise from '@utils/app-promise'
+  import storage from '@utils/storage'
+  import { resolveQueryScene } from '@utils/common'
 
   const PAGE_NAME = 'COURSE_DETAIL'
 
@@ -123,15 +126,51 @@
         loaded: false,
         id: '',
         showPopup: false,
-        video: ''
+        video: '',
+        shareId: ''
       }
+    },
+    onLoad(options) {
+      AppPromise.getInstance().then(res => {
+        if (options.scene) {
+          // 小程序扫码进来
+          console.log(options.scene, 'options.scene')
+          let query = resolveQueryScene(options.scene)
+          this.id = query.id
+          this.shareId = query.shareId
+        } else {
+          // 普通参数进来
+          this.id = options.id
+          this.shareId = options.shareId
+        }
+        this.getCourseDetail()
+      })
+      if (this.shareId && this.shareId > 0) {
+        storage('shareId', this.shareId)
+        if (!storage('token')) return
+        this.bindShareAction()
+        return
+      }
+      if (storage('token') && storage('shareId')) {
+        this.shareId = storage('shareId')
+        this.bindShareAction()
+      }
+    },
+    onShow() {
     },
     onShareAppMessage() {
       // 分享锁
       // const flag = Date.now()
+      let url = ''
+      let userId = storage('businessUserInfo').id
+      if (userId) {
+        url = `${this.$routes.main.COURSE_DETAIL}?id=${this.id}&shareId=${userId}`
+      } else {
+        url = `${this.$routes.main.COURSE_DETAIL}?id=${this.id}`
+      }
       return {
         title: this.courseDetail.name,
-        path: `${this.$routes.main.COURSE_DETAIL}`,
+        path: url,
         imageUrl: this.bannerArray[0].image_url,
         success: (res) => {
           // 转发成功
@@ -140,12 +179,6 @@
           // 转发失败
         }
       }
-    },
-    onLoad(options) {
-      this.id = options.id || ''
-      this.getCourseDetail()
-    },
-    onShow() {
     },
     methods: {
       getCourseDetail() {
@@ -182,6 +215,17 @@
       goGuide() {
         let url = `${this.$routes.main.COURSE_GUIDE}?wechat=${this.courseDetail.wechat}`
         this.$checkIsTabPage(url) ? wx.switchTab({ url }) : wx.navigateTo({ url })
+      },
+      // 绑定关系
+      bindShareAction() {
+        let data = {
+          share_manager_id: this.shareId,
+          object_id: storage('userInfo').id,
+          object_type: 1
+        }
+        API.Goods.bindShare({data}).then(res => {
+          wx.removeStorageSync('shareId')
+        })
       }
     }
   }
