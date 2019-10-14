@@ -192,18 +192,18 @@
           this.shareId = options.shareId
         }
         this._getCourseInfo()
-        if (this.shareId && this.shareId > 0) {
-          storage('shareId', this.shareId)
-          if (!storage('token')) return
-          this.bindShareAction()
-          return
-        }
-        if (storage('token') && storage('shareId')) {
-          this.shareId = storage('shareId')
-          this.bindShareAction()
-        }
       })
       this.getSystemInfo()
+      if (this.shareId && this.shareId > 0) {
+        storage('shareId', this.shareId)
+        if (!storage('token')) return
+        this.bindShareAction()
+        return
+      }
+      if (storage('token') && storage('shareId')) {
+        this.shareId = storage('shareId')
+        this.bindShareAction()
+      }
     },
     onShow() {
       !this.onLoad && this._getCourseInfo()
