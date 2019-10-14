@@ -9,6 +9,8 @@
       </div>
     </div>
     <empty v-if="!courseList.length && loaded" :image="empty" :imgWidth="100" :paddingTop="100" tip="暂无会议"></empty>
+    <loading-more v-if="isLoading"></loading-more>
+    <isEnd v-if="isEnd && courseList.length"></isEnd>
   </div>
 </template>
 
@@ -17,6 +19,8 @@
   import API from '@api'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
   import Empty from '@components/empty/empty'
+  import LoadingMore from '@components/loading-more/loading-more'
+  import IsEnd from '@components/is-end/is-end'
 
   const PAGE_NAME = 'COURSE_LIST'
 
@@ -24,7 +28,9 @@
     name: PAGE_NAME,
     components: {
       NavigationBar,
-      Empty
+      Empty,
+      LoadingMore,
+      IsEnd
     },
     data() {
       return {
@@ -35,7 +41,9 @@
           }
         ],
         page: 1,
-        loaded: false
+        loaded: false,
+        isLoading: false,
+        isEnd: false
       }
     },
     computed: {
@@ -45,11 +53,15 @@
       this.getCourseList(true)
     },
     onReachBottom() {
+      if (this.isEnd) return
       this.page++
       this.getCourseList(false)
     },
     methods: {
       getCourseList(loading) {
+        if (this.page > 1) {
+          this.isLoading = true
+        }
         API.Course.getCourseList({
           data: {
             page: this.page
@@ -57,9 +69,14 @@
           loading
         })
           .then(res => {
+            this.isLoading = false
             if (this.page === 1) {
               this.courseList = []
               this.loaded = true
+              this.isEnd = false
+            }
+            if (+this.page === +res.meta.last_page) {
+              this.isEnd = true
             }
             this.courseList = [...this.courseList, ...res.data]
           })
