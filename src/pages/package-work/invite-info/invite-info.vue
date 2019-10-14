@@ -16,7 +16,7 @@
             <div class="left-box">
               <img v-if="item.avatar||imageUrl" :src="item.avatar||imageUrl + '/yx-image/2.1/default_avatar@2x.png'" alt="" class="item-img" mode="aspectFill">
               <div class="name-box">
-                {{item.nickname}}
+                <div class="name">{{item.nickname}}</div>
                 <div v-if="idx===1&&item.participants_status_text" :class="[item.participants_status===1?'ed':'']" class="status-box">{{item.participants_status_text}}</div>
               </div>
             </div>
@@ -76,34 +76,6 @@
       _getListData() {
         let apiArr = ['getCustomerList', 'getBuyTicketList']
         API.BusinessManager[apiArr[this.type]]({data: this.listParams}).then(res => {
-          if (this.type === 1) {
-            res.data = [
-              {
-                'id': 7,
-                'customer_id': 1,
-                'nickname': '庄泽',
-                'participants_status_text': '庄泽',
-                'avatar': 'https://wx.qlogo.cn/mmopen/vi_32/PiajxSqBRaEKph0fhLwzYlibwjKibZE2Ht6hzWyGjDsJFxiblapfgxV3SbWF197Y5HtDQ9sCKKVxEFF6LOINWSjfDw/132',
-                'created_at': '2019-10-07 11:11:50'
-              },
-              {
-                'id': 7,
-                'customer_id': 1,
-                'nickname': '庄泽',
-                'participants_status_text': '庄泽',
-                'avatar': 'https://wx.qlogo.cn/mmopen/vi_32/PiajxSqBRaEKph0fhLwzYlibwjKibZE2Ht6hzWyGjDsJFxiblapfgxV3SbWF197Y5HtDQ9sCKKVxEFF6LOINWSjfDw/132',
-                'created_at': '2019-10-07 11:11:50'
-              },
-              {
-                'id': 7,
-                'customer_id': 1,
-                'nickname': '庄泽',
-                'participants_status_text': '庄泽',
-                'avatar': 'https://wx.qlogo.cn/mmopen/vi_32/PiajxSqBRaEKph0fhLwzYlibwjKibZE2Ht6hzWyGjDsJFxiblapfgxV3SbWF197Y5HtDQ9sCKKVxEFF6LOINWSjfDw/132',
-                'created_at': '2019-10-07 11:11:50'
-              }
-            ]
-          }
           if (this.listParams.page === 1) {
             this.listData = res.data
           } else {
@@ -184,33 +156,46 @@
       border-bottom-1px()
       font-family: $font-family-regular
       .left-box
+        flex: 1
+        no-wrap()
         layout(row)
         align-items: center
         font-size: 14px
         color: #3F454B
         .name-box
+          flex: 1
           layout()
+          no-wrap()
+          .name
+            width: 100%
+            overflow: hidden
+            text-overflow:ellipsis
+            white-space: nowrap
           .status-box
             box-sizing: border-box
             width: auto
+            max-width: 40px
             height: 14px
             line-height: 1
             padding: 2px 5px
             font-family: $font-family-regular
             color: #d2d2d2
             font-size: 10px
+            text-align: center
             border-1px(#d2d2d2,7px)
             &.ed
               background: #FFF8F3
               color: #FF802F
               border-1px(#FF802F,7px)
       .right-box
+        padding-left: 10px
         font-size: 12px
         color: #999999
       .item-img
         width: 36px
         height: @width
         margin-right: 10px
+        border-radius: 100%
     .list-header
       height: 40px
       .left-box,.right-box
