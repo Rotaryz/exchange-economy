@@ -43,12 +43,12 @@ HTTP.setCallback({
     // 错误处理
     if (res.error_code !== ERR_OK) {
       // 1 code码处理
-      errorCodeHandle(res.error_code, url)
+      errorCodeHandle(res.error_code, url, res.message)
       // 2 可自定义处理toast错误
       if (typeof toast === 'function') {
         toast(res)
       } else if (toast) {
-        if (res.error_code !== 10000) {
+        if (res.error_code !== 10000 && res.error_code !== 2040201) {
           showToast(res.message)
         }
       }
@@ -65,7 +65,7 @@ HTTP.setCallback({
 })
 
 // 错误码处理
-function errorCodeHandle(code) {
+function errorCodeHandle(code, url, msg) {
   switch (code) {
     // 登录凭证失效的时候
     case 10000:
@@ -80,6 +80,10 @@ function errorCodeHandle(code) {
     case 2040101:
       console.log(code)
       wx.redirectTo({ url: $$routes.work.WORK_LOGIN })
+      break
+    // 管理人员登录凭证失效的时候
+    case 2040201:
+      wx.navigateTo({ url: $$routes.work.VERIFY_RESULT + `?status=0&errorMsg=${msg}` })
       break
     case 2600101: // 活动不存在
     case 2010101: // 商品不存在

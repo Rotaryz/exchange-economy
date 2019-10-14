@@ -1,6 +1,6 @@
 <template>
   <div class="verify-result">
-    <navigation-bar  :title="titleText"></navigation-bar>
+    <navigation-bar  :title="verifyObj[verifyStatus].title"></navigation-bar>
     <div class="content">
       <img v-if="verifyStatus===1" mode="aspectFill" src="./pic-payok.png" alt="" class="status-img">
       <img v-else mode="aspectFill" src="./pic-payno@2x.png" alt="" class="status-img">
@@ -24,7 +24,6 @@
     },
     data() {
       return {
-        titleText: '核销成功',
         verifyStatus: 0,
         verifyObj: [
           {
@@ -38,7 +37,10 @@
       }
     },
     onLoad(option) {
-      this.verifyStatus = option.status || 0
+      if (option) {
+        this.verifyStatus = option.status * 1 || 0
+        this.verifyObj[0].text = option.errorMsg || '该凭证不存在'
+      }
     },
     methods: {
       _goBack() {

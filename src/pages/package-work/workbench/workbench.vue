@@ -119,8 +119,9 @@
         wx.scanCode({
           success(res) {
             const codeRes = JSON.parse(res.result)
-            if (codeRes && codeRes.code) {
-              self.code = codeRes.code
+            console.log(codeRes)
+            if (codeRes) {
+              self.code = codeRes.code || codeRes
               self._verifyFun()
             } else {
               wx.showToast('获取核销码失败!')
