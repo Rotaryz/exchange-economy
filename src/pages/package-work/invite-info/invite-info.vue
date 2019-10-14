@@ -5,23 +5,25 @@
       <div v-for="(item, idx) in tabList" :key="idx" :class="[type===item.type?'active':'']" class="tab-item" @click="_tabChange(item.type)">{{item.name}}</div>
       <div :style="{left: type*50+'%'}" class="tab-line"></div>
     </div>
-    <div :style="{'transform': ' translateX('+ -(type * 100) +'vw)', 'transition': boxTransition}" class="content">
-      <div v-for="(tab, idx) in tabList" :key="idx" class="list">
-        <div class="list-header list-item">
-          <div class="left-box">{{idx===1?'购票':'邀请'}}客户</div>
-          <div class="right-box">时间</div>
-        </div>
-        <div v-if="listData.length" v-for="(item, index) in listData" :key="index" class="list-item">
-          <div class="left-box">
-            <img v-if="item.avatar||imageUrl" :src="item.avatar||imageUrl + '/yx-image/2.1/default_avatar@2x.png'" alt="" class="item-img" mode="aspectFill">
-            <div class="name-box">
-              {{item.nickname}}
-              <div v-if="idx===1&&item.participants_status_text" :class="[item.participants_status===1?'ed':'']" class="status-box">{{item.participants_status_text}}</div>
-            </div>
+    <div class="content">
+      <div :style="{'transform': ' translateX('+ -(type * 100) +'vw)'}" class="container">
+        <div v-for="(tab, idx) in tabList" :key="idx" class="list">
+          <div class="list-header list-item">
+            <div class="left-box">{{idx===1?'购票':'邀请'}}客户</div>
+            <div class="right-box">时间</div>
           </div>
-          <div class="right-box">{{item.created_at}}</div>
+          <div v-if="listData.length" v-for="(item, index) in listData" :key="index" class="list-item">
+            <div class="left-box">
+              <img v-if="item.avatar||imageUrl" :src="item.avatar||imageUrl + '/yx-image/2.1/default_avatar@2x.png'" alt="" class="item-img" mode="aspectFill">
+              <div class="name-box">
+                {{item.nickname}}
+                <div v-if="idx===1&&item.participants_status_text" :class="[item.participants_status===1?'ed':'']" class="status-box">{{item.participants_status_text}}</div>
+              </div>
+            </div>
+            <div class="right-box">{{item.created_at}}</div>
+          </div>
+          <empty v-if="!hasMore&&!listData.length" :imgWidth="72" :paddingTop="38" tipSub="暂无数据"></empty>
         </div>
-        <empty v-if="!hasMore&&!listData.length" :imgWidth="72" :paddingTop="38" tipSub="暂无数据"></empty>
       </div>
     </div>
   </div>
@@ -49,7 +51,6 @@
           {name: '购票', type: 1}
         ],
         type: 0,
-        boxTransition: 'all 0.25s',
         listData: {},
         listParams: {page: 1, limit: 20},
         hasMore: false
@@ -69,14 +70,45 @@
     methods: {
       _tabChange(type) {
         this.type = type
-        this.listData = []
         this.listParams.page = 1
         this._getListData()
       },
       _getListData() {
         let apiArr = ['getCustomerList', 'getBuyTicketList']
         API.BusinessManager[apiArr[this.type]]({data: this.listParams}).then(res => {
-          this.listData = res.data
+          if (this.type === 1) {
+            res.data = [
+              {
+                'id': 7,
+                'customer_id': 1,
+                'nickname': '庄泽',
+                'participants_status_text': '庄泽',
+                'avatar': 'https://wx.qlogo.cn/mmopen/vi_32/PiajxSqBRaEKph0fhLwzYlibwjKibZE2Ht6hzWyGjDsJFxiblapfgxV3SbWF197Y5HtDQ9sCKKVxEFF6LOINWSjfDw/132',
+                'created_at': '2019-10-07 11:11:50'
+              },
+              {
+                'id': 7,
+                'customer_id': 1,
+                'nickname': '庄泽',
+                'participants_status_text': '庄泽',
+                'avatar': 'https://wx.qlogo.cn/mmopen/vi_32/PiajxSqBRaEKph0fhLwzYlibwjKibZE2Ht6hzWyGjDsJFxiblapfgxV3SbWF197Y5HtDQ9sCKKVxEFF6LOINWSjfDw/132',
+                'created_at': '2019-10-07 11:11:50'
+              },
+              {
+                'id': 7,
+                'customer_id': 1,
+                'nickname': '庄泽',
+                'participants_status_text': '庄泽',
+                'avatar': 'https://wx.qlogo.cn/mmopen/vi_32/PiajxSqBRaEKph0fhLwzYlibwjKibZE2Ht6hzWyGjDsJFxiblapfgxV3SbWF197Y5HtDQ9sCKKVxEFF6LOINWSjfDw/132',
+                'created_at': '2019-10-07 11:11:50'
+              }
+            ]
+          }
+          if (this.listParams.page === 1) {
+            this.listData = res.data
+          } else {
+            this.listData = this.listData.concat(res.data)
+          }
           this.hasMore = res.meta.current_page < res.meta.last_page
         })
       }
@@ -128,13 +160,20 @@
         border-radius: 1.5px
         background: $color-main
   .content
-    width: 200vw
-    margin-top: $tabHeight
-    border-top: 10px solid $color-background
-    layout(row)
+    width: 100vw
+    height: 100%
+    overflow: hidden
+    .container
+      width: 200vw
+      height: 100%
+      margin-top: $tabHeight
+      border-top: 10px solid $color-background
+      layout(row)
+      transition: all 0.3s
   .list
     box-sizing: border-box
     width: 100vw
+    height: 100%
     padding-left: 15px
     .list-item
       padding-right: 15px
