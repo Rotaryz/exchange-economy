@@ -166,7 +166,7 @@
       // const flag = Date.now()
       let url = ''
       let userId = storage('businessUserInfo').id
-      if (userId) {
+      if (userId && storage('businessUserInfo').role_type * 1 === 1) {
         url = `${this.$routes.main.COURSE_DETAIL}?id=${this.id}&shareId=${userId}`
       } else {
         url = `${this.$routes.main.COURSE_DETAIL}?id=${this.id}`
