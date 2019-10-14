@@ -10,5 +10,10 @@ export default {
   getCourseDetail(args) {
     const url = `/business/course/course/show`
     return request.get({url, loading: false, ...args})
+  },
+  // 增加阅读数
+  addReadCount(args) {
+    const url = `/business/course/course/create-read-count`
+    return request.get({url, loading: false, ...args})
   }
 }

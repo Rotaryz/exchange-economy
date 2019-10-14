@@ -61,11 +61,6 @@ export default {
         page.onShow()
         return true
       }
-      let userInfo = this.$storage('userInfo')
-      if (!userInfo.is_register) {
-        wx.reLaunch({ url: this.$routes.main.LOGIN })
-        return false
-      }
       return true
     }
   }

@@ -36,7 +36,7 @@
           <div class="list-container">
             <div class="list-item" v-for="(item, index) in completeList" :key="item.id" @click="goMeetingDetail(item)">
               <div class="item-detail complete-detail">
-                <img src="" alt="" class="meeting-image">
+                <img :src="item.detail[0].meeting_cover_image" alt="" class="meeting-image">
                 <div class="meeting-right">
                   <p class="meeting-title">{{item.detail[0].meeting_name}}</p>
                   <p class="meeting-time">时间: {{item.detail[0].meeting_time}}</p>
@@ -50,6 +50,8 @@
         </div>
       </div>
     </div>
+    <loading-more v-if="isLoading"></loading-more>
+    <isEnd v-if="isEnd && (willList.length || completeList.length)"></isEnd>
   </div>
 </template>
 
@@ -58,6 +60,8 @@
   import API from '@api'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
   import Empty from '@components/empty/empty'
+  import LoadingMore from '@components/loading-more/loading-more'
+  import IsEnd from '@components/is-end/is-end'
 
   const PAGE_NAME = 'MY_MEETING'
 
@@ -65,7 +69,9 @@
     name: PAGE_NAME,
     components: {
       NavigationBar,
-      Empty
+      Empty,
+      LoadingMore,
+      IsEnd
     },
     data() {
       return {
@@ -80,7 +86,9 @@
         loaded: false,
         page: 1,
         status: 10,
-        listType: 'willList'
+        listType: 'willList',
+        isLoading: false,
+        isEnd: false
       }
     },
     computed: {
@@ -92,11 +100,13 @@
     onShow() {
     },
     onReachBottom() {
+      if (this.isEnd) return
       this.page++
       this.getMeetingList()
     },
     methods: {
       getMeetingList(loading = false) {
+        if (this.page > 1) this.isLoading = true
         API.Meeting.getMyMeetingList({
           data: {
             page: this.page,
@@ -105,12 +115,19 @@
           loading
         })
           .then(res => {
+            this.isLoading = false
             if (this.page === 1) {
               this.willList = []
               this.completeList = []
             }
             this.loaded = true
+            if (+this.page === +res.meta.last_page) {
+              this.isEnd = true
+            }
             this[this.listType] = [...this[this.listType], ...res.data]
+          })
+          .catch(() => {
+            this.isLoading = false
           })
       },
       changeTab(idx, item) {
@@ -118,6 +135,7 @@
         this.status = item.status
         this.page = 1
         this.listType = item.list
+        this.isEnd = false
         this.getMeetingList()
       },
       goMeetingDetail(item) {
@@ -140,6 +158,8 @@
     width: 100%
     min-height: 100vh
     background: $color-background
+    display: flex
+    flex-direction: column
     .header-tab
       height: 50px
       background: $color-white
@@ -172,6 +192,7 @@
         justify-content: center
         transform: translate(0, 0)
         transition: all 0.3s
+        z-index: 1
         .underline
           width: 30px
           height: 3px
@@ -182,6 +203,7 @@
       width: 100vw
       height: 100%
       overflow: hidden
+      flex: 1
       .big-container
         width: 200vw
         height: 100%

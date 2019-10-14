@@ -19,6 +19,8 @@
       </ul>
       <empty v-else :imgWidth="109" :paddingTop="2.4" tip="会议排期中，敬请期待"></empty>
     </div>
+    <loading-more v-if="loading"></loading-more>
+    <isEnd v-if="params.page + 1 > totalPage"></isEnd>
   </div>
 </template>
 
@@ -27,6 +29,8 @@
   import API from '@api'
   import NavigationBar from '@components/navigation-bar/navigation-bar'
   import Empty from '@components/empty/empty'
+  import LoadingMore from '@components/loading-more/loading-more'
+  import IsEnd from '@components/is-end/is-end'
 
   const PAGE_NAME = 'MEETING_LIST'
 
@@ -34,7 +38,9 @@
     name: PAGE_NAME,
     components: {
       NavigationBar,
-      Empty
+      Empty,
+      LoadingMore,
+      IsEnd
     },
     data() {
       return {

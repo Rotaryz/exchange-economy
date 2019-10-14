@@ -45,7 +45,7 @@
     "selectedColor": "#F54949",
     "borderStyle": "white",
     "list": [{
-      "text": "会议",
+      "text": "首页",
       "pagePath": "pages/home",
       "iconPath": "static/tabs/icon-gift.png",
       "selectedIconPath": "static/tabs/icon-gift_pressed.png"

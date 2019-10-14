@@ -43,10 +43,12 @@
         <p class="title">{{courseDetail.name}}</p>
         <p class="describtion">{{courseDetail.description}}</p>
       </div>
-      <button open-type="share" class="right-share">
-        <img src="./icon-share_details@2x.png" class="share-icon" alt="" mode="aspectFill">
+      <div class="right-share">
+        <button open-type="share" class="share-btn">
+          <img src="./icon-share_details@2x.png" class="share-icon" alt="" mode="aspectFill">
+        </button>
         <p class="text">推荐好友</p>
-      </button>
+      </div>
     </div>
 
     <div class="padding"></div>
@@ -157,13 +159,14 @@
       }
     },
     onShow() {
+      this.addReadCount()
     },
     onShareAppMessage() {
       // 分享锁
       // const flag = Date.now()
       let url = ''
       let userId = storage('businessUserInfo').id
-      if (userId) {
+      if (userId && storage('businessUserInfo').role_type * 1 === 1) {
         url = `${this.$routes.main.COURSE_DETAIL}?id=${this.id}&shareId=${userId}`
       } else {
         url = `${this.$routes.main.COURSE_DETAIL}?id=${this.id}`
@@ -194,6 +197,13 @@
             this.courseList = res.data.banner_videos
             // this.courseImage = res.data.detail_images
           })
+      },
+      addReadCount() {
+        API.Course.addReadCount({
+          data: {
+            course_id: this.id
+          }
+        })
       },
       handleSetBannerIndex(e) {
         this.bannerIndex = e.target.current
@@ -281,22 +291,30 @@
       display: flex
       align-items: center
       justify-content: space-between
+      .left-msg
+        flex: 1
+        overflow: hidden
       .title
         font-size: $font-size-18
         color: #1D2023
         font-family: $font-family-medium
         font-bold()
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap
       .describtion
         margin-top: 12px
         font-family: $font-family-regular
         color: #999
         font-size: $font-size-15
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap
       .right-share
         reset-button()
         flex: 0 0 auto
-        width: 100px
-        height: 76px
-        padding: 5px 0 5px 40px
+        height: 50px
+        padding-left: 40px
         display: flex
         flex-direction: column
         align-items: center
@@ -347,6 +365,7 @@
         justify-content: center
         transform: translate(0, 0)
         transition: all 0.3s
+        z-index: 1
         .underline
           width: 30px
           height: 3px
@@ -393,6 +412,7 @@
         .right-btn
           display: flex
           align-items: center
+          flex: 0 0 auto
         .play-icon
           width: 20px
           height: 20px
@@ -411,6 +431,7 @@
       left: 0
       width: 100vw
       box-sizing: border-box
+      background: $color-white
       .btn
         height: 40px
         border-radius: 40px
