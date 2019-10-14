@@ -258,6 +258,7 @@
           overflow: hidden
           -webkit-line-clamp: 2
           -webkit-box-orient: vertical
+          word-break: break-all
         .bottom-space
           border-top-1px($color-line)
           height: 45px

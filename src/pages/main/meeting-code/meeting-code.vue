@@ -39,7 +39,7 @@
     methods: {
       createdCodeImage() {
         this.codeList.forEach(item => {
-          let code = createQrCode.svg(`{code: ${item.code}}`)
+          let code = createQrCode.svg(item.code)
           this.codeImage.push(code)
         })
       }
@@ -71,7 +71,8 @@
         font-bold()
         position: absolute
         left: 32vw
-        top: px2vw(24)
+        top: 6.5%
+        line-height: 1
       .code-image
         width: 67vw
         height: @width
