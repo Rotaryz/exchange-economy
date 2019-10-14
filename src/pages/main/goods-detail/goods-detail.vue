@@ -47,7 +47,7 @@
         <!--<span class="title-label">报名中</span>-->
         {{goodsMsg.name}}
       </div>
-      <div class="meeting-number">会议人数: {{goodsMsg.meeting_number}}</div>
+      <div class="meeting-number">会议人数: {{goodsMsg.total_stock}}</div>
       <!--<div class="goods-text-box">-->
         <!--<text class="goods-text">{{goodsMsg.description}}</text>-->
       <!--</div>-->
