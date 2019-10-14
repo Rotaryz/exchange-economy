@@ -179,7 +179,9 @@
         flex: 1
         margin-bottom: 14px
         font-bold()
-        line-height: 1
+        padding-right: 6px
+        height: 20px
+        line-height: 22px
         font-size: 20px
         color: #fff
         no-wrap-plus(1)
