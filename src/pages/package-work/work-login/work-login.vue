@@ -98,6 +98,7 @@
       &:last-child
         margin-bottom: 0
       .from-input
+        flex: 1
         font-family: $font-family-regular
         font-size: 15px
         color: $color-text-main
