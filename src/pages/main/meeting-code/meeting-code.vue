@@ -70,13 +70,13 @@
         color: $color-text-main
         font-bold()
         position: absolute
-        left: 120px
-        top: 22px
+        left: 32vw
+        top: px2vw(24)
       .code-image
-        width: 232px
+        width: 67vw
         height: @width
         position: absolute
-        top: 124px
+        top: 30vw
         left: 50%
         transform: translateX(-50%)
 

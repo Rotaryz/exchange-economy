@@ -355,6 +355,7 @@
         justify-content: center
         transform: translate(0, 0)
         transition: all 0.3s
+        z-index: 1
         .underline
           width: 30px
           height: 3px
