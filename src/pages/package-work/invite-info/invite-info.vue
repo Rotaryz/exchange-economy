@@ -5,23 +5,25 @@
       <div v-for="(item, idx) in tabList" :key="idx" :class="[type===item.type?'active':'']" class="tab-item" @click="_tabChange(item.type)">{{item.name}}</div>
       <div :style="{left: type*50+'%'}" class="tab-line"></div>
     </div>
-    <div :style="{'transform': ' translateX('+ -(type * 100) +'vw)', 'transition': boxTransition}" class="content">
-      <div v-for="(tab, idx) in tabList" :key="idx" class="list">
-        <div class="list-header list-item">
-          <div class="left-box">{{idx===1?'购票':'邀请'}}客户</div>
-          <div class="right-box">时间</div>
-        </div>
-        <div v-if="listData.length" v-for="(item, index) in listData" :key="index" class="list-item">
-          <div class="left-box">
-            <img v-if="item.avatar||imageUrl" :src="item.avatar||imageUrl + '/yx-image/2.1/default_avatar@2x.png'" alt="" class="item-img" mode="aspectFill">
-            <div class="name-box">
-              {{item.nickname}}
-              <div v-if="idx===1&&item.participants_status_text" :class="[item.participants_status===1?'ed':'']" class="status-box">{{item.participants_status_text}}</div>
-            </div>
+    <div class="content">
+      <div :style="{'transform': ' translateX('+ -(type * 100) +'vw)'}" class="container">
+        <div v-for="(tab, idx) in tabList" :key="idx" class="list">
+          <div class="list-header list-item">
+            <div class="left-box">{{idx===1?'购票':'邀请'}}客户</div>
+            <div class="right-box">时间</div>
           </div>
-          <div class="right-box">{{item.created_at}}</div>
+          <div v-if="listData.length" v-for="(item, index) in listData" :key="index" class="list-item">
+            <div class="left-box">
+              <img v-if="item.avatar||imageUrl" :src="item.avatar||imageUrl + '/yx-image/2.1/default_avatar@2x.png'" alt="" class="item-img" mode="aspectFill">
+              <div class="name-box">
+                <div class="name">{{item.nickname}}</div>
+                <div v-if="idx===1&&item.participants_status_text" :class="[item.participants_status===1?'ed':'']" class="status-box">{{item.participants_status_text}}</div>
+              </div>
+            </div>
+            <div class="right-box">{{item.created_at}}</div>
+          </div>
+          <empty v-if="!hasMore&&!listData.length" :imgWidth="72" :paddingTop="38" tipSub="暂无数据"></empty>
         </div>
-        <empty v-if="!hasMore&&!listData.length" :imgWidth="72" :paddingTop="38" tipSub="暂无数据"></empty>
       </div>
     </div>
   </div>
@@ -49,7 +51,6 @@
           {name: '购票', type: 1}
         ],
         type: 0,
-        boxTransition: 'all 0.25s',
         listData: {},
         listParams: {page: 1, limit: 20},
         hasMore: false
@@ -69,14 +70,17 @@
     methods: {
       _tabChange(type) {
         this.type = type
-        this.listData = []
         this.listParams.page = 1
         this._getListData()
       },
       _getListData() {
         let apiArr = ['getCustomerList', 'getBuyTicketList']
         API.BusinessManager[apiArr[this.type]]({data: this.listParams}).then(res => {
-          this.listData = res.data
+          if (this.listParams.page === 1) {
+            this.listData = res.data
+          } else {
+            this.listData = this.listData.concat(res.data)
+          }
           this.hasMore = res.meta.current_page < res.meta.last_page
         })
       }
@@ -128,13 +132,20 @@
         border-radius: 1.5px
         background: $color-main
   .content
-    width: 200vw
-    margin-top: $tabHeight
-    border-top: 10px solid $color-background
-    layout(row)
+    width: 100vw
+    height: 100%
+    overflow: hidden
+    .container
+      width: 200vw
+      height: 100%
+      margin-top: $tabHeight
+      border-top: 10px solid $color-background
+      layout(row)
+      transition: all 0.3s
   .list
     box-sizing: border-box
     width: 100vw
+    height: 100%
     padding-left: 15px
     .list-item
       padding-right: 15px
@@ -145,33 +156,46 @@
       border-bottom-1px()
       font-family: $font-family-regular
       .left-box
+        flex: 1
+        no-wrap()
         layout(row)
         align-items: center
         font-size: 14px
         color: #3F454B
         .name-box
+          flex: 1
           layout()
+          no-wrap()
+          .name
+            width: 100%
+            overflow: hidden
+            text-overflow:ellipsis
+            white-space: nowrap
           .status-box
             box-sizing: border-box
             width: auto
+            max-width: 40px
             height: 14px
             line-height: 1
             padding: 2px 5px
             font-family: $font-family-regular
             color: #d2d2d2
             font-size: 10px
+            text-align: center
             border-1px(#d2d2d2,7px)
             &.ed
               background: #FFF8F3
               color: #FF802F
               border-1px(#FF802F,7px)
       .right-box
+        padding-left: 10px
         font-size: 12px
         color: #999999
       .item-img
         width: 36px
         height: @width
         margin-right: 10px
+        border-radius: 100%
     .list-header
       height: 40px
       .left-box,.right-box
