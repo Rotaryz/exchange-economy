@@ -145,7 +145,6 @@
           this.id = options.id
           this.shareId = options.shareId
         }
-        this.getCourseDetail()
       })
       if (this.shareId && this.shareId > 0) {
         storage('shareId', this.shareId)
@@ -159,6 +158,7 @@
       }
     },
     onShow() {
+      this.getCourseDetail()
       this.addReadCount()
     },
     onShareAppMessage() {

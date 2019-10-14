@@ -18,7 +18,7 @@
           <div class="list-container">
             <div class="list-item" v-for="(item, index) in willList" :key="item.id">
               <div class="item-detail" @click="goMeetingDetail(item)">
-                <img :src="item.detail[0].meeting_cover_image" alt="" class="meeting-image">
+                <img :src="item.detail[0].meeting_cover_image" alt="" class="meeting-image" mode="aspectFill">
                 <div class="meeting-right">
                   <p class="meeting-title">{{item.detail[0].meeting_name}}</p>
                   <p class="meeting-time">时间: {{item.detail[0].meeting_time}}</p>
@@ -36,7 +36,7 @@
           <div class="list-container">
             <div class="list-item" v-for="(item, index) in completeList" :key="item.id" @click="goMeetingDetail(item)">
               <div class="item-detail complete-detail">
-                <img :src="item.detail[0].meeting_cover_image" alt="" class="meeting-image">
+                <img :src="item.detail[0].meeting_cover_image" alt="" class="meeting-image" mode="aspectFill">
                 <div class="meeting-right">
                   <p class="meeting-title">{{item.detail[0].meeting_name}}</p>
                   <p class="meeting-time">时间: {{item.detail[0].meeting_time}}</p>
@@ -95,9 +95,9 @@
       // ...Helpers.computed,
     },
     onLoad() {
-      this.getMeetingList(true)
     },
     onShow() {
+      this.getMeetingList(true)
     },
     onReachBottom() {
       if (this.isEnd) return
@@ -234,7 +234,6 @@
           flex: 0 0 auto
         .meeting-right
           padding: 2px 0 2px 10px
-          height: 90px
           flex: 1
           overflow: hidden
           box-sizing: border-box
@@ -246,12 +245,14 @@
           text-overflow: ellipsis
           overflow: hidden
           white-space: nowrap
+          line-height: 26px
         .meeting-time,.meeting-addr
           margin-top: 12px
           color: #999
           font-family: $font-family-medium
           font-bold()
           font-size: $font-size-14
+          line-height: 18px
         .meeting-addr
           margin-top: 0
           display: -webkit-box

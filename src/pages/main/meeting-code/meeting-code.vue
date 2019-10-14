@@ -71,7 +71,7 @@
         font-bold()
         position: absolute
         left: 32vw
-        top: 6.5%
+        top: 7%
         line-height: 1
       .code-image
         width: 67vw
