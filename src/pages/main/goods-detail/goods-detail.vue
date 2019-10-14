@@ -195,7 +195,7 @@
             if (!storage('token')) return
             this.bindShareAction()
           }
-          if (storage('token') && storage('shareId')) {
+          if (storage('token') && storage('shareId') && !this.shareId) {
             this.shareId = storage('shareId')
             this.bindShareAction()
           }
@@ -475,7 +475,9 @@
           object_id: storage('userInfo').id,
           object_type: 1
         }
-        API.Goods.bindShare({data})
+        API.Goods.bindShare({data}).then(res => {
+          wx.removeStorageSync('shareId')
+        })
       }
     }
   }
