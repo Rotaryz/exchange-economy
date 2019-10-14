@@ -43,10 +43,12 @@
         <p class="title">{{courseDetail.name}}</p>
         <p class="describtion">{{courseDetail.description}}</p>
       </div>
-      <button open-type="share" class="right-share">
-        <img src="./icon-share_details@2x.png" class="share-icon" alt="" mode="aspectFill">
+      <div class="right-share">
+        <button open-type="share" class="share-btn">
+          <img src="./icon-share_details@2x.png" class="share-icon" alt="" mode="aspectFill">
+        </button>
         <p class="text">推荐好友</p>
-      </button>
+      </div>
     </div>
 
     <div class="padding"></div>
@@ -302,9 +304,8 @@
       .right-share
         reset-button()
         flex: 0 0 auto
-        width: 100px
-        height: 76px
-        padding: 5px 0 5px 40px
+        height: 50px
+        padding-left: 40px
         display: flex
         flex-direction: column
         align-items: center
