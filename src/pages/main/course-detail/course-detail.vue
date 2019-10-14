@@ -197,6 +197,10 @@
             this.courseList = res.data.banner_videos
             // this.courseImage = res.data.detail_images
           })
+          .catch(() => {
+            let url = `${this.$routes.main.MEETING_ERROR}`
+            this.$checkIsTabPage(url) ? wx.switchTab({ url }) : wx.redirectTo({ url })
+          })
       },
       addReadCount() {
         API.Course.addReadCount({
