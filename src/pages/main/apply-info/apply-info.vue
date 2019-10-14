@@ -187,6 +187,7 @@
     background: $color-background
     overflow-x: hidden
     box-sizing: border-box
+    padding-bottom: 60px
   .apply-box
     padding: 10px 15px 0
     box-sizing: border-box
@@ -290,6 +291,7 @@
     background: $color-white
     padding: 10px 15px
     box-sizing: border-box
+    z-index: 22
     .sure-box-btn
       font-bold()
       color: $color-white
