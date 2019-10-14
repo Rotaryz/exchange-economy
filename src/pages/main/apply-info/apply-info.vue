@@ -153,7 +153,7 @@
         API.Goods.createOrder({data})
           .then(res => {
             // 保存用户手机号码
-            // API.Goods.saveMobile({data: {mobile: this.mobile}})
+            API.Goods.saveMobile({data: {mobile: this.mobile}})
             let payData = res.data
             let payRes = res.data.pay_config
             let that = this
