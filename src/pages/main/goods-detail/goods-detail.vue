@@ -190,17 +190,18 @@
           // 普通参数进来
           this.courseId = options.id
           this.shareId = options.shareId
-          if (this.shareId && this.shareId > 0) {
-            storage('shareId', this.shareId)
-            if (!storage('token')) return
-            this.bindShareAction()
-          }
-          if (storage('token') && storage('shareId') && !this.shareId) {
-            this.shareId = storage('shareId')
-            this.bindShareAction()
-          }
         }
         this._getCourseInfo()
+        if (this.shareId && this.shareId > 0) {
+          storage('shareId', this.shareId)
+          if (!storage('token')) return
+          this.bindShareAction()
+          return
+        }
+        if (storage('token') && storage('shareId')) {
+          this.shareId = storage('shareId')
+          this.bindShareAction()
+        }
       })
       this.getSystemInfo()
     },
