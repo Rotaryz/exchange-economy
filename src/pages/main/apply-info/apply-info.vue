@@ -75,9 +75,10 @@
         name: ''
       }
     },
-    onLoad(options) {
+    async onLoad(options) {
       console.log(options.id)
       this.courseId = options.id
+      this.codeMsg = await wechat.login()
       this._getCourseInfo()
     },
     computed: {
@@ -112,7 +113,6 @@
       // 微信授权手机
       async getPhoneNumber(e) {
         console.log(e)
-        this.codeMsg = await wechat.login()
         let data = {
           code: this.codeMsg.code,
           iv: e.mp.detail.iv,
