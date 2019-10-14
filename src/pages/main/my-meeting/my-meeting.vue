@@ -36,7 +36,7 @@
           <div class="list-container">
             <div class="list-item" v-for="(item, index) in completeList" :key="item.id" @click="goMeetingDetail(item)">
               <div class="item-detail complete-detail">
-                <img src="" alt="" class="meeting-image">
+                <img :src="item.detail[0].meeting_cover_image" alt="" class="meeting-image">
                 <div class="meeting-right">
                   <p class="meeting-title">{{item.detail[0].meeting_name}}</p>
                   <p class="meeting-time">时间: {{item.detail[0].meeting_time}}</p>

@@ -85,9 +85,8 @@
       },
       copyNumber() {
         wx.setClipboardData({
-          data: this.wxNum,
+          data: this.meetingMsg.order_sn,
           success: () => {
-            wx.showToast({title: '复制成功', icon: 'none'})
           }
         })
       },
