@@ -43,17 +43,17 @@
     "color": "#111111",
     "backgroundColor": "#fff",
     "selectedColor": "#F54949",
-    "borderStyle": "white",
+    "borderStyle": "black",
     "list": [{
       "text": "首页",
       "pagePath": "pages/home",
-      "iconPath": "static/tabs/icon-gift.png",
-      "selectedIconPath": "static/tabs/icon-gift_pressed.png"
+      "iconPath": "static/tabs/icon-index1@2x.png",
+      "selectedIconPath": "static/tabs/icon-index2@2x.png"
     }, {
       "text": "我的",
       "pagePath": "pages/mine",
-      "iconPath": "static/tabs/icon-mine.png",
-      "selectedIconPath": "static/tabs/icon-mine_pressed.png"
+      "iconPath": "static/tabs/icon-my1@2x.png",
+      "selectedIconPath": "static/tabs/icon-my2@2x.png"
     }],
 
     "position": "bottom"

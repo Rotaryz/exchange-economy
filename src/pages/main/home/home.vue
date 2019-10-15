@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <navigation-bar headStyle="background: #F2F3F6" title="5G新营销" :showArrow="false" titleColor="#000"></navigation-bar>
+    <navigation-bar headStyle="background: #FFFFFF" title="5G新营销" :showArrow="false" titleColor="#000"></navigation-bar>
     <div class="location-city">
       <img src="./icon-current_city@2x.png" alt="" class="location-img">
       <div class="location-text">当前城市: 广州市</div>
@@ -245,7 +245,7 @@
   @import "~@design"
   .home
     min-height: 100vh
-    background: $color-background
+    background: $color-white
     overflow-x: hidden
     box-sizing: border-box
   .location-city
@@ -255,12 +255,12 @@
     align-items: center
     .location-img
       display: block
-      width: 12.5px
-      height: 14.5px
+      width: 14px
+      height: 16.5px
       margin-right: 5px
     .location-text
       font-family: $font-family-regular
-      color: $color-text-main
+      color: #888888
       font-size: $font-size-16
   .banner-box
     position: relative
@@ -305,6 +305,8 @@
     .goods-item-wrap
       border-radius: 4px
       overflow: hidden
+      border-1px($color-line, 4px)
+      box-shadow: 0 2px 6px 0 rgba(0,0,0,0.06)
       .goods-item-top
         width: 100%
         display: block
