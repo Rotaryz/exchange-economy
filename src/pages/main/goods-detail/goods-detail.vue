@@ -678,19 +678,27 @@
     width: 100%
     height: px-change-vw(211)
     position: relative
+    border-radius: 8px
+    overflow: hidden
     .banner
       width: 100%
       height: px-change-vw(211)
+      border-radius: 4px
+      overflow: hidden
       .banner-item
         width: 100%
         height: 100%
         position: relative
+        border-radius: 4px !important
+        overflow: hidden !important
         .item-img
           width: 100%
           height: 100%
           position: absolute
           left: 0
           top: 0
+          border-radius: 5px !important
+          overflow: hidden !important
         .video-img
           transition: all 0.3s
           &.hide
