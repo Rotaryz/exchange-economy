@@ -14,14 +14,14 @@
 
     <div class="ticket-list">
       <p class="ticket-title">
-        参会凭证(<span class="ticket-number">{{ticketList.length}}</span>张可用)
+        参会凭证(<span class="ticket-number">{{useTicket}}</span>张可用)
       </p>
       <div v-for="(item, index) in ticketList" :key="index" class="ticket-item">
         <p class="ticket-msg">
-          <img :src="item.usable ? usableTicket : unusableTicket" class="ticket-icon" mode="aspectFill">
-          <span class="ticket-num" :class="{'ticket-grey': item.status}">{{item.code}}</span>
+          <img :src="item.status * 1 === 0 ? usableTicket : unusableTicket" class="ticket-icon" mode="aspectFill">
+          <span class="ticket-num" :class="{'ticket-grey': item.status * 1 !== 0}">{{item.code}}</span>
         </p>
-        <p class="right-btn" :class="{'ticket-usable': !item.status}" @click="goCodePage(item)">{{ item.status ? '已使用' : '查看凭证'}}</p>
+        <p class="right-btn" :class="{'ticket-usable': item.status * 1 === 0}" @click="goCodePage(item)">{{ item.status ? '已使用' : '查看凭证'}}</p>
       </div>
     </div>
 
@@ -64,7 +64,12 @@
       }
     },
     computed: {
-      // ...Helpers.computed,
+      useTicket() {
+        let arr = this.ticketList.filter(item => {
+          return +item.status === 0
+        })
+        return arr.length
+      }
     },
     onLoad(options) {
       this.id = options.id || ''

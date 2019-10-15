@@ -90,7 +90,7 @@
     <div class="footer-btn">
       <div class="btn" @click="goGuide">课程咨询</div>
     </div>
-    <popup :showPopup.sync="showPopup" :video="video"></popup>
+    <popup v-if="showPopup" ref="video" :showPopup.sync="showPopup" :video="video"></popup>
   </div>
 </template>
 
@@ -168,8 +168,6 @@
       let userId = storage('businessUserInfo').id
       if (userId && storage('businessUserInfo').role_type * 1 === 1) {
         url = `${this.$routes.main.COURSE_DETAIL}?id=${this.id}&shareId=${userId}`
-      } else if (storage('userInfo').distributor_id) {
-        url = `${this.$routes.main.COURSE_DETAIL}?id=${this.id}&shareId=${storage('userInfo').distributor_id}`
       } else {
         url = `${this.$routes.main.COURSE_DETAIL}?id=${this.id}`
       }
@@ -227,6 +225,13 @@
       playVideo(item) {
         this.showPopup = true
         this.video = item.video_url
+        setTimeout(() => {
+          this.$refs.video.play()
+        }, 100)
+      },
+      hidePopup() {
+        this.showPopup = false
+        this.video = ''
       },
       goGuide() {
         let url = `${this.$routes.main.COURSE_GUIDE}?wechat=${this.courseDetail.wechat}`
