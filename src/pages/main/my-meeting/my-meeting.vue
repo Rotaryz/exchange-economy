@@ -21,8 +21,10 @@
                 <img :src="item.detail[0].meeting_cover_image" alt="" class="meeting-image" mode="aspectFill">
                 <div class="meeting-right">
                   <p class="meeting-title">{{item.detail[0].meeting_name}}</p>
-                  <p class="meeting-time">时间: {{item.detail[0].meeting_time}}</p>
-                  <p class="meeting-addr">地点: {{item.detail[0].meeting_description}}</p>
+                  <div class="meeting-des">
+                    <p class="meeting-time">时间: {{item.detail[0].meeting_time}}</p>
+                    <p class="meeting-addr">地点: {{item.detail[0].meeting_description}}</p>
+                  </div>
                 </div>
               </div>
               <div class="bottom-space">
@@ -39,8 +41,10 @@
                 <img :src="item.detail[0].meeting_cover_image" alt="" class="meeting-image" mode="aspectFill">
                 <div class="meeting-right">
                   <p class="meeting-title">{{item.detail[0].meeting_name}}</p>
-                  <p class="meeting-time">时间: {{item.detail[0].meeting_time}}</p>
-                  <p class="meeting-addr">地点: {{item.detail[0].meeting_description}}</p>
+                  <div class="meeting-des">
+                    <p class="meeting-time">时间: {{item.detail[0].meeting_time}}</p>
+                    <p class="meeting-addr">地点: {{item.detail[0].meeting_description}}</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -235,8 +239,12 @@
         .meeting-right
           padding: 2px 0 2px 10px
           flex: 1
+          height: 90px
           overflow: hidden
           box-sizing: border-box
+          display: flex
+          flex-direction: column
+          justify-content: space-between
         .meeting-title
           color: $color-text-main
           font-family: $font-family-medium
@@ -245,9 +253,8 @@
           text-overflow: ellipsis
           overflow: hidden
           white-space: nowrap
-          line-height: 26px
+          line-height: 1
         .meeting-time,.meeting-addr
-          margin-top: 12px
           color: #999
           font-family: $font-family-medium
           font-bold()

@@ -77,7 +77,7 @@
                 <span class="play-text">播放</span>
               </div>
             </div>
-            <empty v-if="!courseList.length && loaded" :image="empty" :imgWidth="100" :paddingTop="100" tip="暂无课程"></empty>
+            <empty v-if="!courseList.length && loaded" :image="empty" :imgWidth="100" :paddingTop="60" tip="暂无内容"></empty>
           </div>
         </div>
         <div class="container-item">
@@ -300,7 +300,6 @@
     .course-msg
       padding: 20px 15px 25px
       display: flex
-      align-items: center
       justify-content: space-between
       .left-msg
         flex: 1
@@ -308,17 +307,19 @@
       .title
         font-size: $font-size-18
         color: #1D2023
+        line-height: 1
         font-family: $font-family-medium
         font-bold()
         overflow: hidden
         text-overflow: ellipsis
         white-space: nowrap
       .describtion
-        margin-top: 12px
+        margin-top: 9px
         font-family: $font-family-regular
         color: #999
         font-size: $font-size-15
-        line-height: 1.2
+        line-height: 1.4
+        word-break: break-all
       .right-share
         reset-button()
         flex: 0 0 auto
@@ -328,6 +329,8 @@
         flex-direction: column
         align-items: center
         justify-content: space-between
+      .share-btn
+        height: 32px
       .share-icon
         width: 32px
         height: 32px

@@ -5,8 +5,10 @@
       <img :src="meetingDetail.meeting_cover_image" alt="" class="meeting-image">
       <div class="meeting-right">
         <p class="meeting-title">{{meetingDetail.meeting_name}}</p>
-        <p class="meeting-time">时间: {{meetingDetail.meeting_time}}</p>
-        <p class="meeting-addr">地点: {{meetingDetail.meeting_description}}</p>
+        <div class="meeting-des">
+          <p class="meeting-time">时间: {{meetingDetail.meeting_time}}</p>
+          <p class="meeting-addr">地点: {{meetingDetail.meeting_description}}</p>
+        </div>
       </div>
     </div>
 
@@ -131,19 +133,22 @@
       .meeting-right
         padding: 2px 0 2px 10px
         flex: 1
+        height: 90px
         overflow: hidden
         box-sizing: border-box
+        display: flex
+        flex-direction: column
+        justify-content: space-between
       .meeting-title
         color: $color-text-main
         font-family: $font-family-medium
         font-bold()
         font-size: $font-size-15
-        line-height: 26px
+        line-height: 1
         text-overflow: ellipsis
         overflow: hidden
         white-space: nowrap
       .meeting-time,.meeting-addr
-        margin-top: 12px
         color: #999
         font-family: $font-family-medium
         font-bold()
