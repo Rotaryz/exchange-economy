@@ -313,9 +313,7 @@
         font-family: $font-family-regular
         color: #999
         font-size: $font-size-15
-        overflow: hidden
-        text-overflow: ellipsis
-        white-space: nowrap
+        line-height: 1.2
       .right-share
         reset-button()
         flex: 0 0 auto
