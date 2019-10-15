@@ -97,7 +97,7 @@
           </div>
         </li>
       </ul>
-      <empty v-else :imgWidth="109" :paddingTop="2.4" tip="会议排期中，敬请期待"></empty>
+      <empty v-else :imgWidth="109" :paddingTop="2.4" tip="课程排期中，敬请期待"></empty>
     </div>
   </div>
 </template>
