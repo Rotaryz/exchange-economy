@@ -51,11 +51,11 @@
       <!--<div class="goods-text-box">-->
         <!--<text class="goods-text">{{goodsMsg.description}}</text>-->
       <!--</div>-->
-      <div class="meeting-des-box">
+      <div v-if="goodsMsg.meeting_time" class="meeting-des-box">
         <img src="./time@2x.png" alt="" class="des-box-img">
         <div class="des-box-text">{{goodsMsg.meeting_time}}</div>
       </div>
-      <div class="meeting-des-box">
+      <div v-if="goodsMsg.description" class="meeting-des-box">
         <img src="./icon-current@2x.png" alt="" class="des-box-img">
         <div class="des-box-text">{{goodsMsg.description}}</div>
       </div>

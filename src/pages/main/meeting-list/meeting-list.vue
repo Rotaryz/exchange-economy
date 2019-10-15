@@ -12,8 +12,10 @@
             <div class="goods-item-title">
               <span class="goods-label" :class="{'goods-label-null': item.saleable * 1 === 0}">{{item.saleable * 1 === 0 ? '人数已满' : '报名中'}}</span><p class="goods-title-text">{{item.name}}</p>
             </div>
-            <div class="describe-goods-time">时间：{{item.meeting_time}}</div>
-            <div class="describe-goods-time">地点：{{item.description}}</div>
+            <div v-if="item.meeting_time || item.description" class="goods-item-content-box">
+              <div v-if="item.meeting_time" class="describe-goods-time">时间：{{item.meeting_time}}</div>
+              <div v-if="item.description" class="describe-goods-time">地点：{{item.description}}</div>
+            </div>
           </div>
         </li>
       </ul>
@@ -127,7 +129,6 @@
           font-size: $font-size-16
           layout(row)
           align-items: center
-          margin-bottom: 10px
           .goods-label
             padding: 0 5.5px
             height: 17px
@@ -147,6 +148,8 @@
             flex: 1
             no-wrap()
 
+        .goods-item-content-box
+          margin-top: 10px
         .describe-goods-time
           font-bold()
           color: #999
