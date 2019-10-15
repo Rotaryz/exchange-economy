@@ -2,7 +2,7 @@
   <div class="verifier">
     <navigation-bar  title="凭证核销"></navigation-bar>
     <div class="title">输码核销</div>
-    <input v-model="code" type="number" placeholder-style="color: #999999;font-size: 16px;font-family: PingFangSC-Regular;font-weight: 200;letter-spacing: 1px;" maxlength="8" placeholder="输入8位凭证号" class="input-box">
+    <input v-model="code" type="number" placeholder-style="color: #999999;font-size: 16px;font-family: PingFangSC-Regular;font-weight: 200;" maxlength="8" placeholder="输入8位凭证号" class="input-box">
     <div :class="[code?'active':'']" class="sub-btn" @click="_verifyFun">核销</div>
   </div>
 </template>
@@ -55,7 +55,6 @@
     line-height: 60px
     font-bold()
     font-size: 35px
-    letter-spacing: 6px
     border-bottom-1px()
   .sub-btn
     margin-top: 30px
