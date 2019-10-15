@@ -30,7 +30,7 @@
         </div>
       </div>
       <div class="apply-input-box">
-        <div class="input-item">
+        <div class="input-item number-item-line">
           <div class="input-item-left">姓名</div>
           <div class="input-item-right">
             <input v-model="name" type="text" class="info-input" placeholder="请输入姓名" placeholder-class="info-input-placeholder">
@@ -39,7 +39,7 @@
         <div class="input-item">
           <div class="input-item-left">手机号</div>
           <div class="input-item-right">
-            <input v-model="mobile" type="number" class="info-input" placeholder="请输入手机号" placeholder-class="info-input-placeholder">
+            <input v-model="mobile" type="number" class="info-input" placeholder="请输入手机号" placeholder-class="info-input-placeholder" maxlength="11">
             <button class="input-btn" formType="submit" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">微信授权手机</button>
           </div>
         </div>
@@ -237,8 +237,8 @@
           font-family: $font-family-regular
           color: $color-text-main
           font-size: $font-size-14
-      .number-item-line
-        border-bottom-1px($color-line)
+  .number-item-line
+    border-bottom-1px($color-line)
   .apply-input-box
     background: $color-white
     border-radius: 4px

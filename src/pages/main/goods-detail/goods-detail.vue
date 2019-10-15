@@ -80,7 +80,7 @@
     </section>
     <div class="fixed-btn">
       <div class="fixed-btn-phone" @click="_bookBack">
-        <img src="./icon-index1@2x.png" alt="" class="btn-phone-img">
+        <img src="./icon-return_index@2x.png" alt="" class="btn-phone-img">
         <div class="btn-phone-text">首页</div>
       </div>
       <div class="fixed-btn-phone" @click="_bookCourse">
@@ -556,16 +556,17 @@
         color: #333
         font-size: $font-size-14
     .goods-share
-      background: $color-background-module
+      background: #F9F9F9
       border-radius: 2px
-      padding: 10px
+      padding: 10px 10px 15px 10px
       box-sizing: border-box
       margin-top: 18px
+      border-1px(#EEEEEE)
       .goods-share-title
-        font-family: $font-family-regular
-        color: $color-text-sub
-        font-size: $font-size-12
-        margin-bottom: 6px
+        font-bold()
+        color: $color-999
+        font-size: $font-size-15
+        margin-bottom: 11px
       .goods-share-box
         layout(row)
         align-items: center
@@ -662,8 +663,10 @@
         box-sizing: border-box
       .banner-box
         position :relative
-        border-radius: 2px
+        border-radius: 4px
         margin: 0 15px
+        border-1px($color-line, 4px)
+        box-shadow: 0 2px 6px 0 rgba(0,0,0,0.06)
         overflow: hidden
         .header-title-wrapper
           position: absolute
