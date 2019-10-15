@@ -168,6 +168,8 @@
       let userId = storage('businessUserInfo').id
       if (userId && storage('businessUserInfo').role_type * 1 === 1) {
         url = `${this.$routes.main.COURSE_DETAIL}?id=${this.id}&shareId=${userId}`
+      } else if (storage('userInfo').distributor_id) {
+        url = `${this.$routes.main.COURSE_DETAIL}?id=${this.id}&shareId=${storage('userInfo').distributor_id}`
       } else {
         url = `${this.$routes.main.COURSE_DETAIL}?id=${this.id}`
       }

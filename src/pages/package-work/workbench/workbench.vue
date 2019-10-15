@@ -128,10 +128,9 @@
         const self = this
         wx.scanCode({
           success(res) {
-            const codeRes = JSON.parse(res.result)
-            console.log(codeRes)
-            if (codeRes) {
-              self.code = codeRes.code || codeRes
+            console.log(res)
+            if (res.result) {
+              self.code = res.result
               self._verifyFun()
             } else {
               wx.showToast('获取核销码失败!')
@@ -180,7 +179,9 @@
         flex: 1
         margin-bottom: 14px
         font-bold()
-        line-height: 1
+        padding-right: 6px
+        height: 20px
+        line-height: 22px
         font-size: 20px
         color: #fff
         no-wrap-plus(1)
