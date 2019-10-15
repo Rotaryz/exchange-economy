@@ -77,9 +77,10 @@
                 <span class="play-text">播放</span>
               </div>
             </div>
-            <empty v-if="!courseList.length && loaded" :image="empty" :imgWidth="100" :paddingTop="60" tip="暂无内容"></empty>
+            <empty v-if="!courseList.length && loaded" :image="empty" :imgWidth="100" marginTop="20px" :paddingTop="0" tip="暂无内容"></empty>
           </div>
         </div>
+
         <div class="container-item">
           <div class="list-container">
             <img v-for="(item, index) in courseImage" :key="index" :src="item.image_url" alt="" mode="widthFix" class="course-image">
