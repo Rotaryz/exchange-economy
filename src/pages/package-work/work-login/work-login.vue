@@ -41,7 +41,7 @@
       _getVerifyCode() {
         if (!this.params.mobile) return
         API.BusinessManager.getVerifyCode({data: {mobile: this.params.mobile}}).then(res => {
-          wx.showToast('短信验证码已发送')
+          this.$wechat.showToast('短信验证码已发送')
           this.verifyText = 60
           let self = this
           this.codeTimer = setInterval(() => {
@@ -56,11 +56,11 @@
       },
       _loginFun() {
         if (!this.params.mobile) {
-          wx.showToast('请输入手机号')
+          this.$wechat.showToast('请输入手机号')
           return
         }
         if (!this.params.code) {
-          wx.showToast('请输入短信验证码')
+          this.$wechat.showToast('请输入短信验证码')
           return
         }
         API.BusinessManager.managerLogin({data: this.params}).then(res => {

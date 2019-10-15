@@ -137,7 +137,7 @@
               self.code = res.result
               self._verifyFun()
             } else {
-              wx.showToast('获取核销码失败!')
+              this.$wechat.showToast('获取核销码失败!')
             }
           }
         })
