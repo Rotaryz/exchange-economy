@@ -182,7 +182,6 @@
       AppPromise.getInstance().then(res => {
         if (options.scene) {
           // 小程序扫码进来
-          console.log(options.scene, 'options.scene')
           let query = resolveQueryScene(options.scene)
           this.courseId = query.goodsId
           this.shareId = query.shareId
@@ -215,9 +214,12 @@
       const flag = Date.now()
       if (storage('businessUserInfo').id && storage('businessUserInfo').role_type * 1 === 1) {
         url = `${this.$routes.main.GOODS_DETAIL}?imageMogr2/thumbnail/!425x340r%7CimageView2/1/w/425/h/340&id=${this.courseId}&flag=${flag}&shareId=${storage('businessUserInfo').id}`
+      } else if (storage('userInfo').distributor_id) {
+        url = `${this.$routes.main.GOODS_DETAIL}?imageMogr2/thumbnail/!425x340r%7CimageView2/1/w/425/h/340&id=${this.courseId}&flag=${flag}&shareId=${storage('userInfo').distributor_id}`
       } else {
         url = `${this.$routes.main.GOODS_DETAIL}?imageMogr2/thumbnail/!425x340r%7CimageView2/1/w/425/h/340&id=${this.courseId}&flag=${flag}`
       }
+      console.log(url)
       return {
         title: this.goodsMsg.name,
         path: url, // 商品详情
@@ -242,7 +244,6 @@
       },
       // 获取会议详情
       _getCourseInfo() {
-        console.log(`this.courseId = ` + this.courseId)
         API.Meeting.getMeetingInfo({data: {id: this.courseId}}).then(res => {
           this.goodsMsg = res.data
           this.courseId = res.data.id
@@ -348,6 +349,8 @@
         let url
         if (storage('businessUserInfo').id && storage('businessUserInfo').role_type * 1 === 1) {
           url = `${baseURL.api}/common/file/qrcode/miniprogram-load?program=business&path=pages/goods-detail?g=${this.courseId}&si=${storage('businessUserInfo').id}`
+        } else if (storage('userInfo').distributor_id) {
+          url = `${baseURL.api}/common/file/qrcode/miniprogram-load?program=business&path=pages/goods-detail?g=${this.courseId}&si=${storage('userInfo').distributor_id}`
         } else {
           url = `${baseURL.api}/common/file/qrcode/miniprogram-load?program=business&path=pages/goods-detail?g=${this.courseId}`
         }
