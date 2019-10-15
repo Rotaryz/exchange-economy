@@ -13,16 +13,16 @@
     </div>
     <div v-if="isLogin" class="content">
       <div v-if="userInfo.role_type===1" class="wrapper">
-        <div class="top-bar" @click="_navigateTo('INVITE_INFO')">
+        <div class="top-bar" @click="_goToList(0)">
           邀请总览
           <img mode="aspectFill" src="/static/images/icon-right_arrow.png" alt="" class="item-arrow">
         </div>
-        <div class="list">
+        <div class="list" @click="_goToList(0)">
           <div class="item">
             <div class="val">{{inviteInfo.new_customer}}</div>
             <div class="label">拉新</div>
           </div>
-          <div class="item">
+          <div class="item" @click="_goToList(1)">
             <div class="val">{{inviteInfo.buy_ticket}}</div>
             <div class="label">购票</div>
           </div>
@@ -31,7 +31,7 @@
       <div v-if="userInfo.role_type===2" class="wrapper">
         <div class="top-bar">凭证核销</div>
         <div class="list service">
-          <div class="item" @click="_navigateTo('VERIFIER')">
+          <div class="item" @click="_navigateTo">
             <img mode="aspectFill" src="./icon-write_off1@3x.png" alt="" class="item-icon">
             <div class="label">输入凭证号</div>
           </div>
@@ -106,9 +106,13 @@
           this.inviteInfo = res.data
         })
       },
-      // 跳转方法
-      _navigateTo(page) {
-        (page && this.$routes.work[page]) && wx.navigateTo({ url: `${this.$routes.work[page]}` })
+      // 跳转到核销
+      _navigateTo() {
+        wx.navigateTo({ url: this.$routes.work.VERIFIER })
+      },
+      // 跳转到拉新/购票列表
+      _goToList(type) {
+        wx.navigateTo({ url: `${this.$routes.work.INVITE_INFO}?type=${type}` })
       },
       // 退出登录
       loginOut() {
