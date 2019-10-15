@@ -88,7 +88,7 @@
           <img src="/static/images/icon-right_arrow.png" alt="" class="new-right-img">
         </div>
       </div>
-      <ul class="course-list">
+      <ul class="course-list" v-if="courseList.length">
         <li class="course-item" v-for="item in courseList" :key="item.id" @click="courseJump(item)">
           <image class="course-img" :src="item.cover_image"></image>
           <div class="course-info">
@@ -97,6 +97,7 @@
           </div>
         </li>
       </ul>
+      <empty v-else :imgWidth="109" :paddingTop="2.4" tip="会议排期中，敬请期待"></empty>
     </div>
   </div>
 </template>
