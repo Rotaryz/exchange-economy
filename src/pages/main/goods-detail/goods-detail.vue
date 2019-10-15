@@ -180,6 +180,7 @@
     },
     onLoad(options) {
       AppPromise.getInstance().then(res => {
+        console.log(options.scene, '23132')
         if (options.scene) {
           // 小程序扫码进来
           let query = resolveQueryScene(options.scene)
