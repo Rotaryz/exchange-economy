@@ -729,9 +729,9 @@
     .banner-number
       box-sizing: border-box
       width: 100%
-      padding: 0 12px
+      padding: 0 px2vw(12)
       position: absolute
-      bottom: 36px
+      bottom: px2vw(12)
       left: 0
       layout(row)
       align-items: center

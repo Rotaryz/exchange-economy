@@ -32,9 +32,7 @@
         </block>
       </swiper>
       <div class="dot-wrapper">
-        <p class="dot-item">{{bannerIndex+1}}</p>
-        <p class="dot-item">/</p>
-        <p class="dot-item">{{bannerArray.length}}</p>
+        {{bannerIndex+1}}/{{bannerArray.length}}
       </div>
     </div>
 
@@ -282,19 +280,19 @@
       right: px2vw(12)
       bottom: px2vw(12)
       display: flex
-      width: 35px
-      height: 17.5px
-      background-image url("./pic-switch.png")
-      background-size: 100% 100%
-      layout(row, block, nowrap)
-      align-items: center
-      justify-content space-around
+      font-size: $font-size-11
+      font-family: $font-family-regular
+      background: rgba(17,17,17,0.2)
+      color: #F1F5EB
       box-sizing: border-box
-      padding: 0 3px
+      padding: 2px 8px
+      border-radius: 20px
+      opacity: .75
+      transition: all 0.3s
       .dot-item
         font-family: $font-family-regular
-        font-size: $font-size-10;
-        color: #F1F5EB;
+        font-size: $font-size-10
+        color: #F1F5EB
         line-height: 1
 
 
