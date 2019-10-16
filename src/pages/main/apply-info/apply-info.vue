@@ -82,7 +82,6 @@
       this._getCourseInfo()
     },
     computed: {
-      // ...Helpers.computed,
       isSubmit() {
         return (this.name && this.mobile.length === 11)
       }
@@ -90,7 +89,6 @@
     methods: {
       // 获取会议详情
       _getCourseInfo() {
-        console.log(`this.courseId = ` + this.courseId)
         API.Meeting.getMeetingInfo({data: {id: this.courseId}}).then(res => {
           this.goodsMsg = res.data
           this.courseId = res.data.id
@@ -112,7 +110,6 @@
       },
       // 微信授权手机
       async getPhoneNumber(e) {
-        console.log(e)
         let data = {
           code: this.codeMsg.code,
           iv: e.mp.detail.iv,
@@ -127,8 +124,6 @@
               return
             }
             this.mobile = res.data.mobile ? res.data.mobile : ''
-            // this.userInfo.mobile = this.mobile
-            // this.$wechat.setStorage('userInfo', this.userInfo)
           })
       },
       _sureSubmit() {
@@ -145,7 +140,6 @@
           name: this.name,
           mobile: this.mobile
         }
-        console.log(data)
         this.$wechat.showLoading()
         this._paySubmit(data)
       },
@@ -170,12 +164,10 @@
               },
               fail(res) {
                 that.$wechat.hideLoading()
-                // wx.redirectTo({ url: `${$$routes.main.ORDER_DETAIL}?id=${orderId}&&type=0` })
               }
             })
           })
       }
-      // ...Helpers.methods,
     }
   }
 </script>

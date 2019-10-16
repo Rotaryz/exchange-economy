@@ -64,11 +64,7 @@
       this.params.page++
       this.getCourseList()
     },
-    computed: {
-      // ...Helpers.computed,
-    },
     methods: {
-      // ...Helpers.methods,
       // 会议列表
       getCourseList() {
         this.loading = true

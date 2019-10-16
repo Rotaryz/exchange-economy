@@ -2,8 +2,7 @@
   <div class="verify-result">
     <navigation-bar  :title="verifyObj[verifyStatus].title"></navigation-bar>
     <div class="content">
-      <img v-if="verifyStatus===1" mode="aspectFill" src="./pic-payok.png" alt="" class="status-img">
-      <img v-else mode="aspectFill" src="./pic-payno@2x.png" alt="" class="status-img">
+      <img mode="aspectFill" :src="verifyObj[verifyStatus].img" alt="" class="status-img">
       <div class="title">{{verifyObj[verifyStatus].title}}</div>
       <div class="text">{{verifyObj[verifyStatus].text}}</div>
       <div class="button" @click="_goBack">返回</div>
@@ -16,6 +15,8 @@
   import NavigationBar from '@components/navigation-bar/navigation-bar'
 
   const PAGE_NAME = 'VERIFY_RESULT'
+  const IMG_SUCCESS = require('./pic-payok.png')
+  const IMG_FAILED = require('./pic-payno@2x.png')
 
   export default {
     name: PAGE_NAME,
@@ -27,10 +28,12 @@
         verifyStatus: 0,
         verifyObj: [
           {
+            img: IMG_SUCCESS,
             title: '核销失败',
             text: '该凭证不存在'
           },
           {
+            img: IMG_FAILED,
             title: '核销成功'
           }
         ]
