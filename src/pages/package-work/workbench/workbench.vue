@@ -17,8 +17,8 @@
           邀请总览
           <img mode="aspectFill" src="/static/images/icon-right_arrow.png" alt="" class="item-arrow">
         </div>
-        <div class="list" @click="_goToList(0)">
-          <div class="item">
+        <div class="list">
+          <div class="item" @click="_goToList(0)">
             <div class="val">{{inviteInfo.new_customer}}</div>
             <div class="label">拉新</div>
           </div>
