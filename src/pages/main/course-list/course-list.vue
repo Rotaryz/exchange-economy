@@ -1,14 +1,16 @@
 <template>
   <div class="course-list">
     <navigation-bar title="热门课程"></navigation-bar>
-    <div v-for="(item, index) in courseList" :key="index" class="course-item" @click="goDetail(item)">
-      <img :src="item.cover_image" alt="" class="course-image" mode="aspectFill">
-      <div class="course-msg">
-        <p class="course-title">{{item.name}}</p>
-        <p class="count">{{item.read_count}}人已观看</p>
+    <div v-if="courseList.length" class="course-content">
+      <div v-for="(item, index) in courseList" :key="index" class="course-item" @click="goDetail(item)">
+        <img :src="item.cover_image" alt="" class="course-image" mode="aspectFill">
+        <div class="course-msg">
+          <p class="course-title">{{item.name}}</p>
+          <p class="count">{{item.read_count}}人已观看</p>
+        </div>
       </div>
     </div>
-    <empty v-if="!courseList.length && loaded" :image="empty" :imgWidth="100" :paddingTop="100" tip="暂无课程"></empty>
+    <empty v-if="!courseList.length && loaded" :image="empty" :imgWidth="100" :paddingTop="60" tip="课程排期中、敬请期待"></empty>
     <loading-more v-if="isLoading"></loading-more>
     <isEnd v-if="isEnd && courseList.length"></isEnd>
   </div>
@@ -97,9 +99,13 @@
 
   .course-list
     width: 100%
-
+    min-height: 100vh
+    display: flex
+    flex-direction: column
+    .course-content
+      flex: 1
     .course-item
-      margin: 10px 15px
+      margin: 10px 15px 20px
       display: flex
       align-items: center
       .course-image

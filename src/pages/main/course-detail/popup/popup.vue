@@ -1,7 +1,7 @@
 <template>
   <div class="popup " :class="showPopup ? 'fade-modal-enter-active' : 'hide-popup'" @click="close">
     <div class="popup-content">
-      <video :src="video" id="video" ref="video" autoplay :show-mute-btn="true" object-fit="contain" class="video"></video>
+      <video :src="video" id="video" autoplay :show-mute-btn="true" object-fit="contain" class="video" @click.stop></video>
     </div>
   </div>
 </template>
@@ -27,27 +27,24 @@
     },
     data() {
       return {
-        isShow: false,
-        videoContext: wx.createVideoContext('video')
       }
     },
     watch: {
-      showPopup(newValue, old) {
-        if (newValue) {
-          this.videoContext.play()
-        }
-      }
+    },
+    onShow() {
     },
     onUnload() {
-      this.isShow = false
     },
     methods: {
+      play() {
+        wx.createVideoContext('video').play()
+      },
       // 点击阴影是否可以关闭弹窗
       close() {
-        // this.videoContext = wx.createVideoContext('video')
-        this.videoContext.pause()
+        let video = wx.createVideoContext('video')
         setTimeout(() => {
-          this.videoContext.seek(0)
+          video.seek(0)
+          video.pause()
         }, 300)
         this.$emit('update:showPopup', false)
         this.$emit('hidePopup')

@@ -32,9 +32,7 @@
         </block>
       </swiper>
       <div class="dot-wrapper">
-        <p class="dot-item">{{bannerIndex+1}}</p>
-        <p class="dot-item">/</p>
-        <p class="dot-item">{{bannerArray.length}}</p>
+        {{bannerIndex+1}}/{{bannerArray.length}}
       </div>
     </div>
 
@@ -77,9 +75,10 @@
                 <span class="play-text">播放</span>
               </div>
             </div>
-            <empty v-if="!courseList.length && loaded" :image="empty" :imgWidth="100" :paddingTop="100" tip="暂无课程"></empty>
+            <empty v-if="!courseList.length && loaded" :image="empty" :imgWidth="100" marginTop="20px" :paddingTop="0" tip="暂无内容"></empty>
           </div>
         </div>
+
         <div class="container-item">
           <div class="list-container">
             <img v-for="(item, index) in courseImage" :key="index" :src="item.image_url" alt="" mode="widthFix" class="course-image">
@@ -90,7 +89,7 @@
     <div class="footer-btn">
       <div class="btn" @click="goGuide">课程咨询</div>
     </div>
-    <popup :showPopup.sync="showPopup" :video="video"></popup>
+    <popup v-if="showPopup" ref="video" :showPopup.sync="showPopup" :video="video"></popup>
   </div>
 </template>
 
@@ -168,8 +167,6 @@
       let userId = storage('businessUserInfo').id
       if (userId && storage('businessUserInfo').role_type * 1 === 1) {
         url = `${this.$routes.main.COURSE_DETAIL}?id=${this.id}&shareId=${userId}`
-      } else if (storage('userInfo').distributor_id) {
-        url = `${this.$routes.main.COURSE_DETAIL}?id=${this.id}&shareId=${storage('userInfo').distributor_id}`
       } else {
         url = `${this.$routes.main.COURSE_DETAIL}?id=${this.id}`
       }
@@ -227,6 +224,13 @@
       playVideo(item) {
         this.showPopup = true
         this.video = item.video_url
+        setTimeout(() => {
+          this.$refs.video.play()
+        }, 100)
+      },
+      hidePopup() {
+        this.showPopup = false
+        this.video = ''
       },
       goGuide() {
         let url = `${this.$routes.main.COURSE_GUIDE}?wechat=${this.courseDetail.wechat}`
@@ -276,26 +280,25 @@
       right: px2vw(12)
       bottom: px2vw(12)
       display: flex
-      width: 35px
-      height: 17.5px
-      background-image url("./pic-switch.png")
-      background-size: 100% 100%
-      layout(row, block, nowrap)
-      align-items: center
-      justify-content space-around
+      font-size: $font-size-11
+      font-family: $font-family-regular
+      background: rgba(17,17,17,0.2)
+      color: #F1F5EB
       box-sizing: border-box
-      padding: 0 3px
+      padding: 2px 8px
+      border-radius: 20px
+      opacity: .75
+      transition: all 0.3s
       .dot-item
         font-family: $font-family-regular
-        font-size: $font-size-10;
-        color: #F1F5EB;
+        font-size: $font-size-10
+        color: #F1F5EB
         line-height: 1
 
 
     .course-msg
       padding: 20px 15px 25px
       display: flex
-      align-items: center
       justify-content: space-between
       .left-msg
         flex: 1
@@ -303,17 +306,19 @@
       .title
         font-size: $font-size-18
         color: #1D2023
+        line-height: 1
         font-family: $font-family-medium
         font-bold()
         overflow: hidden
         text-overflow: ellipsis
         white-space: nowrap
       .describtion
-        margin-top: 12px
+        margin-top: 9px
         font-family: $font-family-regular
         color: #999
         font-size: $font-size-15
-        line-height: 1.2
+        line-height: 1.4
+        word-break: break-all
       .right-share
         reset-button()
         flex: 0 0 auto
@@ -323,6 +328,8 @@
         flex-direction: column
         align-items: center
         justify-content: space-between
+      .share-btn
+        height: 32px
       .share-icon
         width: 32px
         height: 32px

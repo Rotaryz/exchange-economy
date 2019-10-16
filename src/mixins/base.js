@@ -44,14 +44,10 @@ export default {
           toast: false,
           doctor() {
             wx.reLaunch({ url: that.$routes.main.LOGIN })
-            this.$storage('targetPage', url)
+            wx.setStorageSync('targetPage', url)
             return false
           }
         })
-        if (!tokenJson.data.customer_info.is_register) {
-          wx.reLaunch({ url: this.$routes.main.LOGIN })
-          return false
-        }
         wx.setStorageSync('token', tokenJson.data.access_token)
         wx.setStorageSync('userInfo', tokenJson.data.customer_info)
         HTTP.setHeaders({ Authorization: tokenJson.data.access_token })

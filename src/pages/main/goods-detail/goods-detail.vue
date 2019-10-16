@@ -180,6 +180,7 @@
     },
     onLoad(options) {
       AppPromise.getInstance().then(res => {
+        console.log(options.scene, '23132')
         if (options.scene) {
           // 小程序扫码进来
           let query = resolveQueryScene(options.scene)
@@ -191,18 +192,18 @@
           this.shareId = options.shareId
         }
         this._getCourseInfo()
+        if (this.shareId && this.shareId > 0) {
+          storage('shareId', this.shareId)
+          if (!storage('token')) return
+          this.bindShareAction()
+          return
+        }
+        if (storage('token') && storage('shareId')) {
+          this.shareId = storage('shareId')
+          this.bindShareAction()
+        }
       })
       this.getSystemInfo()
-      if (this.shareId && this.shareId > 0) {
-        storage('shareId', this.shareId)
-        if (!storage('token')) return
-        this.bindShareAction()
-        return
-      }
-      if (storage('token') && storage('shareId')) {
-        this.shareId = storage('shareId')
-        this.bindShareAction()
-      }
     },
     onShow() {
       !this.onLoad && this._getCourseInfo()
@@ -678,19 +679,27 @@
     width: 100%
     height: px-change-vw(211)
     position: relative
+    border-radius: 8px
+    overflow: hidden
     .banner
       width: 100%
       height: px-change-vw(211)
+      border-radius: 4px
+      overflow: hidden
       .banner-item
         width: 100%
         height: 100%
         position: relative
+        border-radius: 4px !important
+        overflow: hidden !important
         .item-img
           width: 100%
           height: 100%
           position: absolute
           left: 0
           top: 0
+          border-radius: 5px !important
+          overflow: hidden !important
         .video-img
           transition: all 0.3s
           &.hide
@@ -720,9 +729,9 @@
     .banner-number
       box-sizing: border-box
       width: 100%
-      padding: 0 12px
+      padding: 0 px2vw(12)
       position: absolute
-      bottom: 36px
+      bottom: px2vw(12)
       left: 0
       layout(row)
       align-items: center
