@@ -28,12 +28,12 @@
         verifyStatus: 0,
         verifyObj: [
           {
-            img: IMG_SUCCESS,
+            img: IMG_FAILED,
             title: '核销失败',
             text: '该凭证不存在'
           },
           {
-            img: IMG_FAILED,
+            img: IMG_SUCCESS,
             title: '核销成功'
           }
         ]
