@@ -2,11 +2,14 @@
   <div class="meeting-code">
     <navigation-bar title="参会凭证"></navigation-bar>
     <div class="code-content">
-      <div v-for="(item, index) in codeList" :key="index" class="code-item">
-        <img src="./pic-voucher_bg@2x.png" alt="" class="code-bg" mode="widthFix">
-        <p class="number">{{item.code}}</p>
-        <img :src="codeImage[index]" alt="" class="code-image">
+      <div v-for="(item, index) in codeList" :key="index" class="code-lit">
+        <div v-if="item.status * 1 === 0" class="code-item">
+          <img src="./pic-voucher_bg@2x.png" alt="" class="code-bg" mode="widthFix">
+          <p class="number">{{item.code}}</p>
+          <img :src="codeImage[index]" alt="" class="code-image">
+        </div>
       </div>
+
     </div>
   </div>
 </template>
