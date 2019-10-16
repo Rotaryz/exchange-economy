@@ -53,13 +53,13 @@
           <img src="./icon-news@2x.png" alt="" class="new-goods-img">
           <div class="new-goods-text">最新会议</div>
         </div>
-        <div class="new-goods-right" @click="jumpAllMeeting">
+        <div class="new-goods-right" @click="jumpList('MEETING_LIST')">
           <div class="new-right-text">全部</div>
           <img src="/static/images/icon-right_arrow.png" alt="" class="new-right-img">
         </div>
       </div>
       <ul class="goods-list" v-if="goodsList.length && totalPage > 0">
-        <li class="goods-item-wrap" v-for="item in goodsList" :key="item.id" @click="goodsJump(item)">
+        <li class="goods-item-wrap" v-for="item in goodsList" :key="item.id" @click="detailJump('GOODS_DETAIL', item.id)">
           <image :src="item.goods_cover_image" lazy-load mode="aspectFill" alt="" class="goods-item-top">
             <img v-if="item.video.id" src="./icon-play_big@2x.png" lazy-load mode="widthFix" alt="" class="goods-play-auto">
           </image>
@@ -74,7 +74,7 @@
           </div>
         </li>
       </ul>
-      <empty v-else :imgWidth="109" :paddingTop="2.4" tip="会议排期中，敬请期待"></empty>
+      <empty v-else-if="acquired.course" :imgWidth="109" :paddingTop="2.4" tip="会议排期中，敬请期待"></empty>
     </div>
     <!-- 热门课程 -->
     <div class="course-box">
@@ -83,13 +83,13 @@
           <img src="./icon-hot@2x.png" alt="" class="new-goods-img">
           <div class="new-goods-text">热门课程</div>
         </div>
-        <div class="new-goods-right"@click="jumpAllCourse">
+        <div class="new-goods-right" @click="jumpList('COURSE_LIST')">
           <div class="new-right-text">全部</div>
           <img src="/static/images/icon-right_arrow.png" alt="" class="new-right-img">
         </div>
       </div>
       <ul class="course-list" v-if="courseList.length">
-        <li class="course-item" v-for="item in courseList" :key="item.id" @click="courseJump(item)">
+        <li class="course-item" v-for="item in courseList" :key="item.id" @click="detailJump('COURSE_DETAIL', item.id)">
           <image class="course-img" :src="item.cover_image"></image>
           <div class="course-info">
             <div class="course-info-top">{{item.name}}</div>
@@ -97,7 +97,7 @@
           </div>
         </li>
       </ul>
-      <empty v-else :imgWidth="109" :paddingTop="2.4" tip="课程排期中，敬请期待"></empty>
+      <empty v-else-if="acquired.meeting" :imgWidth="109" :paddingTop="2.4" tip="课程排期中，敬请期待"></empty>
     </div>
   </div>
 </template>
@@ -138,7 +138,8 @@
         loading: false,
         totalPage: 0,
         goodsList: [],
-        courseList: []
+        courseList: [],
+        acquired: {meeting: false, course: false}// 记录是否已请求列表接口
       }
     },
     computed: {
@@ -149,6 +150,7 @@
     },
     async onLoad() {},
     onShow() {
+      this.acquired = {meeting: false, course: false}
       this.pageDetail()
       this.getCourseList()
     },
@@ -156,7 +158,6 @@
     onReachBottom() {
       if (this.params.page + 1 > this.totalPage || this.loading) return
       this.params.page++
-      // this.getMeetingList()
     },
     methods: {
       handleSetBannerIndex(e) {
@@ -188,6 +189,7 @@
           this.goodsList = [...this.goodsList, ...res.data]
           this.totalPage = res.meta.last_page
           this.loading = false
+          this.acquired.meeting = true
         }).catch(() => {
           this.loading = false
         })
@@ -197,6 +199,7 @@
         API.Goods.getCourseList({ data: this.courseParams, loading: false }).then(res => {
           if (this.courseParams.page === 1) this.courseList = []
           this.courseList = [...this.courseList, ...res.data]
+          this.acquired.course = true
         }).catch(() => {
         })
       },
@@ -211,8 +214,11 @@
           case 3005:// 小程序链接
             url = `${item.detail.url}`
             break
-          case 3013:// 商品
+          case 3013:// 会议详情
             url = `${this.$routes.main.GOODS_DETAIL}?id=${item.detail.object_id}`
+            break
+          case 3014:// 课程详情
+            url = `${this.$routes.main.COURSE_DETAIL}?id=${item.detail.object_id}`
             break
           default:
             break
@@ -221,20 +227,12 @@
           this.$checkIsTabPage(url) ? wx.switchTab({ url }) : wx.navigateTo({ url })
         }
       },
-      goodsJump(item) {
-        let url = `${this.$routes.main.GOODS_DETAIL}?id=${item.id}`
+      detailJump(page, id) {
+        let url = `${this.$routes.main[page]}?id=${id}`
         this.$checkIsTabPage(url) ? wx.switchTab({ url }) : wx.navigateTo({ url })
       },
-      courseJump(item) {
-        let url = `${this.$routes.main.COURSE_DETAIL}?id=${item.id}`
-        this.$checkIsTabPage(url) ? wx.switchTab({ url }) : wx.navigateTo({ url })
-      },
-      jumpAllMeeting() {
-        let url = `${this.$routes.main.MEETING_LIST}`
-        wx.navigateTo({url})
-      },
-      jumpAllCourse() {
-        let url = `${this.$routes.main.COURSE_LIST}`
+      jumpList(page) {
+        let url = `${this.$routes.main[page]}`
         wx.navigateTo({url})
       }
     }
